@@ -50,6 +50,25 @@
     <!-- Publications Content -->
     <section class="publications-page">
         <div class="section-container">
+            
+            <!-- Search and Filter Controls -->
+            <div class="pub-controls">
+                <div class="search-box">
+                    <input type="text" id="pub-search" placeholder="Search publications by title, author, or keyword..." />
+                    <span class="search-icon">🔍</span>
+                </div>
+                
+                <div class="filter-buttons">
+                    <button class="filter-btn active" data-filter="all">All</button>
+                    <button class="filter-btn" data-filter="Book">Books</button>
+                    <button class="filter-btn" data-filter="Peer-Reviewed Journal Article">Journal Articles</button>
+                    <button class="filter-btn" data-filter="Peer-Reviewed Book Chapter">Book Chapters</button>
+                    <button class="filter-btn" data-filter="Professional Journal Article">Professional</button>
+                    <button class="filter-btn" data-filter="Research Report">Reports</button>
+                    <button class="filter-btn" data-filter="Public Scholarship">Public Scholarship</button>
+                </div>
+            </div>
+
             <div class="publications-list">
                 <!-- Publications will load here from CSV -->
                 <p style="text-align: center; padding: 2rem; color: #6B7280;">Loading publications...</p>

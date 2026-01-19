@@ -74,6 +74,18 @@ class CSVDataLoader {
         const container = document.querySelector('.publications-list');
         if (!container) return;
 
+        // Store all publications data for filtering/searching
+        window.publicationsData = data;
+
+        this.renderPublications(data);
+        this.initPublicationControls();
+    }
+
+    // Render publications to DOM
+    renderPublications(data) {
+        const container = document.querySelector('.publications-list');
+        if (!container) return;
+
         // Group by type
         const grouped = {
             'Book': [],
@@ -317,6 +329,83 @@ class CSVDataLoader {
         } else if (path.includes('media')) {
             this.loadMedia();
         }
+    }
+
+    // Initialize publication search and filter controls
+    initPublicationControls() {
+        const searchInput = document.getElementById('pub-search');
+        const filterButtons = document.querySelectorAll('.filter-btn');
+
+        if (!searchInput || !filterButtons.length) return;
+
+        let currentFilter = 'all';
+        let searchTerm = '';
+
+        // Search functionality
+        searchInput.addEventListener('input', (e) => {
+            searchTerm = e.target.value.toLowerCase();
+            this.filterPublications(currentFilter, searchTerm);
+        });
+
+        // Filter button functionality
+        filterButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Update active button
+                filterButtons.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                
+                currentFilter = btn.dataset.filter;
+                this.filterPublications(currentFilter, searchTerm);
+            });
+        });
+    }
+
+    // Filter and search publications
+    filterPublications(filterType, searchTerm) {
+        const categories = document.querySelectorAll('.pub-category');
+        
+        categories.forEach(category => {
+            const categoryTitle = category.querySelector('.pub-category-title').textContent;
+            const publications = category.querySelectorAll('.publication-item');
+            let categoryHasVisiblePubs = false;
+
+            // Determine which type to match based on category title
+            let typeToMatch = '';
+            if (categoryTitle.includes('Books')) typeToMatch = 'Book';
+            else if (categoryTitle.includes('Peer-Reviewed Journal')) typeToMatch = 'Peer-Reviewed Journal Article';
+            else if (categoryTitle.includes('Book Chapters')) typeToMatch = 'Peer-Reviewed Book Chapter';
+            else if (categoryTitle.includes('Professional')) typeToMatch = 'Professional Journal Article';
+            else if (categoryTitle.includes('Research Reports')) typeToMatch = 'Research Report';
+            else if (categoryTitle.includes('Public Scholarship')) typeToMatch = 'Public Scholarship';
+
+            // Check if category matches filter
+            const categoryMatches = filterType === 'all' || filterType === typeToMatch;
+
+            if (!categoryMatches) {
+                category.classList.add('hidden');
+                return;
+            }
+
+            // Filter publications within category by search term
+            publications.forEach(pub => {
+                const text = pub.textContent.toLowerCase();
+                const matchesSearch = !searchTerm || text.includes(searchTerm);
+                
+                if (matchesSearch) {
+                    pub.style.display = 'block';
+                    categoryHasVisiblePubs = true;
+                } else {
+                    pub.style.display = 'none';
+                }
+            });
+
+            // Hide category if no visible publications
+            if (categoryHasVisiblePubs) {
+                category.classList.remove('hidden');
+            } else {
+                category.classList.add('hidden');
+            }
+        });
     }
 }
 
