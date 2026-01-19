@@ -111,7 +111,7 @@ class CSVDataLoader {
                             <article class="publication-item">
                                 <p class="pub-citation">${pub.Authors} (${pub.Year}). <em>${pub.Title}</em>. ${pub.Venue}.</p>
                                 ${pub.Award ? `<p class="pub-award">${pub.Award}</p>` : ''}
-                                ${pub.Link ? `<a href="${pub.Link}" class="pub-link" target="_blank">View Book →</a>` : ''}
+                                ${pub.Link && pub.Link.trim() && pub.Link !== 'https://link-here.com' ? `<a href="${pub.Link}" class="pub-link" target="_blank">View Book →</a>` : ''}
                             </article>
                         `).join('')}
                     </div>
@@ -129,7 +129,7 @@ class CSVDataLoader {
                             <article class="publication-item">
                                 <p class="pub-citation">${pub.Authors} (${pub.Year}). ${pub.Title}. <em>${pub.Venue}</em>${pub.Volume ? ', ' + pub.Volume : ''}.</p>
                                 ${pub.Award ? `<p class="pub-award">${pub.Award}</p>` : ''}
-                                ${pub.Link ? `<a href="${pub.Link}" class="pub-link" target="_blank">Read Article →</a>` : ''}
+                                ${pub.Link && pub.Link.trim() && pub.Link !== 'https://link-here.com' ? `<a href="${pub.Link}" class="pub-link" target="_blank">Read Article →</a>` : ''}
                             </article>
                         `).join('')}
                     </div>
@@ -147,7 +147,7 @@ class CSVDataLoader {
                             <article class="publication-item">
                                 <p class="pub-citation">${pub.Authors} (${pub.Year}). ${pub.Title}. In <em>${pub.Venue}</em>.</p>
                                 ${pub.Award ? `<p class="pub-award">${pub.Award}</p>` : ''}
-                                ${pub.Link ? `<a href="${pub.Link}" class="pub-link" target="_blank">Read Chapter →</a>` : ''}
+                                ${pub.Link && pub.Link.trim() && pub.Link !== 'https://link-here.com' ? `<a href="${pub.Link}" class="pub-link" target="_blank">Read Chapter →</a>` : ''}
                             </article>
                         `).join('')}
                     </div>
@@ -164,7 +164,7 @@ class CSVDataLoader {
                         ${grouped['Professional Journal Article'].map(pub => `
                             <article class="publication-item">
                                 <p class="pub-citation">${pub.Authors} (${pub.Year}). ${pub.Title}. <em>${pub.Venue}</em>${pub.Volume ? ', ' + pub.Volume : ''}.</p>
-                                ${pub.Link ? `<a href="${pub.Link}" class="pub-link" target="_blank">Read Article →</a>` : ''}
+                                ${pub.Link && pub.Link.trim() && pub.Link !== 'https://link-here.com' ? `<a href="${pub.Link}" class="pub-link" target="_blank">Read Article →</a>` : ''}
                             </article>
                         `).join('')}
                     </div>
@@ -181,7 +181,7 @@ class CSVDataLoader {
                         ${grouped['Research Report'].map(pub => `
                             <article class="publication-item">
                                 <p class="pub-citation">${pub.Authors} (${pub.Year}). ${pub.Title}. ${pub.Venue}.</p>
-                                ${pub.Link ? `<a href="${pub.Link}" class="pub-link" target="_blank">Read Report →</a>` : ''}
+                                ${pub.Link && pub.Link.trim() && pub.Link !== 'https://link-here.com' ? `<a href="${pub.Link}" class="pub-link" target="_blank">Read Report →</a>` : ''}
                             </article>
                         `).join('')}
                     </div>
@@ -198,7 +198,7 @@ class CSVDataLoader {
                         ${grouped['Public Scholarship'].map(pub => `
                             <article class="publication-item">
                                 <p class="pub-citation">${pub.Authors} (${pub.Year}). ${pub.Title}. <em>${pub.Venue}</em>.</p>
-                                ${pub.Link ? `<a href="${pub.Link}" class="pub-link" target="_blank">Read Article →</a>` : ''}
+                                ${pub.Link && pub.Link.trim() && pub.Link !== 'https://link-here.com' ? `<a href="${pub.Link}" class="pub-link" target="_blank">Read Article →</a>` : ''}
                             </article>
                         `).join('')}
                     </div>
@@ -227,7 +227,7 @@ class CSVDataLoader {
                 ${project.Funding ? `<p class="project-funding">💰 ${project.Funding}</p>` : ''}
                 ${project.Funder ? `<p class="project-funder">Funded by: ${project.Funder}</p>` : ''}
                 ${project.Partners ? `<p class="project-partners">Partners: ${project.Partners}</p>` : ''}
-                ${project.Link ? `<a href="${project.Link}" class="project-link" target="_blank">Learn More →</a>` : ''}
+                ${project.Link && project.Link.trim() && project.Link !== 'https://link-here.com' ? `<a href="${project.Link}" class="project-link" target="_blank">Learn More →</a>` : ''}
             </article>
         `).join('');
     }
@@ -256,7 +256,7 @@ class CSVDataLoader {
                                 <p class="presentation-venue">${talk.Venue}, ${talk.Location}</p>
                                 ${talk.Copresenters ? `<p class="presentation-coauthors">With ${talk.Copresenters}</p>` : ''}
                                 <span class="presentation-badge">${talk.Type}</span>
-                                ${talk.Link ? `<br><a href="${talk.Link}" class="pub-link" target="_blank">Watch Recording →</a>` : ''}
+                                ${talk.Link && talk.Link.trim() && talk.Link !== 'https://link-here.com' ? `<br><a href="${talk.Link}" class="pub-link" target="_blank">Watch Recording →</a>` : ''}
                             </article>
                         `).join('')}
                     </div>
@@ -275,7 +275,7 @@ class CSVDataLoader {
                                 <h3 class="presentation-title">${talk.Title}</h3>
                                 <p class="presentation-venue">${talk.Venue}, ${talk.Location}</p>
                                 ${talk.Copresenters ? `<p class="presentation-coauthors">With ${talk.Copresenters}</p>` : ''}
-                                ${talk.Link ? `<a href="${talk.Link}" class="pub-link" target="_blank">Watch Recording →</a>` : ''}
+                                ${talk.Link && talk.Link.trim() && talk.Link !== 'https://link-here.com' ? `<a href="${talk.Link}" class="pub-link" target="_blank">Watch Recording →</a>` : ''}
                             </article>
                         `).join('')}
                     </div>
@@ -299,7 +299,7 @@ class CSVDataLoader {
                 <p class="media-source">${media.Source}, ${media.Date}</p>
                 ${media.Author ? `<p class="media-author">${media.Author}</p>` : ''}
                 ${media.Award ? `<p class="media-award">${media.Award}</p>` : ''}
-                ${media.Link ? `<a href="${media.Link}" class="media-link" target="_blank">View →</a>` : ''}
+                ${media.Link && media.Link.trim() && media.Link !== 'https://link-here.com' ? `<a href="${media.Link}" class="media-link" target="_blank">View →</a>` : ''}
             </article>
         `).join('');
     }
