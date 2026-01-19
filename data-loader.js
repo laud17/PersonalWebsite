@@ -70,13 +70,24 @@ class CSVDataLoader {
         // Group by type
         const grouped = {
             'Book': [],
-            'Journal Article': [],
-            'Book Chapter': [],
-            'Research Report': []
+            'Peer-Reviewed Journal Article': [],
+            'Peer-Reviewed Book Chapter': [],
+            'Professional Journal Article': [],
+            'Research Report': [],
+            'Public Scholarship': []
         };
 
         data.forEach(pub => {
-            if (grouped[pub.Type]) {
+            // Map old types to new categories
+            if (pub.Type === 'Journal Article') {
+                grouped['Peer-Reviewed Journal Article'].push(pub);
+            } else if (pub.Type === 'Book Chapter') {
+                grouped['Peer-Reviewed Book Chapter'].push(pub);
+            } else if (pub.Type === 'Professional Article') {
+                grouped['Professional Journal Article'].push(pub);
+            } else if (pub.Type === 'Public Scholarship') {
+                grouped['Public Scholarship'].push(pub);
+            } else if (grouped[pub.Type]) {
                 grouped[pub.Type].push(pub);
             }
         });
@@ -101,13 +112,13 @@ class CSVDataLoader {
             `;
         }
 
-        // Journal Articles
-        if (grouped['Journal Article'].length > 0) {
+        // Peer-Reviewed Journal Articles
+        if (grouped['Peer-Reviewed Journal Article'].length > 0) {
             html += `
                 <div class="pub-category">
-                    <h2 class="pub-category-title">Refereed Journal Articles</h2>
+                    <h2 class="pub-category-title">Peer-Reviewed Journal Articles</h2>
                     <div class="publications-list-inner">
-                        ${grouped['Journal Article'].map(pub => `
+                        ${grouped['Peer-Reviewed Journal Article'].map(pub => `
                             <article class="publication-item">
                                 <p class="pub-citation">${pub.Authors} (${pub.Year}). ${pub.Title}. <em>${pub.Venue}</em>${pub.Volume ? ', ' + pub.Volume : ''}.</p>
                                 ${pub.Award ? `<p class="pub-award">${pub.Award}</p>` : ''}
@@ -119,17 +130,34 @@ class CSVDataLoader {
             `;
         }
 
-        // Book Chapters
-        if (grouped['Book Chapter'].length > 0) {
+        // Peer-Reviewed Book Chapters
+        if (grouped['Peer-Reviewed Book Chapter'].length > 0) {
             html += `
                 <div class="pub-category">
                     <h2 class="pub-category-title">Peer-Reviewed Book Chapters</h2>
                     <div class="publications-list-inner">
-                        ${grouped['Book Chapter'].map(pub => `
+                        ${grouped['Peer-Reviewed Book Chapter'].map(pub => `
                             <article class="publication-item">
                                 <p class="pub-citation">${pub.Authors} (${pub.Year}). ${pub.Title}. In <em>${pub.Venue}</em>.</p>
                                 ${pub.Award ? `<p class="pub-award">${pub.Award}</p>` : ''}
                                 ${pub.Link ? `<a href="${pub.Link}" class="pub-link" target="_blank">Read Chapter →</a>` : ''}
+                            </article>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        // Professional Journal Articles
+        if (grouped['Professional Journal Article'].length > 0) {
+            html += `
+                <div class="pub-category">
+                    <h2 class="pub-category-title">Professional Journal Articles</h2>
+                    <div class="publications-list-inner">
+                        ${grouped['Professional Journal Article'].map(pub => `
+                            <article class="publication-item">
+                                <p class="pub-citation">${pub.Authors} (${pub.Year}). ${pub.Title}. <em>${pub.Venue}</em>${pub.Volume ? ', ' + pub.Volume : ''}.</p>
+                                ${pub.Link ? `<a href="${pub.Link}" class="pub-link" target="_blank">Read Article →</a>` : ''}
                             </article>
                         `).join('')}
                     </div>
@@ -147,6 +175,23 @@ class CSVDataLoader {
                             <article class="publication-item">
                                 <p class="pub-citation">${pub.Authors} (${pub.Year}). ${pub.Title}. ${pub.Venue}.</p>
                                 ${pub.Link ? `<a href="${pub.Link}" class="pub-link" target="_blank">Read Report →</a>` : ''}
+                            </article>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        // Public Scholarship
+        if (grouped['Public Scholarship'].length > 0) {
+            html += `
+                <div class="pub-category">
+                    <h2 class="pub-category-title">Public Scholarship</h2>
+                    <div class="publications-list-inner">
+                        ${grouped['Public Scholarship'].map(pub => `
+                            <article class="publication-item">
+                                <p class="pub-citation">${pub.Authors} (${pub.Year}). ${pub.Title}. <em>${pub.Venue}</em>.</p>
+                                ${pub.Link ? `<a href="${pub.Link}" class="pub-link" target="_blank">Read Article →</a>` : ''}
                             </article>
                         `).join('')}
                     </div>
