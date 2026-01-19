@@ -3,7 +3,7 @@
 
 class CSVDataLoader {
     constructor() {
-        this.baseUrl = '/data/';
+        this.baseUrl = '/'; // Changed from '/data/' to root
     }
 
     // Parse CSV text into array of objects
@@ -52,11 +52,18 @@ class CSVDataLoader {
     // Fetch and parse a CSV file
     async fetchCSV(filename) {
         try {
+            console.log('Attempting to fetch:', this.baseUrl + filename);
             const response = await fetch(this.baseUrl + filename);
+            
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            
             const text = await response.text();
+            console.log('Successfully fetched:', filename);
             return this.parseCSV(text);
         } catch (error) {
-            console.error(`Error loading ${filename}:`, error);
+            console.error(`Error fetching ${filename}:`, error);
             return [];
         }
     }
