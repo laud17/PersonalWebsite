@@ -3,7 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Research projects by R. Lennon Audrain - Grants, initiatives, and collaborative work transforming education systems.">
+    <meta property="og:title" content="Projects | R. Lennon Audrain">
+    <meta property="og:description" content="Research initiatives, grants, and collaborative work transforming education systems.">
+    <meta property="og:type" content="website">
     <title>Projects | R. Lennon Audrain</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <link rel="stylesheet" href="styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -14,6 +19,11 @@
     <nav class="main-nav">
         <div class="nav-container">
             <a href="index.html" class="nav-logo">Lennon Audrain</a>
+            <button class="nav-toggle" aria-label="Toggle navigation">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
             <ul class="nav-links">
                 <li><a href="index.html">Home</a></li>
                 <li><a href="publications.html">Publications</a></li>
@@ -46,7 +56,7 @@
     <!-- Footer -->
     <footer class="footer">
         <div class="footer-container">
-            <p>&copy; 2025 Richard "Lennon" Audrain. All rights reserved.</p>
+            <p>&copy; <span id="year"></span> Richard "Lennon" Audrain. All rights reserved.</p>
         </div>
     </footer>
 

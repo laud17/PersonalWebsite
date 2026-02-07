@@ -3,7 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="R. Lennon Audrain, PhD - Education researcher, policy innovator, and enrolled citizen of the Shawnee Tribe and Cherokee Nation. Head of Innovation and Policy Initiatives at Arizona State University.">
+    <meta name="author" content="R. Lennon Audrain">
+    <meta property="og:title" content="R. Lennon Audrain | Education Innovation & Policy">
+    <meta property="og:description" content="Education researcher and policy innovator at Arizona State University, specializing in team-based staffing models and educator preparation.">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="https://static.wixstatic.com/media/2f027b_e0fe740f2014490b923ffc7a0b38a162~mv2.jpg/v1/crop/x_0,y_133,w_1366,h_1019/fill/w_600,h_448,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/52810681548_36f059922c_k_edited.jpg">
     <title>R. Lennon Audrain | Education Innovation & Policy</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <link rel="stylesheet" href="styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -14,6 +21,11 @@
     <nav class="main-nav">
         <div class="nav-container">
             <a href="index.html" class="nav-logo">Lennon Audrain</a>
+            <button class="nav-toggle" aria-label="Toggle navigation">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
             <ul class="nav-links">
                 <li><a href="index.html" class="active">Home</a></li>
                 <li><a href="publications.html">Publications</a></li>
@@ -161,7 +173,7 @@
                 <div class="contact-info">
                     <div class="contact-item">
                         <h4>Email</h4>
-                        <a href="/cdn-cgi/l/email-protection#4a062f24242524640b3f2e382b23240a2b393f642f2e3f"><span class="__cf_email__" data-cfemail="5e123b30303130701f2b3a2c3f37301e3f2d2b703b3a2b">[email&#160;protected]</span></a>
+                        <a href="mailto:rlaudrain@asu.edu">rlaudrain@asu.edu</a>
                     </div>
                     <div class="contact-item">
                         <h4>Office</h4>
@@ -180,4 +192,11 @@
     <!-- Footer -->
     <footer class="footer">
         <div class="footer-container">
-            <p>&copy;
+            <p>&copy; <span id="year"></span> Richard "Lennon" Audrain. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script src="data-loader.js"></script>
+</body>
+</html>

@@ -1,4 +1,26 @@
 // ===================================
+// MOBILE NAVIGATION TOGGLE
+// ===================================
+
+const navToggle = document.querySelector('.nav-toggle');
+const navLinks = document.querySelector('.nav-links');
+
+if (navToggle && navLinks) {
+    navToggle.addEventListener('click', () => {
+        navToggle.classList.toggle('active');
+        navLinks.classList.toggle('open');
+    });
+
+    // Close menu when a link is clicked
+    navLinks.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => {
+            navToggle.classList.remove('active');
+            navLinks.classList.remove('open');
+        });
+    });
+}
+
+// ===================================
 // MICRO-INTERACTIONS SYSTEM
 // ===================================
 
@@ -234,7 +256,7 @@ document.querySelectorAll('.pub-link, .media-link').forEach(link => {
         ripple.style.top = y + 'px';
         ripple.style.position = 'absolute';
         ripple.style.borderRadius = '50%';
-        ripple.style.background = 'rgba(193, 125, 74, 0.3)';
+        ripple.style.background = 'rgba(11, 19, 43, 0.2)';
         ripple.style.transform = 'scale(0)';
         ripple.style.transition = 'transform 0.6s ease-out, opacity 0.6s ease-out';
         ripple.style.pointerEvents = 'none';
@@ -335,7 +357,7 @@ const createScrollProgress = () => {
     progressBar.style.top = '0';
     progressBar.style.left = '0';
     progressBar.style.height = '3px';
-    progressBar.style.background = 'linear-gradient(90deg, #c17d4a, #8b5a3c)';
+    progressBar.style.background = 'var(--color-black, #000000)';
     progressBar.style.transformOrigin = 'left';
     progressBar.style.transform = 'scaleX(0)';
     progressBar.style.transition = 'transform 0.1s ease-out';
@@ -433,7 +455,7 @@ animateCredentials();
 if (bookCover) {
     let floatDirection = 1;
     let floatPosition = 0;
-    
+
     setInterval(() => {
         floatPosition += 0.5 * floatDirection;
         if (floatPosition > 10 || floatPosition < -10) {
@@ -441,4 +463,13 @@ if (bookCover) {
         }
         bookCover.style.transform = `translateY(${floatPosition}px)`;
     }, 50);
+}
+
+// ===================================
+// DYNAMIC FOOTER YEAR
+// ===================================
+
+const yearSpan = document.getElementById('year');
+if (yearSpan) {
+    yearSpan.textContent = new Date().getFullYear();
 }
