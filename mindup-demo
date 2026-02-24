@@ -1,0 +1,1458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MindUP Teacher Assistant</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --teal: #2EC4B6;
+    --teal-dark: #1a9e93;
+    --coral: #FF6B6B;
+    --gold: #FFD166;
+    --navy: #1a2744;
+    --navy-light: #243460;
+    --soft-bg: #f0f7f6;
+    --card-bg: #ffffff;
+    --text: #1a2744;
+    --muted: #6b7a99;
+    --pfc-color: #FF6B6B;
+    --amygdala-color: #FFD166;
+    --hippocampus-color: #2EC4B6;
+    --cerebellum-color: #9B5DE5;
+    --brainstem-color: #F15BB5;
+    --cortex-color: #00BBF9;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--soft-bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Header */
+  header {
+    background: var(--navy);
+    padding: 0 2rem;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 2px 20px rgba(0,0,0,0.2);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .logo-icon {
+    width: 38px;
+    height: 38px;
+    background: linear-gradient(135deg, var(--teal), var(--coral));
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+  }
+
+  .logo-text {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.4rem;
+    color: white;
+    letter-spacing: -0.5px;
+  }
+
+  .logo-sub {
+    font-size: 0.7rem;
+    color: var(--teal);
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-top: -4px;
+  }
+
+  .header-badge {
+    background: rgba(46,196,182,0.15);
+    border: 1px solid var(--teal);
+    border-radius: 20px;
+    padding: 4px 14px;
+    font-size: 0.75rem;
+    color: var(--teal);
+    font-weight: 700;
+    letter-spacing: 1px;
+  }
+
+  /* Layout */
+  .app-layout {
+    display: grid;
+    grid-template-columns: 1fr 420px;
+    grid-template-rows: auto 1fr;
+    gap: 0;
+    height: calc(100vh - 64px);
+  }
+
+  /* Left Panel */
+  .left-panel {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border-right: 1px solid #dde8e7;
+  }
+
+  /* Tab Bar */
+  .tab-bar {
+    background: white;
+    display: flex;
+    border-bottom: 2px solid #e8f0ef;
+    padding: 0 1.5rem;
+    gap: 0;
+    flex-shrink: 0;
+  }
+
+  .tab-btn {
+    padding: 1rem 1.25rem;
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--muted);
+    border-bottom: 3px solid transparent;
+    margin-bottom: -2px;
+    transition: all 0.2s;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .tab-btn:hover { color: var(--teal); }
+  .tab-btn.active { color: var(--teal); border-bottom-color: var(--teal); }
+
+  /* Tab Content */
+  .tab-content { display: none; flex: 1; overflow-y: auto; padding: 1.5rem; }
+  .tab-content.active { display: block; }
+
+  /* Brain Diagram Panel */
+  .brain-container {
+    background: white;
+    border-radius: 16px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.06);
+    margin-bottom: 1.5rem;
+  }
+
+  .brain-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.3rem;
+    color: var(--navy);
+    margin-bottom: 4px;
+  }
+
+  .brain-subtitle {
+    font-size: 0.8rem;
+    color: var(--muted);
+    margin-bottom: 1.25rem;
+    font-weight: 600;
+  }
+
+  .brain-svg-wrapper {
+    position: relative;
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+
+  .brain-svg-wrapper svg {
+    width: 100%;
+    height: auto;
+    filter: drop-shadow(0 4px 20px rgba(0,0,0,0.1));
+  }
+
+  /* Brain regions */
+  .brain-region {
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .brain-region:hover { filter: brightness(1.1); }
+  .brain-region.active { filter: brightness(1.15) drop-shadow(0 0 8px rgba(255,255,255,0.5)); }
+
+  /* Region info cards */
+  .region-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 0.75rem;
+    margin-top: 1.25rem;
+  }
+
+  .region-card {
+    border-radius: 12px;
+    padding: 1rem;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: all 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .region-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--region-color);
+  }
+
+  .region-card:hover, .region-card.active {
+    border-color: var(--region-color);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+  }
+
+  .region-card-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: var(--region-color);
+    display: inline-block;
+    margin-right: 6px;
+  }
+
+  .region-card-name {
+    font-weight: 800;
+    font-size: 0.85rem;
+    color: var(--navy);
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+  }
+
+  .region-card-role {
+    font-size: 0.75rem;
+    color: var(--muted);
+    font-weight: 600;
+    line-height: 1.4;
+  }
+
+  /* Info Panel */
+  .info-panel {
+    background: var(--navy);
+    border-radius: 16px;
+    padding: 1.5rem;
+    color: white;
+    min-height: 160px;
+    margin-top: 1.25rem;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .info-panel::before {
+    content: '';
+    position: absolute;
+    top: -40px; right: -40px;
+    width: 140px; height: 140px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.03);
+  }
+
+  .info-panel-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    min-height: 120px;
+    opacity: 0.4;
+    text-align: center;
+    gap: 8px;
+  }
+
+  .info-panel-placeholder-icon { font-size: 2rem; }
+  .info-panel-placeholder-text { font-size: 0.85rem; font-weight: 600; }
+
+  .info-region-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 0.75rem;
+  }
+
+  .info-region-badge {
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    background: var(--active-color, var(--teal));
+    color: white;
+  }
+
+  .info-region-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.4rem;
+    margin-bottom: 0.5rem;
+    color: white;
+  }
+
+  .info-region-desc {
+    font-size: 0.85rem;
+    line-height: 1.6;
+    color: rgba(255,255,255,0.8);
+    margin-bottom: 1rem;
+  }
+
+  .info-mindful-connection {
+    background: rgba(255,255,255,0.08);
+    border-radius: 10px;
+    padding: 0.85rem;
+    font-size: 0.8rem;
+    color: rgba(255,255,255,0.9);
+    line-height: 1.5;
+  }
+
+  .info-mindful-connection strong {
+    color: var(--teal);
+    display: block;
+    margin-bottom: 4px;
+    font-size: 0.72rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  /* Lesson Content Tab */
+  .lesson-section {
+    background: white;
+    border-radius: 16px;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+  }
+
+  .lesson-section-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 1rem;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .lesson-section-icon {
+    width: 36px; height: 36px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+  }
+
+  .lesson-section-title {
+    font-weight: 800;
+    font-size: 0.95rem;
+    color: var(--navy);
+    flex: 1;
+  }
+
+  .lesson-section-toggle {
+    color: var(--muted);
+    font-size: 1.2rem;
+    transition: transform 0.2s;
+  }
+
+  .lesson-section.open .lesson-section-toggle { transform: rotate(180deg); }
+
+  .lesson-section-body {
+    display: none;
+    font-size: 0.85rem;
+    line-height: 1.7;
+    color: #3a4a6b;
+  }
+
+  .lesson-section.open .lesson-section-body { display: block; }
+
+  .script-box {
+    background: #f0f7f6;
+    border-left: 3px solid var(--teal);
+    border-radius: 0 8px 8px 0;
+    padding: 1rem;
+    margin: 0.75rem 0;
+    font-size: 0.82rem;
+    line-height: 1.7;
+  }
+
+  .script-line {
+    padding: 4px 0;
+    color: var(--navy);
+    font-weight: 600;
+  }
+
+  .script-line::before {
+    content: '▶ ';
+    color: var(--teal);
+    font-size: 0.6rem;
+  }
+
+  .tip-box {
+    background: #fff8e6;
+    border: 1px solid #ffd166;
+    border-radius: 10px;
+    padding: 0.85rem;
+    margin: 0.75rem 0;
+    font-size: 0.82rem;
+    line-height: 1.6;
+  }
+
+  .tip-box strong { color: #b8860b; display: block; margin-bottom: 3px; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 1px; }
+
+  .warning-box {
+    background: #fff0f0;
+    border: 1px solid #ffb3b3;
+    border-radius: 10px;
+    padding: 0.85rem;
+    margin: 0.75rem 0;
+    font-size: 0.82rem;
+    line-height: 1.6;
+  }
+
+  .warning-box strong { color: #c0392b; display: block; margin-bottom: 3px; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 1px; }
+
+  .step-list {
+    list-style: none;
+    counter-reset: steps;
+    margin: 0.75rem 0;
+  }
+
+  .step-list li {
+    counter-increment: steps;
+    display: flex;
+    gap: 10px;
+    margin-bottom: 0.6rem;
+    font-size: 0.83rem;
+    line-height: 1.6;
+  }
+
+  .step-list li::before {
+    content: counter(steps);
+    min-width: 22px; height: 22px;
+    background: var(--teal);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    font-weight: 800;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  /* Quick Reference Badges */
+  .quick-ref-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .quick-ref-card {
+    background: white;
+    border-radius: 12px;
+    padding: 1rem;
+    border-left: 4px solid var(--accent);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .quick-ref-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+  }
+
+  .quick-ref-card-label {
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 4px;
+  }
+
+  .quick-ref-card-text {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--navy);
+    line-height: 1.4;
+  }
+
+  /* Chat Panel */
+  .chat-panel {
+    display: flex;
+    flex-direction: column;
+    background: white;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  .chat-header {
+    padding: 1.25rem 1.5rem;
+    background: var(--navy);
+    color: white;
+    flex-shrink: 0;
+  }
+
+  .chat-header-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.1rem;
+    margin-bottom: 2px;
+  }
+
+  .chat-header-sub {
+    font-size: 0.75rem;
+    color: rgba(255,255,255,0.6);
+    font-weight: 600;
+  }
+
+  .chat-quick-prompts {
+    padding: 0.75rem 1rem;
+    background: var(--soft-bg);
+    border-bottom: 1px solid #e8f0ef;
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    flex-shrink: 0;
+    scrollbar-width: none;
+  }
+
+  .chat-quick-prompts::-webkit-scrollbar { display: none; }
+
+  .quick-prompt-chip {
+    background: white;
+    border: 1.5px solid var(--teal);
+    color: var(--teal);
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s;
+    font-family: 'Nunito', sans-serif;
+  }
+
+  .quick-prompt-chip:hover {
+    background: var(--teal);
+    color: white;
+  }
+
+  .chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    scroll-behavior: smooth;
+  }
+
+  .message {
+    max-width: 92%;
+    animation: fadeUp 0.3s ease;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .message.user { align-self: flex-end; }
+  .message.assistant { align-self: flex-start; }
+
+  .message-bubble {
+    padding: 0.85rem 1.1rem;
+    border-radius: 16px;
+    font-size: 0.85rem;
+    line-height: 1.65;
+  }
+
+  .message.user .message-bubble {
+    background: var(--navy);
+    color: white;
+    border-bottom-right-radius: 4px;
+  }
+
+  .message.assistant .message-bubble {
+    background: var(--soft-bg);
+    color: var(--text);
+    border-bottom-left-radius: 4px;
+    border: 1px solid #dde8e7;
+  }
+
+  .message-label {
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+    padding: 0 4px;
+  }
+
+  .message.user .message-label { text-align: right; color: var(--muted); }
+  .message.assistant .message-label { color: var(--teal); }
+
+  .typing-indicator {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 0.85rem 1.1rem;
+    background: var(--soft-bg);
+    border-radius: 16px;
+    border-bottom-left-radius: 4px;
+    border: 1px solid #dde8e7;
+    width: fit-content;
+  }
+
+  .typing-dot {
+    width: 6px; height: 6px;
+    background: var(--teal);
+    border-radius: 50%;
+    animation: bounce 1.2s infinite;
+  }
+
+  .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+  .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+  @keyframes bounce {
+    0%, 60%, 100% { transform: translateY(0); }
+    30% { transform: translateY(-6px); }
+  }
+
+  /* Chat Input */
+  .chat-input-area {
+    padding: 1rem;
+    border-top: 1px solid #e8f0ef;
+    background: white;
+    flex-shrink: 0;
+  }
+
+  .chat-input-wrapper {
+    display: flex;
+    gap: 8px;
+    align-items: flex-end;
+    background: var(--soft-bg);
+    border: 2px solid #dde8e7;
+    border-radius: 14px;
+    padding: 8px 8px 8px 14px;
+    transition: border-color 0.2s;
+  }
+
+  .chat-input-wrapper:focus-within { border-color: var(--teal); }
+
+  .chat-textarea {
+    flex: 1;
+    border: none;
+    background: none;
+    resize: none;
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.85rem;
+    color: var(--text);
+    outline: none;
+    min-height: 40px;
+    max-height: 120px;
+    line-height: 1.5;
+    padding: 4px 0;
+  }
+
+  .chat-textarea::placeholder { color: var(--muted); }
+
+  .send-btn {
+    width: 38px; height: 38px;
+    background: var(--teal);
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.2s;
+    color: white;
+  }
+
+  .send-btn:hover { background: var(--teal-dark); transform: scale(1.05); }
+  .send-btn:disabled { background: #ccc; cursor: not-allowed; transform: none; }
+
+  /* Welcome message */
+  .welcome-message {
+    text-align: center;
+    padding: 1.5rem 1rem;
+    color: var(--muted);
+  }
+
+  .welcome-icon {
+    font-size: 2.5rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .welcome-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.1rem;
+    color: var(--navy);
+    margin-bottom: 0.5rem;
+  }
+
+  .welcome-text {
+    font-size: 0.82rem;
+    line-height: 1.6;
+    color: var(--muted);
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: #dde8e7; border-radius: 4px; }
+
+  /* Tag chips */
+  .tag-chip {
+    display: inline-block;
+    background: rgba(46,196,182,0.12);
+    color: var(--teal-dark);
+    padding: 2px 8px;
+    border-radius: 6px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    margin: 2px;
+  }
+
+  /* Divider in messages */
+  .message-bubble h4 {
+    font-size: 0.82rem;
+    color: var(--teal-dark);
+    margin: 0.6rem 0 0.3rem;
+    font-weight: 800;
+  }
+
+  .message-bubble ul {
+    padding-left: 1.2rem;
+    margin: 0.3rem 0;
+  }
+
+  .message-bubble li { margin-bottom: 3px; }
+
+  .message-bubble strong { color: var(--navy); }
+
+  @media (max-width: 768px) {
+    .app-layout {
+      grid-template-columns: 1fr;
+      grid-template-rows: 1fr auto;
+      height: auto;
+    }
+    .left-panel { height: 70vh; }
+    .chat-panel { height: 80vh; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <div class="logo-icon">🧠</div>
+    <div>
+      <div class="logo-text">MindUP</div>
+      <div class="logo-sub">Teacher Assistant</div>
+    </div>
+  </div>
+  <div class="header-badge">Grades 3–5 · Unit 1</div>
+</header>
+
+<div class="app-layout">
+  <!-- LEFT PANEL -->
+  <div class="left-panel">
+    <div class="tab-bar">
+      <button class="tab-btn active" onclick="switchTab('brain')">🧠 Brain Explorer</button>
+      <button class="tab-btn" onclick="switchTab('lesson')">📋 Lesson 4 Guide</button>
+      <button class="tab-btn" onclick="switchTab('scripts')">💬 Scripts</button>
+    </div>
+
+    <!-- BRAIN TAB -->
+    <div class="tab-content active" id="tab-brain">
+      <div class="brain-container">
+        <div class="brain-title">The Mindful Brain</div>
+        <div class="brain-subtitle">Click a region to learn its role in mindfulness</div>
+
+        <div class="brain-svg-wrapper">
+          <!-- Brain SVG illustration with labeled regions -->
+          <svg viewBox="0 0 520 360" xmlns="http://www.w3.org/2000/svg">
+            <!-- Background glow -->
+            <defs>
+              <radialGradient id="bgGlow" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stop-color="#e8f8f7" stop-opacity="1"/>
+                <stop offset="100%" stop-color="#f0f7f6" stop-opacity="1"/>
+              </radialGradient>
+              <filter id="softShadow">
+                <feDropShadow dx="0" dy="3" stdDeviation="6" flood-color="rgba(0,0,0,0.15)"/>
+              </filter>
+              <filter id="glow">
+                <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+              </filter>
+            </defs>
+
+            <rect width="520" height="360" fill="url(#bgGlow)" rx="12"/>
+
+            <!-- PREFRONTAL CORTEX - front of brain -->
+            <g class="brain-region" id="region-pfc" onclick="selectRegion('pfc')" filter="url(#softShadow)">
+              <ellipse cx="135" cy="145" rx="88" ry="70" fill="#FF6B6B" opacity="0.9"/>
+              <ellipse cx="135" cy="145" rx="75" ry="57" fill="#FF8E8E" opacity="0.6"/>
+              <!-- folds -->
+              <path d="M80 120 Q100 110 120 125 Q140 110 160 125 Q180 112 195 125" stroke="#e05555" stroke-width="2" fill="none" opacity="0.5"/>
+              <path d="M75 148 Q95 138 115 152 Q135 138 155 152 Q175 140 200 150" stroke="#e05555" stroke-width="2" fill="none" opacity="0.5"/>
+              <path d="M80 172 Q100 162 120 176 Q140 163 160 175 Q180 165 195 173" stroke="#e05555" stroke-width="2" fill="none" opacity="0.5"/>
+              <text x="132" y="138" text-anchor="middle" fill="white" font-size="11" font-weight="bold" font-family="Nunito">Prefrontal</text>
+              <text x="132" y="152" text-anchor="middle" fill="white" font-size="11" font-weight="bold" font-family="Nunito">Cortex</text>
+              <text x="132" y="166" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-size="9" font-family="Nunito">(PFC)</text>
+            </g>
+
+            <!-- CEREBRAL CORTEX - top/back -->
+            <g class="brain-region" id="region-cortex" onclick="selectRegion('cortex')" filter="url(#softShadow)">
+              <ellipse cx="310" cy="130" rx="105" ry="82" fill="#00BBF9" opacity="0.85"/>
+              <ellipse cx="310" cy="130" rx="90" ry="68" fill="#33CAFA" opacity="0.5"/>
+              <!-- folds -->
+              <path d="M215 110 Q240 95 265 115 Q290 98 315 115 Q340 98 365 112 Q390 100 415 110" stroke="#0099cc" stroke-width="2.5" fill="none" opacity="0.5"/>
+              <path d="M210 135 Q235 120 260 138 Q285 122 310 138 Q335 122 360 136 Q385 122 410 133" stroke="#0099cc" stroke-width="2.5" fill="none" opacity="0.5"/>
+              <path d="M215 160 Q240 145 265 163 Q290 148 315 162 Q340 148 365 160 Q390 148 415 157" stroke="#0099cc" stroke-width="2.5" fill="none" opacity="0.5"/>
+              <text x="310" y="124" text-anchor="middle" fill="white" font-size="11" font-weight="bold" font-family="Nunito">Cerebral</text>
+              <text x="310" y="138" text-anchor="middle" fill="white" font-size="11" font-weight="bold" font-family="Nunito">Cortex</text>
+            </g>
+
+            <!-- AMYGDALA - middle inner -->
+            <g class="brain-region" id="region-amygdala" onclick="selectRegion('amygdala')" filter="url(#softShadow)">
+              <ellipse cx="248" cy="218" rx="52" ry="40" fill="#FFD166" opacity="0.95"/>
+              <ellipse cx="248" cy="218" rx="38" ry="28" fill="#FFE09A" opacity="0.7"/>
+              <text x="248" y="213" text-anchor="middle" fill="#7a5c00" font-size="10" font-weight="bold" font-family="Nunito">Amygdala</text>
+              <text x="248" y="227" text-anchor="middle" fill="#9a7500" font-size="8.5" font-family="Nunito">😤 Alert!</text>
+            </g>
+
+            <!-- HIPPOCAMPUS -->
+            <g class="brain-region" id="region-hippocampus" onclick="selectRegion('hippocampus')" filter="url(#softShadow)">
+              <path d="M340 200 Q380 185 410 205 Q430 220 415 248 Q395 268 365 258 Q335 248 330 228 Q328 212 340 200Z" fill="#2EC4B6" opacity="0.9"/>
+              <path d="M348 210 Q375 198 400 215 Q418 228 405 248 Q388 262 362 252 Q340 242 337 225 Q336 215 348 210Z" fill="#5dd9d0" opacity="0.5"/>
+              <text x="378" y="228" text-anchor="middle" fill="white" font-size="10" font-weight="bold" font-family="Nunito">Hippocampus</text>
+              <text x="378" y="242" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-size="8.5" font-family="Nunito">Memory</text>
+            </g>
+
+            <!-- CEREBELLUM - bottom back -->
+            <g class="brain-region" id="region-cerebellum" onclick="selectRegion('cerebellum')" filter="url(#softShadow)">
+              <ellipse cx="420" cy="285" rx="72" ry="52" fill="#9B5DE5" opacity="0.9"/>
+              <ellipse cx="420" cy="285" rx="60" ry="40" fill="#b57ff5" opacity="0.5"/>
+              <!-- parallel folds characteristic of cerebellum -->
+              <path d="M358 275 Q390 262 420 275 Q450 262 480 272" stroke="#7b3dc0" stroke-width="2" fill="none" opacity="0.5"/>
+              <path d="M355 285 Q388 272 420 285 Q452 272 483 282" stroke="#7b3dc0" stroke-width="2" fill="none" opacity="0.5"/>
+              <path d="M358 295 Q390 282 420 295 Q450 282 480 292" stroke="#7b3dc0" stroke-width="2" fill="none" opacity="0.5"/>
+              <text x="420" y="280" text-anchor="middle" fill="white" font-size="11" font-weight="bold" font-family="Nunito">Cerebellum</text>
+              <text x="420" y="294" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-size="8.5" font-family="Nunito">Balance & Body</text>
+            </g>
+
+            <!-- BRAIN STEM -->
+            <g class="brain-region" id="region-brainstem" onclick="selectRegion('brainstem')" filter="url(#softShadow)">
+              <path d="M195 255 Q210 245 230 255 Q245 265 248 290 Q248 318 235 332 Q220 342 205 332 Q192 318 190 290 Q188 265 195 255Z" fill="#F15BB5" opacity="0.9"/>
+              <path d="M202 265 Q214 257 228 265 Q238 273 240 293 Q240 316 229 328 Q218 336 207 328 Q197 316 196 293 Q194 273 202 265Z" fill="#f57fc5" opacity="0.5"/>
+              <text x="217" y="292" text-anchor="middle" fill="white" font-size="10" font-weight="bold" font-family="Nunito">Brain</text>
+              <text x="217" y="305" text-anchor="middle" fill="white" font-size="10" font-weight="bold" font-family="Nunito">Stem</text>
+            </g>
+
+            <!-- Connection lines (subtle) -->
+            <line x1="195" y1="170" x2="220" y2="195" stroke="rgba(100,100,100,0.15)" stroke-width="2" stroke-dasharray="4,4"/>
+            <line x1="248" y1="178" x2="248" y2="200" stroke="rgba(100,100,100,0.15)" stroke-width="2" stroke-dasharray="4,4"/>
+            <line x1="280" y1="175" x2="335" y2="205" stroke="rgba(100,100,100,0.15)" stroke-width="2" stroke-dasharray="4,4"/>
+
+            <!-- Labels -->
+            <text x="60" y="30" fill="#6b7a99" font-size="9" font-family="Nunito" font-weight="700">FRONT</text>
+            <text x="440" y="30" fill="#6b7a99" font-size="9" font-family="Nunito" font-weight="700">BACK</text>
+            <line x1="50" y1="22" x2="470" y2="22" stroke="#dde8e7" stroke-width="1"/>
+            <polygon points="50,19 45,22 50,25" fill="#dde8e7"/>
+            <polygon points="470,19 475,22 470,25" fill="#dde8e7"/>
+          </svg>
+        </div>
+
+        <!-- Region detail cards -->
+        <div class="region-cards">
+          <div class="region-card" id="card-pfc" style="background:#fff5f5; --region-color:#FF6B6B" onclick="selectRegion('pfc')">
+            <div class="region-card-name"><span class="region-card-dot" style="background:#FF6B6B"></span>Prefrontal Cortex</div>
+            <div class="region-card-role">Decision-making, focus, self-regulation — the "Wise Owl"</div>
+          </div>
+          <div class="region-card" id="card-amygdala" style="background:#fffbf0; --region-color:#FFD166" onclick="selectRegion('amygdala')">
+            <div class="region-card-name"><span class="region-card-dot" style="background:#FFD166"></span>Amygdala</div>
+            <div class="region-card-role">Emotional reactions, threat detection — the "Guard Dog"</div>
+          </div>
+          <div class="region-card" id="card-hippocampus" style="background:#f0fafa; --region-color:#2EC4B6" onclick="selectRegion('hippocampus')">
+            <div class="region-card-name"><span class="region-card-dot" style="background:#2EC4B6"></span>Hippocampus</div>
+            <div class="region-card-role">Learning & memory storage — helps us remember skills</div>
+          </div>
+          <div class="region-card" id="card-cortex" style="background:#f0f9ff; --region-color:#00BBF9" onclick="selectRegion('cortex')">
+            <div class="region-card-name"><span class="region-card-dot" style="background:#00BBF9"></span>Cerebral Cortex</div>
+            <div class="region-card-role">Thinking, language, perception — our "thinking cap"</div>
+          </div>
+          <div class="region-card" id="card-cerebellum" style="background:#f7f0ff; --region-color:#9B5DE5" onclick="selectRegion('cerebellum')">
+            <div class="region-card-name"><span class="region-card-dot" style="background:#9B5DE5"></span>Cerebellum</div>
+            <div class="region-card-role">Balance, coordination, movement control</div>
+          </div>
+          <div class="region-card" id="card-brainstem" style="background:#fff0f8; --region-color:#F15BB5" onclick="selectRegion('brainstem')">
+            <div class="region-card-name"><span class="region-card-dot" style="background:#F15BB5"></span>Brain Stem</div>
+            <div class="region-card-role">Survival basics: breathing, heart rate, sleep cycles</div>
+          </div>
+        </div>
+
+        <!-- Detail panel -->
+        <div class="info-panel" id="region-info-panel">
+          <div class="info-panel-placeholder">
+            <div class="info-panel-placeholder-icon">👆</div>
+            <div class="info-panel-placeholder-text">Click any brain region above to learn more</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LESSON GUIDE TAB -->
+    <div class="tab-content" id="tab-lesson">
+
+      <div class="quick-ref-grid">
+        <div class="quick-ref-card" style="--accent: var(--teal)">
+          <div class="quick-ref-card-label">⏱ Time</div>
+          <div class="quick-ref-card-text">25–30 minutes</div>
+        </div>
+        <div class="quick-ref-card" style="--accent: var(--coral)">
+          <div class="quick-ref-card-label">📦 Materials</div>
+          <div class="quick-ref-card-text">Chime · Mindful Me Portfolio</div>
+        </div>
+        <div class="quick-ref-card" style="--accent: #9B5DE5">
+          <div class="quick-ref-card-label">🎯 SEL Focus</div>
+          <div class="quick-ref-card-text">Self-awareness · Self-management</div>
+        </div>
+        <div class="quick-ref-card" style="--accent: var(--gold)">
+          <div class="quick-ref-card-label">🧠 Brain Link</div>
+          <div class="quick-ref-card-text">PFC calms amygdala via breathing</div>
+        </div>
+      </div>
+
+      <div class="lesson-section open">
+        <div class="lesson-section-header" onclick="toggleSection(this)">
+          <div class="lesson-section-icon" style="background:#fff0f0">🎯</div>
+          <div class="lesson-section-title">Purpose & Objectives</div>
+          <span class="lesson-section-toggle">▾</span>
+        </div>
+        <div class="lesson-section-body">
+          <p>Students are introduced to the core mindful awareness practices of the MindUP Brain Break: <strong>mindful listening</strong> and <strong>mindful breathing</strong>. They'll continue these throughout the program.</p>
+          <br>
+          <p><strong>Students will:</strong></p>
+          <ul class="step-list">
+            <li>Practice mindful listening and breathing</li>
+            <li>Describe their experience and identify differences from normal breathing</li>
+            <li>Connect attention focus to the PFC</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="lesson-section">
+        <div class="lesson-section-header" onclick="toggleSection(this)">
+          <div class="lesson-section-icon" style="background:#fff8e6">⚠️</div>
+          <div class="lesson-section-title">Before You Teach — Important Ethics</div>
+          <span class="lesson-section-toggle">▾</span>
+        </div>
+        <div class="lesson-section-body">
+          <div class="warning-box">
+            <strong>⚠️ Never Mandate</strong>
+            The Brain Break must always be presented as an <em>invitation</em>. Students who are not comfortable must be able to opt out. This is an individual choice.
+          </div>
+          <div class="warning-box">
+            <strong>⚠️ Not a Compliance Tool</strong>
+            Do NOT use the Brain Break as a classroom management strategy to enforce compliance. The goal is to help students develop internal self-regulation.
+          </div>
+          <div class="tip-box">
+            <strong>✅ Right Mindset</strong>
+            Focus on "practice" not "perfection." Minds will wander — that's normal! The goal is simply to notice wandering and gently return attention to the breath. Consistent practice matters more than doing it "right."
+          </div>
+        </div>
+      </div>
+
+      <div class="lesson-section">
+        <div class="lesson-section-header" onclick="toggleSection(this)">
+          <div class="lesson-section-icon" style="background:#f0fafa">🫁</div>
+          <div class="lesson-section-title">Brain Science: Breathing Notes</div>
+          <span class="lesson-section-toggle">▾</span>
+        </div>
+        <div class="lesson-section-body">
+          <p><strong>Nose breathing:</strong> Inhaling through the nose supports calm, focused awareness. Inhalations should equal exhalations for balance.</p>
+          <br>
+          <p><strong>To activate calm (parasympathetic system):</strong> Extend the exhale so it's <em>longer</em> than the inhale. Try: breathing out through nose, humming, hissing, or saying "shhh."</p>
+          <br>
+          <p><strong>What's happening in the brain:</strong> Diaphragmatic (belly) breathing reduces cortisol, releases acetylcholine (calming), and through neuroplasticity, strengthens neural pathways for reflective rather than reactive responses.</p>
+          <div class="tip-box">
+            <strong>🎯 Key for kids</strong>
+            "Notice your belly rise and fall" — this anchors attention to a concrete physical sensation, making it easier than abstract breath focus.
+          </div>
+        </div>
+      </div>
+
+      <div class="lesson-section">
+        <div class="lesson-section-header" onclick="toggleSection(this)">
+          <div class="lesson-section-icon" style="background:#f7f0ff">📝</div>
+          <div class="lesson-section-title">Lesson Flow (Step by Step)</div>
+          <span class="lesson-section-toggle">▾</span>
+        </div>
+        <div class="lesson-section-body">
+          <ol class="step-list">
+            <li><strong>Review Community Agreement</strong> — remind students of agreed ways of being together</li>
+            <li><strong>Class Discussion</strong> — define "mindful" (nonjudgmental moment-to-moment awareness) vs. "unmindful"</li>
+            <li><strong>Share Home Activity</strong> — ask if anyone wants to share their experience</li>
+            <li><strong>Set Focused Awareness Norms</strong> — how does the community agreement extend to mindfulness practice?</li>
+            <li><strong>Mindful Listening Activity</strong> — ring chime, students listen until they can't hear the sound</li>
+            <li><strong>Brain Break: Mindful Breathing</strong> — ~1 minute of guided belly breathing (see Scripts tab)</li>
+            <li><strong>Share Experiences</strong> — discussion questions about what they noticed</li>
+            <li><strong>Summarize Key Points</strong> — address concerns about "doing it right"</li>
+            <li><strong>Apply to Community Agreement</strong> — how does this new knowledge fit?</li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="lesson-section">
+        <div class="lesson-section-header" onclick="toggleSection(this)">
+          <div class="lesson-section-icon" style="background:#f0f9ff">🎨</div>
+          <div class="lesson-section-title">Differentiation Ideas</div>
+          <span class="lesson-section-toggle">▾</span>
+        </div>
+        <div class="lesson-section-body">
+          <p><strong>Simplification:</strong></p>
+          <ul style="padding-left:1.2rem; font-size:0.83rem; line-height:1.8; color:#3a4a6b; margin: 0.5rem 0 1rem">
+            <li>Listen to chime for only a few seconds</li>
+            <li>Use hands or Hoberman sphere to show breath in/out</li>
+            <li>Introduce the "Mind Jar" — glitter + water = amygdala in overdrive; deep breaths = glitter settles</li>
+            <li>Lie on back, place Lego on stomach — watch it rise and fall</li>
+          </ul>
+          <p><strong>Enrichment:</strong></p>
+          <ul style="padding-left:1.2rem; font-size:0.83rem; line-height:1.8; color:#3a4a6b; margin: 0.5rem 0">
+            <li>Challenge students to lengthen Brain Break time or exhale duration</li>
+            <li>Build neuron models with toothpicks and plasticine</li>
+            <li>Deeper amygdala discussion — what triggers it? What calms it?</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- SCRIPTS TAB -->
+    <div class="tab-content" id="tab-scripts">
+
+      <div class="lesson-section open">
+        <div class="lesson-section-header" onclick="toggleSection(this)">
+          <div class="lesson-section-icon" style="background:#fff0f8">🎵</div>
+          <div class="lesson-section-title">Mindful Listening Script</div>
+          <span class="lesson-section-toggle">▾</span>
+        </div>
+        <div class="lesson-section-body">
+          <div class="tip-box"><strong>📋 When to use</strong>This precedes the Brain Break. Repeat the chime 1–2 times.</div>
+          <div class="script-box">
+            <div class="script-line">Now we are going to practice our mindful listening.</div>
+            <div class="script-line">To get ready, please sit in a comfortable position.</div>
+            <div class="script-line">I invite you to close your eyes. If you're not comfortable closing your eyes, please just look down at your hands to respect the people around you.</div>
+            <div class="script-line">You can place your hands gently in your lap.</div>
+            <div class="script-line">Now, focus the best way you can, and listen to the sound of the instrument for as long as you can.</div>
+            <div class="script-line">When you can no longer hear the sound, you can quietly raise your hand.</div>
+          </div>
+          <div class="tip-box"><strong>🔔 Then:</strong> Ring the chime. Repeat 1–2 times.</div>
+        </div>
+      </div>
+
+      <div class="lesson-section">
+        <div class="lesson-section-header" onclick="toggleSection(this)">
+          <div class="lesson-section-icon" style="background:#f0fafa">🫁</div>
+          <div class="lesson-section-title">Brain Break Script (~1 minute)</div>
+          <span class="lesson-section-toggle">▾</span>
+        </div>
+        <div class="lesson-section-body">
+          <div class="tip-box"><strong>📋 Setup</strong>Begin AND end with one ring of the chime. Allow 30–45 sec afterward for students to return awareness.</div>
+          <div class="script-box">
+            <div class="script-line">Please sit down in a comfortable position.</div>
+            <div class="script-line">I am going to invite you to close your eyes. If you are not comfortable closing your eyes, please just look down at your hands to respect the people around you.</div>
+            <div class="script-line">Please listen to the sound as long as you can.</div>
+          </div>
+          <div class="tip-box"><strong>🔔 Ring chime → wait for sound to end, then continue:</strong></div>
+          <div class="script-box">
+            <div class="script-line">Bring your attention to your breath. <em>(PAUSE)</em></div>
+            <div class="script-line">If your mind wanders, that's okay; just bring your focus back to your breath. <em>(PAUSE)</em></div>
+            <div class="script-line">Breathe in through your nose and out through your mouth or nose.</div>
+            <div class="script-line">Notice your belly rise and fall. <em>(PAUSE)</em></div>
+            <div class="script-line">If your mind wanders, that's okay; just bring your focus back to your breath. <em>(PAUSE)</em></div>
+            <div class="script-line">When you hear the chime again, listen as long as you can. When you can't hear the sound any longer, slowly look up and bring your attention back to the room.</div>
+          </div>
+          <div class="tip-box"><strong>🔔 Ring chime → Allow 30–45 seconds for full return.</strong></div>
+        </div>
+      </div>
+
+      <div class="lesson-section">
+        <div class="lesson-section-header" onclick="toggleSection(this)">
+          <div class="lesson-section-icon" style="background:#fff8e6">💬</div>
+          <div class="lesson-section-title">Discussion Questions</div>
+          <span class="lesson-section-toggle">▾</span>
+        </div>
+        <div class="lesson-section-body">
+          <p style="font-size:0.82rem; font-weight:700; color:var(--teal-dark); margin-bottom:8px; text-transform:uppercase; letter-spacing:1px;">After the Brain Break:</p>
+          <div class="script-box">
+            <div class="script-line">What did you think about the activity?</div>
+            <div class="script-line">Did you notice any differences between how you normally breathe and your breath during the mindful breathing exercise?</div>
+            <div class="script-line">Do you notice any differences in your breath when you are doing other kinds of activities (sports, music or dance, relaxing and watching a show)?</div>
+          </div>
+          <p style="font-size:0.82rem; font-weight:700; color:var(--teal-dark); margin: 12px 0 8px; text-transform:uppercase; letter-spacing:1px;">Key Summary Points to Communicate:</p>
+          <div class="script-box">
+            <div class="script-line">Having trouble holding attention on our breath is normal and expected.</div>
+            <div class="script-line">We're not trying to do anything right or avoid doing something wrong.</div>
+            <div class="script-line">Sometimes you might feel bored — this is okay! You are still strengthening your brain.</div>
+            <div class="script-line">By focusing on the present moment, we use our PFC to help calm our brain.</div>
+            <div class="script-line">From now on, we will practice mindful listening and breathing three times a day, every day — it will be our Brain Break.</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- CHAT PANEL -->
+  <div class="chat-panel">
+    <div class="chat-header">
+      <div class="chat-header-title">✨ AI Teacher Assistant</div>
+      <div class="chat-header-sub">Ask anything about MindUP, brain science, or this lesson</div>
+    </div>
+
+    <div class="chat-quick-prompts">
+      <button class="quick-prompt-chip" onclick="sendQuickPrompt('How do I explain the amygdala to a 3rd grader?')">Explain amygdala simply</button>
+      <button class="quick-prompt-chip" onclick="sendQuickPrompt('A student refuses to close their eyes. What should I do?')">Student won\'t close eyes</button>
+      <button class="quick-prompt-chip" onclick="sendQuickPrompt('What\'s the difference between PFC and amygdala in the Brain Break?')">PFC vs amygdala</button>
+      <button class="quick-prompt-chip" onclick="sendQuickPrompt('How do I help a student who says the Brain Break feels weird?')">Feels weird to student</button>
+      <button class="quick-prompt-chip" onclick="sendQuickPrompt('Give me 3 ways to simplify this lesson for struggling learners')">Simplify for learners</button>
+      <button class="quick-prompt-chip" onclick="sendQuickPrompt('What is neuroplasticity and how do I teach it to kids?')">Neuroplasticity for kids</button>
+    </div>
+
+    <div class="chat-messages" id="chatMessages">
+      <div class="welcome-message">
+        <div class="welcome-icon">🧠</div>
+        <div class="welcome-title">Just-in-Time Teaching Support</div>
+        <div class="welcome-text">Ask me anything about Lesson 4, brain science, or mindful teaching strategies. I know the full MindUP curriculum and the neuroscience behind it.</div>
+      </div>
+    </div>
+
+    <div class="chat-input-area">
+      <div class="chat-input-wrapper">
+        <textarea
+          class="chat-textarea"
+          id="chatInput"
+          placeholder="Ask about the lesson, brain regions, student scenarios..."
+          rows="1"
+          onkeydown="handleKeyDown(event)"
+          oninput="autoResize(this)"
+        ></textarea>
+        <button class="send-btn" id="sendBtn" onclick="sendMessage()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <line x1="22" y1="2" x2="11" y2="13"></line>
+            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ============================================================
+// TAB SWITCHING
+// ============================================================
+function switchTab(tabId) {
+  document.querySelectorAll('.tab-btn').forEach((btn, i) => {
+    btn.classList.remove('active');
+  });
+  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+
+  const tabs = ['brain', 'lesson', 'scripts'];
+  const idx = tabs.indexOf(tabId);
+  document.querySelectorAll('.tab-btn')[idx].classList.add('active');
+  document.getElementById('tab-' + tabId).classList.add('active');
+}
+
+// ============================================================
+// LESSON SECTIONS TOGGLE
+// ============================================================
+function toggleSection(header) {
+  const section = header.parentElement;
+  section.classList.toggle('open');
+}
+
+// ============================================================
+// BRAIN REGION DATA
+// ============================================================
+const regionData = {
+  pfc: {
+    name: 'Prefrontal Cortex (PFC)',
+    color: '#FF6B6B',
+    emoji: '🦉',
+    nickname: '"The Wise Owl"',
+    description: 'The PFC is located right behind your forehead. It\'s the brain\'s command center for thinking clearly, making good decisions, planning ahead, and managing emotions. It\'s the last brain region to fully develop (not until our mid-20s!).',
+    mindupConnection: 'The Brain Break directly activates the PFC. When students focus attention on breath or sound in the present moment, they\'re exercising this region. The PFC can "calm down" the amygdala — like a wise mentor helping an anxious friend. Every Brain Break makes these neural pathways stronger.'
+  },
+  amygdala: {
+    name: 'Amygdala',
+    color: '#FFD166',
+    emoji: '🐕',
+    nickname: '"The Guard Dog"',
+    description: 'The amygdala is an almond-shaped structure deep inside the brain. It processes emotions — especially fear, excitement, and threat responses. When it detects danger (real or imagined), it can trigger fight, flight, or freeze responses, flooding the body with stress hormones.',
+    mindupConnection: 'Stress, anxiety, or strong emotions can cause the amygdala to "hijack" the brain, making the PFC less accessible. This is called "flipping your lid." The Brain Break — especially slow exhales — activates the parasympathetic nervous system and helps the PFC regain control, reducing amygdala activation.'
+  },
+  hippocampus: {
+    name: 'Hippocampus',
+    color: '#2EC4B6',
+    emoji: '📚',
+    nickname: '"The Librarian"',
+    description: 'The hippocampus is shaped like a seahorse (hippo = horse, campus = sea creature in Latin!). It\'s critical for forming new memories, learning, and connecting new information to what we already know. It\'s particularly sensitive to stress hormones like cortisol.',
+    mindupConnection: 'High stress and chronic amygdala activation can impair the hippocampus, making learning harder. By calming stress responses through the Brain Break, MindUP actually creates better conditions for memory formation and learning — directly supporting academic performance.'
+  },
+  cortex: {
+    name: 'Cerebral Cortex',
+    color: '#00BBF9',
+    emoji: '🎩',
+    nickname: '"The Thinking Cap"',
+    description: 'The cerebral cortex is the brain\'s outer wrinkled layer — all those folds create more surface area for more brain cells! It handles higher-order thinking: language, reasoning, creativity, perception, and conscious thought.',
+    mindupConnection: 'Mindfulness practice strengthens the cortex, particularly areas involved in attention and self-awareness. Over time, consistent Brain Break practice may actually increase the thickness of cortical regions responsible for sustained attention — a structural brain change from practice!'
+  },
+  cerebellum: {
+    name: 'Cerebellum',
+    color: '#9B5DE5',
+    emoji: '⚖️',
+    nickname: '"The Coordinator"',
+    description: 'The cerebellum sits at the back-bottom of the brain. Despite being smaller, it contains more than half of all the brain\'s neurons! It coordinates movement, balance, and muscle timing, and may also play roles in emotional regulation and attention.',
+    mindupConnection: 'During the Brain Break, body posture and stillness engage the cerebellum subtly. Some researchers suggest the cerebellum contributes to the timing and rhythm of breathing exercises, and its connections to emotional centers may support the calming effects of mindful movement.'
+  },
+  brainstem: {
+    name: 'Brain Stem',
+    color: '#F15BB5',
+    emoji: '💓',
+    nickname: '"The Life Support"',
+    description: 'The brain stem connects the brain to the spinal cord and controls automatic survival functions: breathing, heart rate, blood pressure, sleep, and basic alertness. It operates 24/7 without conscious effort.',
+    mindupConnection: 'Here\'s the fascinating link: conscious breathing exercises (like the Brain Break) are one of the few ways we can voluntarily influence the brain stem\'s automatic functions. By intentionally controlling the breath, students are literally using their conscious PFC to influence their brain stem — and their entire nervous system state.'
+  }
+};
+
+let activeRegion = null;
+
+function selectRegion(regionId) {
+  // Deactivate previous
+  if (activeRegion) {
+    const prevSvg = document.getElementById('region-' + activeRegion);
+    const prevCard = document.getElementById('card-' + activeRegion);
+    if (prevSvg) prevSvg.classList.remove('active');
+    if (prevCard) prevCard.classList.remove('active');
+  }
+
+  activeRegion = regionId;
+
+  // Activate new
+  const svgEl = document.getElementById('region-' + regionId);
+  const cardEl = document.getElementById('card-' + regionId);
+  if (svgEl) svgEl.classList.add('active');
+  if (cardEl) cardEl.classList.add('active');
+
+  // Update info panel
+  const data = regionData[regionId];
+  const panel = document.getElementById('region-info-panel');
+  panel.style.setProperty('--active-color', data.color);
+
+  panel.innerHTML = `
+    <div class="info-region-label">
+      <span class="info-region-badge" style="background:${data.color}">${data.emoji} ${data.nickname}</span>
+    </div>
+    <div class="info-region-title">${data.name}</div>
+    <div class="info-region-desc">${data.description}</div>
+    <div class="info-mindful-connection">
+      <strong>🧘 MindUP Connection</strong>
+      ${data.mindupConnection}
+    </div>
+  `;
+}
+
+// ============================================================
+// CHAT SYSTEM
+// ============================================================
+const SYSTEM_PROMPT = `You are an expert MindUP teacher assistant embedded in a classroom tool for grades 3-5 teachers. You have deep knowledge of:
+
+1. LESSON 4 - THE BRAIN BREAK (full content):
+- Purpose: Introduce mindful listening and mindful breathing as the MindUP Brain Break
+- Key concept: Focusing attention on the present moment uses the prefrontal cortex (PFC)
+- Materials: Chime, Mindful Me Portfolio
+- Time: 25-30 minutes
+- Steps: Review community agreement → class discussion (mindful vs unmindful) → share home activity → set norms → mindful listening (ring chime) → Brain Break mindful breathing (~1 min) → share experiences → summarize key points → apply to community agreement
+- Scripts are provided for mindful listening and the Brain Break
+- ETHICAL REQUIREMENT: Brain Break must ALWAYS be presented as an invitation, never mandated. Students can opt out.
+- Brain Break should NOT be used as classroom management/compliance tool
+- Focus on "practice" not "perfection" - minds WILL wander, that's normal
+- Follow up: MindUP for Home and Life (mindful breathing in daily life), Mindful Me Portfolio entry ("Focusing My Attention Looks Like...")
+
+2. BRAIN SCIENCE (as relevant to MindUP):
+- Prefrontal Cortex (PFC): "Wise Owl" - decision-making, focus, self-regulation, last to develop (mid-20s), activated by mindful attention
+- Amygdala: "Guard Dog" - emotional reactions, fight/flight/freeze, can "hijack" the brain under stress, calmed by PFC and slow breathing
+- Hippocampus: memory formation, sensitive to cortisol/stress, benefits from reduced amygdala activation
+- Cerebral Cortex: higher-order thinking, language, perception
+- Brain Stem: automatic functions including breathing - uniquely controllable through conscious breathing practice
+- Neuroplasticity: the brain changes with practice; consistent Brain Breaks strengthen attention and emotional regulation neural pathways
+- Diaphragmatic breathing: reduces cortisol, releases acetylcholine (calming), calms sympathetic nervous system
+- Extending exhale longer than inhale activates parasympathetic (rest & digest) system
+- Mouth breathing can activate fight/flight by making inhalations shorter than exhalations
+
+3. MINDFULNESS PEDAGOGY:
+- Mindfulness = moment-to-moment nonjudgmental awareness of our experience
+- SEL connections: self-awareness, self-management, responsible decision-making
+- Emotional regulation = noticing, labeling, and managing emotions; mindful state supports reflection over reaction
+- Consistent daily practice (3x/day) matters more than duration
+- The Brain Break is "a journey, not a destination"
+
+4. DIFFERENTIATION:
+- Simplification: shorter chime, Hoberman sphere, Mind Jar demo (glitter+water), Lego on belly for breathing
+- Enrichment: lengthen Brain Break, neuron models with toothpicks/plasticine, deeper amygdala discussion
+- Literature list: Anh's Anger, Jabari Jumps, A Handful of Quiet, Breathe, Follow Your Breath!, Each Breath a Smile
+
+Respond as a warm, knowledgeable colleague. Be concise (3-5 sentences for simple questions, up to 8-10 for complex ones). Use plain language appropriate for teachers. When relevant, note connections to specific lesson steps or brain science. If asked for student-facing language, adjust accordingly. Format responses with light use of **bold** for key terms when helpful.`;
+
+let conversationHistory = [];
+let isLoading = false;
+
+function autoResize(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 120) + 'px';
+}
+
+function handleKeyDown(e) {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    sendMessage();
+  }
+}
+
+function sendQuickPrompt(prompt) {
+  document.getElementById('chatInput').value = prompt;
+  sendMessage();
+}
+
+async function sendMessage() {
+  if (isLoading) return;
+  const input = document.getElementById('chatInput');
+  const text = input.value.trim();
+  if (!text) return;
+
+  input.value = '';
+  input.style.height = 'auto';
+
+  addMessage('user', text);
+
+  conversationHistory.push({ role: 'user', content: text });
+
+  isLoading = true;
+  document.getElementById('sendBtn').disabled = true;
+
+  const typingId = showTyping();
+
+  try {
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        system: SYSTEM_PROMPT,
+        messages: conversationHistory
+      })
+    });
+
+    const data = await response.json();
+    const reply = data.content?.[0]?.text || 'Sorry, I had trouble responding. Please try again.';
+
+    removeTyping(typingId);
+    conversationHistory.push({ role: 'assistant', content: reply });
+    addMessage('assistant', reply);
+  } catch (err) {
+    removeTyping(typingId);
+    addMessage('assistant', 'I\'m having trouble connecting right now. Please try again in a moment.');
+    console.error(err);
+  }
+
+  isLoading = false;
+  document.getElementById('sendBtn').disabled = false;
+  input.focus();
+}
+
+function addMessage(role, text) {
+  const container = document.getElementById('chatMessages');
+
+  // Remove welcome message if present
+  const welcome = container.querySelector('.welcome-message');
+  if (welcome) welcome.remove();
+
+  const msgDiv = document.createElement('div');
+  msgDiv.className = `message ${role}`;
+
+  const label = role === 'user' ? 'You' : '🧠 MindUP Assistant';
+
+  // Format text: convert **bold** and newlines
+  let formatted = text
+    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\n\n/g, '</p><p>')
+    .replace(/\n- /g, '</p><ul><li>')
+    .replace(/\n• /g, '</p><ul><li>');
+
+  msgDiv.innerHTML = `
+    <div class="message-label">${label}</div>
+    <div class="message-bubble"><p>${formatted}</p></div>
+  `;
+
+  container.appendChild(msgDiv);
+  container.scrollTop = container.scrollHeight;
+}
+
+let typingCounter = 0;
+function showTyping() {
+  const id = 'typing-' + (++typingCounter);
+  const container = document.getElementById('chatMessages');
+
+  const div = document.createElement('div');
+  div.className = 'message assistant';
+  div.id = id;
+  div.innerHTML = `
+    <div class="message-label">🧠 MindUP Assistant</div>
+    <div class="typing-indicator">
+      <div class="typing-dot"></div>
+      <div class="typing-dot"></div>
+      <div class="typing-dot"></div>
+    </div>
+  `;
+  container.appendChild(div);
+  container.scrollTop = container.scrollHeight;
+  return id;
+}
+
+function removeTyping(id) {
+  const el = document.getElementById(id);
+  if (el) el.remove();
+}
+</script>
+</body>
+</html>
