@@ -169,11 +169,16 @@
   textarea { width: 100%; border: 1.5px solid var(--border); border-radius: 4px; padding: 13px 15px; font-family: 'Roboto', sans-serif; font-size: 0.9rem; color: var(--ink); background: white; resize: vertical; min-height: 86px; line-height: 1.6; transition: border-color 0.2s; }
   textarea:focus { outline: none; border-color: var(--maroon); box-shadow: 0 0 0 3px rgba(140,29,64,0.08); }
   textarea::placeholder { color: #aaa; }
-  .ai-respond-btn { display: inline-flex; align-items: center; gap: 6px; background: var(--maroon-soft); color: var(--maroon); border: 1px solid rgba(140,29,64,0.25); border-radius: 4px; padding: 8px 16px; font-family: 'Roboto', sans-serif; font-size: 0.82rem; font-weight: 700; cursor: pointer; margin-top: 8px; transition: all 0.2s; }
-  .ai-respond-btn:hover { background: var(--maroon); color: white; }
+  .coaching-btn-row { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+  .ai-respond-btn { display: inline-flex; align-items: center; gap: 6px; background: var(--maroon); color: white; border: 1px solid var(--maroon); border-radius: 4px; padding: 10px 18px; font-family: 'Roboto', sans-serif; font-size: 0.84rem; font-weight: 700; cursor: pointer; transition: all 0.2s; text-transform: uppercase; letter-spacing: 0.04em; }
+  .ai-respond-btn:hover { background: #6b1530; }
   .ai-respond-btn::before { content: '✦'; font-size: 0.7em; }
   .ai-respond-btn:disabled { opacity: 0.5; cursor: default; }
-  .ai-response-box { display: none; background: var(--maroon-soft); border: 1px solid rgba(140,29,64,0.18); border-radius: 4px; padding: 16px 18px; margin-top: 10px; animation: fadeSlideUp 0.3s ease; }
+  .skip-btn { display: inline-flex; align-items: center; gap: 5px; background: white; color: var(--ink-light); border: 1px solid var(--border); border-radius: 4px; padding: 10px 16px; font-family: 'Roboto', sans-serif; font-size: 0.84rem; font-weight: 500; cursor: pointer; transition: all 0.2s; }
+  .skip-btn:hover { border-color: var(--maroon); color: var(--maroon); }
+  .skip-btn:disabled { opacity: 0.4; cursor: default; }
+  .coaching-note { font-size: 0.76rem; color: var(--ink-light); margin-top: 7px; font-style: italic; }
+  .ai-response-box { display: none; background: var(--maroon-soft); border: 1px solid rgba(140,29,64,0.18); border-radius: 4px; padding: 16px 18px; margin-top: 12px; animation: fadeSlideUp 0.3s ease; }
   .ai-response-box.visible { display: block; }
   .ai-response-header { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; font-size: 0.78rem; font-weight: 700; color: var(--maroon); }
   .ai-response-text { font-size: 0.9rem; color: #4a1020; line-height: 1.6; }
@@ -467,8 +472,12 @@
     <div class="feedback-body" id="fb-act1-body"></div>
     <div class="reflection-area">
       <div class="reflection-label">What specific concepts in Q1–Q4 do you think students struggled with? What would you look for?</div>
-      <textarea placeholder="Type your thinking here..." id="reflect-act1"></textarea>
-      <button class="ai-respond-btn" onclick="getAICoaching('act1')" id="btn-act1">Get coaching</button>
+      <textarea placeholder="Type your thinking here — or just click 'Get Coaching' to hear from your AI coach..." id="reflect-act1"></textarea>
+      <div class="coaching-btn-row">
+        <button class="ai-respond-btn" onclick="getAICoaching('act1')" id="btn-act1">✦ Get Coaching</button>
+        <button class="skip-btn" onclick="getAICoaching('act1', true)" id="skip-act1">Submit without reflection</button>
+      </div>
+      <div class="coaching-note">Your AI coach will respond to what you wrote — or offer a thought if you left it blank.</div>
       <div class="ai-response-box" id="air-act1">
         <div class="ai-response-header"><span class="ai-badge-subtle">AI Coach</span></div>
         <div class="ai-response-text" id="air-act1-text"></div>
@@ -539,8 +548,12 @@
     <div class="feedback-body" id="fb-act2-body"></div>
     <div class="reflection-area">
       <div class="reflection-label">How might knowing this data before the lesson change how you structure your class time?</div>
-      <textarea placeholder="What instructional moves become possible when you have predictive data?" id="reflect-act2"></textarea>
-      <button class="ai-respond-btn" onclick="getAICoaching('act2')" id="btn-act2">Get coaching</button>
+      <textarea placeholder="Type your thinking here — or just click 'Get Coaching' to hear from your AI coach..." id="reflect-act2"></textarea>
+      <div class="coaching-btn-row">
+        <button class="ai-respond-btn" onclick="getAICoaching('act2')" id="btn-act2">✦ Get Coaching</button>
+        <button class="skip-btn" onclick="getAICoaching('act2', true)" id="skip-act2">Submit without reflection</button>
+      </div>
+      <div class="coaching-note">Your AI coach will respond to what you wrote — or offer a thought if you left it blank.</div>
       <div class="ai-response-box" id="air-act2">
         <div class="ai-response-header"><span class="ai-badge-subtle">AI Coach</span></div>
         <div class="ai-response-text" id="air-act2-text"></div>
@@ -674,8 +687,12 @@
     </div>
     <div class="reflection-area">
       <div class="reflection-label">What would you have done with only the Act 1 data? What does the full picture make possible?</div>
-      <textarea placeholder="Think about the difference between reacting to what went wrong vs. anticipating the full range of your learners..." id="reflect-act3"></textarea>
-      <button class="ai-respond-btn" onclick="getAICoaching('act3')" id="btn-act3">Get coaching</button>
+      <textarea placeholder="Type your thinking here — or just click 'Get Coaching' to hear from your AI coach..." id="reflect-act3"></textarea>
+      <div class="coaching-btn-row">
+        <button class="ai-respond-btn" onclick="getAICoaching('act3')" id="btn-act3">✦ Get Coaching</button>
+        <button class="skip-btn" onclick="getAICoaching('act3', true)" id="skip-act3">Submit without reflection</button>
+      </div>
+      <div class="coaching-note">Your AI coach will respond to what you wrote — or offer a thought if you left it blank.</div>
       <div class="ai-response-box" id="air-act3">
         <div class="ai-response-header"><span class="ai-badge-subtle">AI Coach</span></div>
         <div class="ai-response-text" id="air-act3-text"></div>
@@ -903,16 +920,21 @@ function selectChoice(btn, act, choice) {
   document.getElementById('fb-'+act+'-title').textContent = fb.title;
   document.getElementById('fb-'+act+'-body').innerHTML = fb.body;
   document.getElementById('fb-'+act).classList.add('visible');
-  if (act === 'act1') { act1Choice = choice; setProgress(25); }
-  if (act === 'act2') { act2Choice = choice; setProgress(55); }
-  setTimeout(() => { document.getElementById(act+'-continue').style.display = 'block'; scrollTo('fb-'+act); }, 350);
+  if (act === 'act1') { act1Choice = choice; setProgress(15); }
+  if (act === 'act2') { act2Choice = choice; setProgress(42); }
+  // Continue button is now revealed ONLY after coaching fires — not here
+  setTimeout(() => scrollTo('fb-'+act), 350);
 }
 
 // ── ACT 3 ────────────────────────────────────────────
 function toggleNextStep(btn, id) {
   if (btn.classList.contains('selected')) { btn.classList.remove('selected'); selectedSteps = selectedSteps.filter(s => s !== id); }
   else { if (selectedSteps.length >= 3) return; btn.classList.add('selected'); selectedSteps.push(id); }
-  if (selectedSteps.length >= 2) { document.getElementById('fb-act3').classList.add('visible'); document.getElementById('act3-continue').style.display = 'block'; setProgress(80); }
+  if (selectedSteps.length >= 2) {
+    document.getElementById('fb-act3').classList.add('visible');
+    setProgress(65);
+    // continue only appears after coaching
+  }
 }
 
 // ── GO DEEPER ────────────────────────────────────────
@@ -924,23 +946,64 @@ function toggleGoDeeper() {
 }
 
 // ── AI COACHING ──────────────────────────────────────
-async function getAICoaching(id) {
+async function getAICoaching(id, skipReflection) {
   const textEl = document.getElementById('reflect-' + id);
   const btn = document.getElementById('btn-' + id);
+  const skipBtn = document.getElementById('skip-' + id);
   const responseBox = document.getElementById('air-' + id);
   const responseText = document.getElementById('air-' + id + '-text');
-  const userText = textEl.value.trim();
-  if (!userText || userText.length < 10) { textEl.style.borderColor = 'var(--accent)'; setTimeout(() => { textEl.style.borderColor = ''; }, 1500); return; }
-  btn.disabled = true;
+  const userText = textEl ? textEl.value.trim() : '';
+
+  // Disable both buttons while loading
+  if (btn) btn.disabled = true;
+  if (skipBtn) skipBtn.disabled = true;
+
   responseBox.classList.add('visible');
-  responseText.innerHTML = '<div class="ai-thinking"><div class="ai-thinking-dots"><span></span><span></span><span></span></div> Thinking…</div>';
+  responseText.innerHTML = '<div class="ai-thinking"><div class="ai-thinking-dots"><span></span><span></span><span></span></div>&nbsp; Your coach is thinking…</div>';
+
+  // If no reflection, use a default prompt cue
+  const reflectionText = userText.length > 0 ? userText : '[The teacher did not type a reflection — offer a relevant coaching thought based on their choice and the data they just saw.]';
 
   const contexts = {
-    act1: `The teacher is working through a professional learning case study about CK-12 Learning Analytics. In Act 1, they only had question-level data showing Q1-Q4 were most missed (28-44% correct rate) for a 6th grade math class on Section 7.3 Solving Addition and Subtraction Equations. They chose: "${choiceLabels[act1Choice] || 'to reflect without choosing'}". Their reflection is: "${userText}". As an instructional coach, respond in 3-4 sentences: briefly affirm what's insightful in their thinking, name the specific teaching move they're describing, then probe deeper with one follow-up question that connects their thinking to the next layer of data they're about to see (individual student skill levels). Be warm, specific, and concise.`,
-    act2: `The teacher is in Act 2 of a PL case study. They now have both question-level data AND individual student skill level predictions (CR=Beginning, JJ/SJ=Exploring, JD/DS/BS=Developing, MB/TD=Proficient, SW=Mastery, PW/AS=Not enough data) for a 6th grade math class. They chose Act 1: "${choiceLabels[act1Choice] || 'unknown'}" and Act 2: "${act2Labels[act2Choice] || 'unknown'}". Their reflection on how predictive data changes planning: "${userText}". As an instructional coach, respond in 3-4 sentences: affirm the insight, name a specific instructional move they're articulating (e.g. proactive grouping, pre-teaching, tiering), then ask one question that helps them connect this to what they'd actually do in their own classroom. Be warm and specific.`,
-    act3: `The teacher has completed all three acts of a PL case study about CK-12 Learning Analytics. Act 1 (quiz data only) → Act 2 (Foresights skill predictions) → Act 3 (full Insights: 9/11 turned in, engagement scatter, AI recommendations including nudges, prerequisite gap for CR/JJ/SJ, enrichment for SW/TD/AS, 32% engagement gap). Their Act 3 reflection comparing Act 1 to the full picture: "${userText}". They chose: Act 1="${choiceLabels[act1Choice] || 'unknown'}", Act 2="${act2Labels[act2Choice] || 'unknown'}", final steps="${selectedSteps.join(', ')}". As an instructional coach, respond in 3-4 sentences: affirm the specific shift in thinking they're naming, explicitly call out the growth in their decision-making across the acts, and end with one question about how they'd apply this in their own classroom.`,
-    sally: `The teacher is exploring an individual student's data: Sally Williams reached Mastery skill level but has Low engagement (39%) and only spent 3 minutes 6 seconds on reading in a 6th grade math lesson. The teacher's reflection on what they'd do for Sally: "${userText}". As an instructional coach, respond in 3-4 sentences: affirm what's strong in their thinking about this tension between high performance and low engagement, name the instructional move they're describing (e.g. enrichment, differentiated path, acceleration), then probe with one question: what does Sally's pattern tell you about how your current lesson design might be serving — or under-serving — your highest learners?`,
-    final: `The teacher has just completed a full professional learning case study about CK-12 Learning Analytics (Foresights and Insights). Their final reflection about what they'd do differently in their own practice: "${userText}". Act 1 choice: "${choiceLabels[act1Choice] || 'unknown'}". Act 2 choice: "${act2Labels[act2Choice] || 'unknown'}". As an instructional coach, respond in 3-4 sentences: warmly affirm the specific change they're naming, connect it to the mindset shift from "reacting to what went wrong" to "anticipating where each learner is headed", and close with one concrete, actionable step they could take in their next lesson this week to start living this shift.`
+    act1: `You are a warm, specific instructional coach responding to a teacher in a professional learning module about CK-12 Learning Analytics. 
+
+Context: The teacher just saw question-level data for Section 7.3 (Solving Addition and Subtraction Equations, 6th grade). Q1–Q4 had the highest miss rates (28–44% correct). They chose: "${choiceLabels[act1Choice] || 'did not select a choice'}".
+
+Their reflection: "${reflectionText}"
+
+Respond in 3–4 sentences. Affirm what's insightful, name the specific teaching move they're describing, then ask one follow-up question that connects their thinking to the next layer of data (individual student skill levels) they're about to see. Be warm and specific. No headers, no bullet points.`,
+
+    act2: `You are a warm, specific instructional coach responding to a teacher in a professional learning module about CK-12 Learning Analytics.
+
+Context: The teacher now sees individual student skill level predictions for their 6th grade math class. CR=Beginning, JJ/SJ=Exploring, JD/DS/BS=Developing, MB/TD=Proficient, SW=Mastery, PW/AS=Not enough data. They previously chose "${choiceLabels[act1Choice] || 'unknown'}" in Act 1, and now chose: "${act2Labels[act2Choice] || 'unknown'}".
+
+Their reflection: "${reflectionText}"
+
+Respond in 3–4 sentences. Affirm the insight, name the specific instructional move they're articulating (e.g. proactive grouping, pre-teaching, tiering), then ask one question connecting this to what they'd do in their own classroom. Be warm and specific. No headers, no bullet points.`,
+
+    act3: `You are a warm, specific instructional coach responding to a teacher in a professional learning module about CK-12 Learning Analytics.
+
+Context: The teacher has seen all three layers of data — quiz results, skill predictions, and the full Insights dashboard (engagement scatter, turn-in status, AI recommendations). Act 1 choice: "${choiceLabels[act1Choice] || 'unknown'}". Act 2 choice: "${act2Labels[act2Choice] || 'unknown'}". Final moves selected: "${selectedSteps.join(', ') || 'none yet'}".
+
+Their reflection comparing Act 1 to the full picture: "${reflectionText}"
+
+Respond in 3–4 sentences. Affirm the specific shift in thinking they're naming, call out the growth in their decision-making across the acts, and end with one question about how they'd apply this in their own classroom. Be warm and specific. No headers, no bullet points.`,
+
+    sally: `You are a warm, specific instructional coach responding to a teacher in a professional learning module.
+
+Context: The teacher is looking at an individual student — Sally Williams — who reached Mastery (highest skill level) but has Low engagement (39%) and spent only 3 minutes 6 seconds on reading. The tension: high performance, low engagement — possibly boredom, not struggle.
+
+Their reflection: "${reflectionText}"
+
+Respond in 3–4 sentences. Affirm what's strong in their thinking about this tension, name the instructional move they're describing (enrichment, differentiated path, acceleration), then ask: what does Sally's pattern tell you about how your current lesson design may be serving — or under-serving — your highest learners? Be warm and specific. No headers.`,
+
+    final: `You are a warm, specific instructional coach responding to a teacher who just completed a full professional learning case study about CK-12 Learning Analytics.
+
+Context: Their journey — Act 1: "${choiceLabels[act1Choice] || 'unknown'}". Act 2: "${act2Labels[act2Choice] || 'unknown'}". Final moves: "${selectedSteps.join(', ') || 'none'}".
+
+Their final reflection about what they'd do differently in their own practice: "${reflectionText}"
+
+Respond in 3–4 sentences. Warmly affirm the specific change they're naming, connect it to the mindset shift from "reacting to what went wrong" to "anticipating where each learner is headed", and close with one concrete step they could take in their next lesson this week. Be warm and specific. No headers.`
   };
 
   try {
@@ -949,17 +1012,39 @@ async function getAICoaching(id) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         model: 'claude-sonnet-4-20250514',
-        max_tokens: 1000,
+        max_tokens: 400,
         messages: [{ role: 'user', content: contexts[id] }]
       })
     });
     const data = await res.json();
-    const text = data.content?.map(c => c.text || '').join('') || 'I wasn\'t able to generate a response right now. Try again in a moment.';
-    responseText.innerHTML = text.replace(/\n\n/g, '<br><br>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-  } catch (e) {
-    responseText.innerHTML = '<em>Coaching unavailable right now — but your reflection is valuable. Keep it and revisit it with a colleague!</em>';
+    const text = (data.content?.map(c => c.text || '').join('') || '').trim();
+    responseText.innerHTML = text
+      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+      .replace(/\n\n/g, '<br><br>')
+      .replace(/\n/g, ' ');
+  } catch(e) {
+    responseText.innerHTML = '<em>Your coach is unavailable right now — but your thinking here matters. Keep this reflection and bring it to a colleague.</em>';
   }
-  btn.disabled = false;
+
+  // Re-enable buttons
+  if (btn) btn.disabled = false;
+  if (skipBtn) skipBtn.disabled = false;
+
+  // Reveal the continue button for this act
+  const continueMap = { act1: 'act1-continue', act2: 'act2-continue', act3: 'act3-continue' };
+  if (continueMap[id]) {
+    const continueEl = document.getElementById(continueMap[id]);
+    if (continueEl) {
+      continueEl.style.display = 'block';
+      continueEl.style.animation = 'fadeSlideUp 0.4s ease';
+      setTimeout(() => continueEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 200);
+    }
+  }
+
+  // Update progress
+  if (id === 'act1') setProgress(25);
+  if (id === 'act2') setProgress(55);
+  if (id === 'act3') setProgress(80);
 }
 
 // ── AI SHIFT SUMMARY — THREE BOXES ───────────────────
