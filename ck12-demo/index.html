@@ -1,0 +1,1053 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>What Would You Do? — A CK-12 Learning Analytics Case Study</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&family=Roboto+Slab:wght@400;600;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #191919; --ink-light: #5C6670; --paper: #ffffff; --paper-warm: #f5f5f5;
+    --accent: #FFC627; --accent-dark: #8C1D40;
+    --teal: #00A3E0; --teal-soft: #e6f6fd;
+    --gold: #FFC627; --gold-soft: #fff8e1; --gold-dark: #191919;
+    --green: #78BE20; --green-soft: #f0f9e3;
+    --maroon: #8C1D40; --maroon-soft: #f5e8ee;
+    --ai-purple: #8C1D40; --ai-soft: #f5e8ee; --border: #e0e0e0;
+    --shadow: 0 2px 20px rgba(0,0,0,0.08);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Roboto', sans-serif; background: var(--paper); color: var(--ink); line-height: 1.65; font-size: 16px; }
+
+  .site-header { background: var(--maroon); position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 12px rgba(0,0,0,0.3); }
+  .header-inner { max-width: 880px; margin: 0 auto; padding: 13px 32px; display: flex; align-items: center; justify-content: space-between; }
+  .header-logo { font-family: 'Roboto', sans-serif; font-size: 1.05rem; font-weight: 900; color: white; letter-spacing: 0.01em; text-transform: uppercase; }
+  .header-logo span { color: var(--gold); }
+  .progress-wrap { display: flex; align-items: center; gap: 10px; font-size: 0.76rem; color: rgba(255,255,255,0.65); font-weight: 500; }
+  .progress-track { width: 110px; height: 3px; background: rgba(255,255,255,0.2); border-radius: 4px; overflow: hidden; }
+  .progress-fill { height: 100%; background: var(--gold); border-radius: 4px; width: 0%; transition: width 0.7s ease; }
+
+  .container { max-width: 840px; margin: 0 auto; padding: 0 32px 100px; }
+  .section { padding: 52px 0 0; }
+  .act-label { display: inline-flex; align-items: center; gap: 8px; font-family: 'Roboto Mono', monospace; font-size: 0.7rem; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--maroon); margin-bottom: 10px; }
+  .act-label::before { content: ''; display: inline-block; width: 22px; height: 2px; background: var(--maroon); }
+  h1 { font-family: 'Roboto Slab', serif; font-size: 2.5rem; font-weight: 700; line-height: 1.15; color: var(--ink); margin-bottom: 14px; }
+  h2 { font-family: 'Roboto Slab', serif; font-size: 1.75rem; font-weight: 600; color: var(--ink); margin-bottom: 12px; line-height: 1.25; }
+  h3 { font-family: 'Roboto', sans-serif; font-size: 1rem; font-weight: 700; color: var(--ink); margin-bottom: 8px; }
+  p { margin-bottom: 13px; color: var(--ink-light); }
+  p:last-child { margin-bottom: 0; }
+  hr.divider { border: none; border-top: 2px solid var(--gold); margin: 48px 0 0; }
+
+  /* HERO */
+  .hero { background: var(--maroon); color: white; border-radius: 4px; padding: 46px 50px; margin-top: 38px; position: relative; overflow: hidden; border-bottom: 6px solid var(--gold); }
+  .hero::before { content: ''; position: absolute; top: -50px; right: -50px; width: 280px; height: 280px; background: radial-gradient(circle, rgba(255,198,39,0.15) 0%, transparent 70%); pointer-events: none; }
+  .hero::after { content: ''; position: absolute; bottom: -30px; left: 28%; width: 200px; height: 200px; background: radial-gradient(circle, rgba(0,163,224,0.12) 0%, transparent 70%); pointer-events: none; }
+  .hero-kicker { font-family: 'Roboto Mono', monospace; font-size: 0.68rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold); margin-bottom: 12px; font-weight: 500; }
+  .hero h1 { font-family: 'Roboto Slab', serif; color: white; font-size: 2.1rem; }
+  .hero p { color: rgba(255,255,255,0.82); font-size: 1.02rem; }
+  .hero-meta { display: flex; gap: 22px; margin-top: 26px; flex-wrap: wrap; }
+  .hero-meta-item { display: flex; align-items: center; gap: 7px; font-size: 0.8rem; color: rgba(255,255,255,0.6); font-weight: 500; }
+  .hero-meta-item .dot { width: 5px; height: 5px; border-radius: 50%; background: var(--gold); flex-shrink: 0; }
+  .step-tracker { display: flex; gap: 5px; align-items: center; margin-top: 26px; flex-wrap: wrap; }
+  .step-node { display: flex; align-items: center; gap: 5px; font-size: 0.76rem; font-weight: 500; color: rgba(255,255,255,0.4); }
+  .step-node.active { color: white; }
+  .step-node.done { color: var(--gold); }
+  .step-circle { width: 20px; height: 20px; border-radius: 50%; background: rgba(255,255,255,0.15); display: flex; align-items: center; justify-content: center; font-size: 0.66rem; font-weight: 700; flex-shrink: 0; }
+  .step-node.active .step-circle { background: var(--gold); color: var(--maroon); }
+  .step-node.done .step-circle { background: var(--gold); color: var(--maroon); }
+  .step-sep { color: rgba(255,255,255,0.2); font-size: 0.65rem; }
+
+  /* PERSONA */
+  .persona-card { background: white; border: 1px solid var(--border); border-radius: 4px; padding: 26px 30px; display: flex; gap: 22px; align-items: flex-start; box-shadow: var(--shadow); margin-top: 30px; border-left: 5px solid var(--maroon); }
+  .persona-avatar { width: 60px; height: 60px; border-radius: 50%; background: linear-gradient(135deg, var(--maroon), #6b1530); display: flex; align-items: center; justify-content: center; font-family: 'Roboto Slab', serif; font-size: 1.4rem; color: white; font-weight: 700; flex-shrink: 0; }
+  .persona-name { font-weight: 700; font-size: 1.02rem; color: var(--ink); margin-bottom: 2px; }
+  .persona-role { font-size: 0.8rem; color: var(--ink-light); margin-bottom: 9px; }
+  .persona-quote { font-style: italic; color: var(--ink-light); font-size: 0.93rem; border-left: 3px solid var(--gold); padding-left: 13px; margin: 0; }
+  .you-are-banner { background: var(--maroon); color: white; border-radius: 4px; padding: 16px 22px; margin-top: 20px; display: flex; align-items: center; gap: 14px; border-left: 6px solid var(--gold); }
+  .you-are-icon { font-size: 1.5rem; flex-shrink: 0; }
+  .you-are-text { font-size: 0.9rem; line-height: 1.5; }
+  .you-are-text strong { font-size: 1rem; display: block; margin-bottom: 2px; color: var(--gold); }
+
+  /* UTIL BOXES */
+  .context-box { background: #f5f5f5; border-left: 4px solid var(--maroon); border-radius: 0 4px 4px 0; padding: 16px 20px; margin: 18px 0; }
+  .context-box p { color: var(--ink-light); font-size: 0.91rem; }
+  .platform-tip { background: var(--teal-soft); border: 1px solid rgba(0,163,224,0.25); border-radius: 4px; padding: 13px 17px; display: flex; gap: 11px; align-items: flex-start; margin: 14px 0; }
+  .platform-tip-icon { font-size: 1rem; flex-shrink: 0; margin-top: 1px; }
+  .platform-tip-text { font-size: 0.84rem; color: #004f6e; line-height: 1.5; }
+  .platform-tip-text strong { color: #007aaa; }
+
+  /* DATA PANEL */
+  .data-panel { background: white; border: 1px solid var(--border); border-radius: 4px; overflow: hidden; box-shadow: var(--shadow); margin: 26px 0; }
+  .data-panel-header { padding: 14px 22px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; background: var(--maroon); flex-wrap: wrap; gap: 6px; }
+  .data-panel-title { font-weight: 700; font-size: 0.86rem; color: white; display: flex; align-items: center; gap: 7px; flex-wrap: wrap; }
+  .platform-badge { font-family: 'Roboto Mono', monospace; font-size: 0.64rem; font-weight: 500; background: rgba(255,198,39,0.25); color: var(--gold); padding: 3px 8px; border-radius: 2px; letter-spacing: 0.06em; border: 1px solid rgba(255,198,39,0.4); }
+  .data-panel-body { padding: 22px; }
+
+  /* Q CHART */
+  .q-chart { display: flex; flex-direction: column; gap: 7px; }
+  .q-row { display: flex; align-items: center; gap: 11px; }
+  .q-label { font-family: 'Roboto Mono', monospace; font-size: 0.76rem; font-weight: 500; color: var(--ink-light); width: 36px; flex-shrink: 0; }
+  .q-bar-track { flex: 1; height: 17px; background: #f0f0f0; border-radius: 2px; overflow: hidden; cursor: pointer; transition: opacity 0.2s; }
+  .q-bar-track:hover { opacity: 0.85; }
+  .q-bar-fill { height: 100%; border-radius: 2px; transition: width 1.1s ease; width: 0%; }
+  .q-bar-fill.danger { background: var(--maroon); }
+  .q-bar-fill.warning { background: #c8963e; }
+  .q-bar-fill.ok { background: var(--green); }
+  .q-pct { font-size: 0.76rem; font-weight: 700; width: 34px; text-align: right; color: var(--ink); flex-shrink: 0; }
+  .q-flag { font-size: 0.7rem; color: var(--maroon); font-weight: 700; width: 72px; flex-shrink: 0; }
+  .chart-legend { display: flex; gap: 18px; margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--border); flex-wrap: wrap; }
+  .legend-item { display: flex; align-items: center; gap: 5px; font-size: 0.76rem; color: var(--ink-light); }
+  .legend-dot { width: 9px; height: 9px; border-radius: 2px; flex-shrink: 0; }
+  .chart-hint { font-size: 0.76rem; color: var(--teal); margin-top: 8px; font-style: italic; }
+
+  /* SCATTER */
+  .skill-scatter, .insights-scatter { position: relative; background: #f5f5f5; border-radius: 4px; overflow: hidden; margin-bottom: 12px; }
+  .skill-scatter { height: 210px; }
+  .insights-scatter { height: 260px; }
+  .scatter-axis-x { position: absolute; bottom: 26px; left: 0; right: 0; display: flex; justify-content: space-between; padding: 0 14px; font-size: 0.66rem; color: var(--ink-light); font-weight: 500; }
+  .scatter-axis-label, .scatter-x-label { position: absolute; bottom: 6px; left: 50%; transform: translateX(-50%); font-size: 0.67rem; color: var(--ink-light); font-family: 'Roboto Mono', monospace; letter-spacing: 0.06em; text-transform: uppercase; }
+  .scatter-y-label { position: absolute; left: 7px; top: 50%; transform: translateY(-50%) rotate(-90deg); font-size: 0.67rem; color: var(--ink-light); font-family: 'Roboto Mono', monospace; letter-spacing: 0.06em; text-transform: uppercase; white-space: nowrap; }
+  .scatter-dot { position: absolute; width: 27px; height: 27px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.58rem; font-weight: 700; color: white; cursor: pointer; box-shadow: 0 2px 7px rgba(0,0,0,0.2); transform: translate(-50%,-50%); transition: transform 0.2s, box-shadow 0.2s; font-family: 'Roboto Mono', monospace; }
+  .scatter-dot:hover { transform: translate(-50%,-50%) scale(1.25); box-shadow: 0 4px 14px rgba(0,0,0,0.3); z-index: 10; }
+  .scatter-dot.beginning { background: var(--maroon); }
+  .scatter-dot.exploring { background: #c8963e; }
+  .scatter-dot.developing { background: var(--teal); }
+  .scatter-dot.proficient { background: var(--green); }
+  .scatter-dot.mastery { background: #191919; }
+  .scatter-dot.tbd { background: var(--ink-light); }
+  .tooltip-wrap { position: relative; display: inline-block; }
+  .tooltip-content { display: none; position: absolute; bottom: calc(100% + 7px); left: 50%; transform: translateX(-50%); background: var(--ink); color: white; font-size: 0.75rem; padding: 7px 11px; border-radius: 4px; white-space: normal; max-width: 160px; text-align: center; z-index: 20; box-shadow: 0 4px 12px rgba(0,0,0,0.25); line-height: 1.4; }
+  .tooltip-content::after { content: ''; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); border: 5px solid transparent; border-top-color: var(--ink); }
+  .scatter-dot:hover .tooltip-content { display: block; }
+
+  /* STUDENT PILLS */
+  .student-pills { display: flex; flex-wrap: wrap; gap: 7px; margin: 11px 0; }
+  .student-pill { display: inline-flex; align-items: center; padding: 4px 11px; border-radius: 2px; font-size: 0.78rem; font-weight: 700; font-family: 'Roboto Mono', monospace; }
+  .pill-red { background: var(--maroon-soft); color: var(--maroon); }
+  .pill-yellow { background: #fff8e1; color: #7a5c00; }
+  .pill-blue { background: var(--teal-soft); color: #005a8e; }
+  .pill-green { background: var(--green-soft); color: #3a6010; }
+  .pill-gray { background: #f0f0f0; color: #5C6670; }
+
+  /* QUESTION PROMPT */
+  .question-prompt { background: var(--maroon); color: white; border-radius: 4px; padding: 26px 30px; margin: 26px 0; border-left: 6px solid var(--gold); }
+  .question-prompt-kicker { font-family: 'Roboto Mono', monospace; font-size: 0.66rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold); margin-bottom: 8px; font-weight: 500; }
+  .question-prompt h3 { color: white; font-family: 'Roboto Slab', serif; font-size: 1.2rem; font-weight: 700; margin-bottom: 6px; }
+  .question-prompt p { color: rgba(255,255,255,0.72); font-size: 0.9rem; margin: 0; }
+
+  /* CHOICES */
+  .choices { display: flex; flex-direction: column; gap: 9px; margin: 18px 0; }
+  .choice-btn { background: white; border: 1.5px solid var(--border); border-radius: 4px; padding: 15px 19px; text-align: left; cursor: pointer; transition: all 0.2s; font-family: 'Roboto', sans-serif; font-size: 0.93rem; color: var(--ink); display: flex; align-items: flex-start; gap: 13px; }
+  .choice-btn:hover:not(:disabled) { border-color: var(--maroon); background: var(--maroon-soft); transform: translateX(3px); }
+  .choice-btn.correct { border-color: var(--green); background: var(--green-soft); }
+  .choice-btn.partial { border-color: #c8963e; background: #fff8e1; }
+  .choice-btn:disabled { cursor: default; }
+  .choice-letter { width: 25px; height: 25px; border-radius: 50%; background: #f0f0f0; display: flex; align-items: center; justify-content: center; font-family: 'Roboto Mono', monospace; font-size: 0.7rem; font-weight: 700; color: var(--ink-light); flex-shrink: 0; margin-top: 1px; }
+  .choice-btn.correct .choice-letter { background: var(--green); color: white; }
+  .choice-btn.partial .choice-letter { background: #c8963e; color: white; }
+  .choice-text { flex: 1; line-height: 1.5; }
+  .choice-sub { display: block; font-size: 0.78rem; color: var(--ink-light); margin-top: 2px; }
+
+  /* FEEDBACK */
+  .feedback-box { display: none; background: white; border: 1px solid var(--border); border-radius: 4px; padding: 20px 22px; margin-top: 14px; box-shadow: var(--shadow); border-top: 3px solid var(--maroon); }
+  .feedback-box.visible { display: block; animation: fadeSlideUp 0.35s ease; }
+  .feedback-box.ai-glow { border-top-color: var(--gold); box-shadow: 0 0 0 3px rgba(140,29,64,0.06), var(--shadow); }
+  .feedback-header { display: flex; align-items: center; gap: 10px; margin-bottom: 11px; }
+  .feedback-icon { width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.95rem; flex-shrink: 0; background: var(--gold-soft); }
+  .feedback-title { font-weight: 700; font-size: 0.93rem; color: var(--ink); flex: 1; }
+  .feedback-body { font-size: 0.9rem; color: var(--ink-light); line-height: 1.62; }
+  .feedback-body strong { color: var(--ink); }
+
+  /* SUBTLE AI BADGE */
+  .ai-badge-subtle { display: inline-flex; align-items: center; gap: 3px; font-family: 'Roboto Mono', monospace; font-size: 0.62rem; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase; color: var(--maroon); background: var(--maroon-soft); padding: 2px 7px; border-radius: 2px; border: 1px solid rgba(140,29,64,0.2); vertical-align: middle; margin-left: 4px; }
+  .ai-badge-subtle::before { content: '✦'; font-size: 0.6em; }
+
+  /* REFLECTION WITH AI RESPONSE */
+  .reflection-area { margin-top: 15px; }
+  .reflection-label { font-size: 0.8rem; font-weight: 600; color: var(--ink-light); margin-bottom: 7px; display: flex; align-items: center; gap: 5px; }
+  .reflection-label::before { content: '✍'; font-size: 0.88em; }
+  textarea { width: 100%; border: 1.5px solid var(--border); border-radius: 4px; padding: 13px 15px; font-family: 'Roboto', sans-serif; font-size: 0.9rem; color: var(--ink); background: white; resize: vertical; min-height: 86px; line-height: 1.6; transition: border-color 0.2s; }
+  textarea:focus { outline: none; border-color: var(--maroon); box-shadow: 0 0 0 3px rgba(140,29,64,0.08); }
+  textarea::placeholder { color: #aaa; }
+  .ai-respond-btn { display: inline-flex; align-items: center; gap: 6px; background: var(--maroon-soft); color: var(--maroon); border: 1px solid rgba(140,29,64,0.25); border-radius: 4px; padding: 8px 16px; font-family: 'Roboto', sans-serif; font-size: 0.82rem; font-weight: 700; cursor: pointer; margin-top: 8px; transition: all 0.2s; }
+  .ai-respond-btn:hover { background: var(--maroon); color: white; }
+  .ai-respond-btn::before { content: '✦'; font-size: 0.7em; }
+  .ai-respond-btn:disabled { opacity: 0.5; cursor: default; }
+  .ai-response-box { display: none; background: var(--maroon-soft); border: 1px solid rgba(140,29,64,0.18); border-radius: 4px; padding: 16px 18px; margin-top: 10px; animation: fadeSlideUp 0.3s ease; }
+  .ai-response-box.visible { display: block; }
+  .ai-response-header { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; font-size: 0.78rem; font-weight: 700; color: var(--maroon); }
+  .ai-response-text { font-size: 0.9rem; color: #4a1020; line-height: 1.6; }
+  .ai-response-text strong { color: var(--maroon); }
+  .ai-thinking { display: flex; align-items: center; gap: 8px; font-size: 0.84rem; color: var(--maroon); font-style: italic; }
+  .ai-thinking-dots span { display: inline-block; width: 5px; height: 5px; border-radius: 50%; background: var(--maroon); margin: 0 1px; animation: bounce 1.2s infinite; }
+  .ai-thinking-dots span:nth-child(2) { animation-delay: 0.2s; }
+  .ai-thinking-dots span:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes bounce { 0%,60%,100% { transform: translateY(0); } 30% { transform: translateY(-5px); } }
+
+  /* CONTINUE BTN */
+  .continue-btn { display: inline-flex; align-items: center; gap: 7px; background: var(--maroon); color: white; border: none; border-radius: 4px; padding: 13px 26px; font-family: 'Roboto', sans-serif; font-size: 0.93rem; font-weight: 700; cursor: pointer; transition: all 0.2s; margin-top: 18px; text-transform: uppercase; letter-spacing: 0.04em; }
+  .continue-btn:hover { background: #6b1530; transform: translateY(-1px); box-shadow: 0 4px 16px rgba(140,29,64,0.3); }
+  .continue-btn .arrow { transition: transform 0.2s; }
+  .continue-btn:hover .arrow { transform: translateX(3px); }
+
+  /* REVEAL */
+  .reveal-section { display: none; }
+  .reveal-section.visible { display: block; animation: fadeSlideUp 0.5s ease; }
+
+  /* STAT STRIP */
+  .stat-strip { display: grid; grid-template-columns: repeat(3,1fr); gap: 11px; margin: 14px 0; }
+  .stat-card { background: white; border: 1px solid var(--border); border-radius: 4px; padding: 15px; text-align: center; border-top: 3px solid var(--maroon); }
+  .stat-value { font-family: 'Roboto Slab', serif; font-size: 1.85rem; font-weight: 700; color: var(--ink); line-height: 1; margin-bottom: 4px; }
+  .stat-label { font-size: 0.74rem; color: var(--ink-light); font-weight: 500; line-height: 1.3; }
+  .stat-value.red { color: var(--maroon); }
+  .stat-value.green { color: var(--green); }
+
+  /* REC CARDS */
+  .rec-card { background: white; border: 1px solid var(--border); border-radius: 4px; padding: 16px 19px; margin-bottom: 11px; display: flex; gap: 14px; align-items: flex-start; box-shadow: var(--shadow); }
+  .rec-icon { font-size: 1.25rem; flex-shrink: 0; margin-top: 2px; }
+  .rec-body { flex: 1; }
+  .rec-label { font-size: 0.7rem; font-weight: 700; font-family: 'Roboto Mono', monospace; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 3px; }
+  .rec-label.alert { color: var(--maroon); }
+  .rec-label.enrich { color: var(--green); }
+  .rec-label.support { color: var(--teal); }
+  .rec-text { font-size: 0.88rem; color: var(--ink-light); line-height: 1.55; }
+  .rec-text strong { color: var(--ink); }
+
+  /* NEXT STEPS GRID */
+  .next-steps-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 11px; margin: 14px 0; }
+  .next-step-card { background: white; border: 1.5px solid var(--border); border-radius: 4px; padding: 15px 17px; cursor: pointer; transition: all 0.2s; text-align: left; }
+  .next-step-card:hover { border-color: var(--maroon); transform: translateY(-2px); box-shadow: 0 4px 14px rgba(140,29,64,0.12); }
+  .next-step-card.selected { border-color: var(--maroon); background: var(--maroon-soft); }
+  .step-icon { font-size: 1.3rem; margin-bottom: 7px; }
+  .step-title { font-weight: 700; font-size: 0.86rem; color: var(--ink); margin-bottom: 3px; }
+  .step-desc { font-size: 0.79rem; color: var(--ink-light); line-height: 1.44; }
+
+  /* STUDENT DRILL-DOWN */
+  .student-spotlight { background: white; border: 1px solid var(--border); border-radius: 4px; overflow: hidden; box-shadow: var(--shadow); margin: 20px 0; }
+  .student-spotlight-header { background: var(--maroon); padding: 18px 22px; color: white; display: flex; align-items: center; gap: 14px; border-bottom: 4px solid var(--gold); }
+  .spotlight-avatar { width: 44px; height: 44px; border-radius: 50%; background: rgba(255,198,39,0.2); display: flex; align-items: center; justify-content: center; font-family: 'Roboto Slab', serif; font-size: 1rem; font-weight: 700; flex-shrink: 0; color: var(--gold); }
+  .spotlight-name { font-weight: 700; font-size: 1rem; margin-bottom: 2px; }
+  .spotlight-role { font-size: 0.78rem; opacity: 0.75; }
+  .spotlight-metrics { display: grid; grid-template-columns: repeat(3,1fr); gap: 1px; background: var(--border); }
+  .spotlight-metric { background: white; padding: 14px 16px; text-align: center; }
+  .spotlight-metric-value { font-family: 'Roboto Slab', serif; font-size: 1.3rem; font-weight: 700; color: var(--ink); margin-bottom: 3px; }
+  .spotlight-metric-value.mastery { color: var(--green); }
+  .spotlight-metric-value.low { color: var(--maroon); }
+  .spotlight-metric-label { font-size: 0.72rem; color: var(--ink-light); font-weight: 500; }
+  .spotlight-body { padding: 18px 22px; }
+
+  /* PREDICTED Q MODAL */
+  .pq-modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.65); z-index: 200; align-items: center; justify-content: center; padding: 20px; }
+  .pq-modal-overlay.open { display: flex; animation: fadeIn 0.2s ease; }
+  .pq-modal { background: white; border-radius: 4px; max-width: 720px; width: 100%; max-height: 85vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,0.3); border-top: 5px solid var(--maroon); }
+  .pq-modal-header { padding: 18px 22px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; background: white; z-index: 1; }
+  .pq-modal-title { font-weight: 700; font-size: 1rem; color: var(--ink); display: flex; align-items: center; gap: 8px; }
+  .pq-close { background: none; border: none; cursor: pointer; font-size: 1.2rem; color: var(--ink-light); padding: 4px; border-radius: 4px; transition: background 0.2s; }
+  .pq-close:hover { background: #f0f0f0; }
+  .pq-modal-body { padding: 22px; }
+  .pq-q-nav { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 18px; }
+  .pq-q-btn { width: 30px; height: 30px; border-radius: 50%; border: 1.5px solid var(--border); background: white; font-size: 0.75rem; font-weight: 700; cursor: pointer; font-family: 'Roboto Mono', monospace; transition: all 0.15s; color: var(--ink-light); }
+  .pq-q-btn:hover { border-color: var(--maroon); background: var(--maroon-soft); }
+  .pq-q-btn.active { background: var(--maroon); border-color: var(--maroon); color: white; }
+  .pq-q-btn.danger { border-color: var(--maroon); color: var(--maroon); }
+  .pq-q-btn.danger.active { background: var(--maroon); color: white; }
+  .pq-split { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .pq-question-box { background: #f5f5f5; border-radius: 4px; padding: 18px; }
+  .pq-question-label { font-family: 'Roboto Mono', monospace; font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-light); margin-bottom: 8px; }
+  .pq-question-text { font-size: 0.92rem; color: var(--ink); line-height: 1.55; margin-bottom: 12px; }
+  .pq-choice { background: white; border: 1px solid var(--border); border-radius: 4px; padding: 10px 14px; margin-bottom: 6px; font-size: 0.88rem; color: var(--ink-light); display: flex; gap: 10px; }
+  .pq-choice-letter { font-family: 'Roboto Mono', monospace; font-size: 0.72rem; font-weight: 700; color: var(--ink-light); flex-shrink: 0; }
+  .pq-perf { }
+  .pq-perf-label { font-size: 0.78rem; font-weight: 700; color: var(--ink); margin-bottom: 6px; }
+  .pq-perf-group { margin-bottom: 12px; }
+  .pq-perf-group-label { font-size: 0.72rem; color: var(--ink-light); font-weight: 500; margin-bottom: 5px; }
+  .pq-pills { display: flex; flex-wrap: wrap; gap: 5px; }
+  .pq-pill { padding: 3px 9px; border-radius: 2px; font-size: 0.72rem; font-weight: 700; font-family: 'Roboto Mono', monospace; }
+  .pq-pill.correct { background: var(--green-soft); color: #3a6010; }
+  .pq-pill.miss { background: var(--maroon-soft); color: var(--maroon); }
+  .pq-pill.nodata { background: #f0f0f0; color: #5C6670; }
+
+  /* AI SHIFT SUMMARY */
+  .shift-summary { background: white; border: 1.5px solid rgba(140,29,64,0.18); border-radius: 4px; padding: 26px 28px; margin-top: 28px; box-shadow: 0 0 0 4px rgba(140,29,64,0.04); border-top: 4px solid var(--gold); }
+  .shift-summary-header { display: flex; align-items: center; gap: 10px; margin-bottom: 18px; }
+  .shift-summary-title { font-family: 'Roboto Slab', serif; font-size: 1.1rem; font-weight: 700; color: var(--ink); }
+  .shift-body { font-size: 0.9rem; color: var(--ink-light); line-height: 1.62; }
+  .shift-body strong { color: var(--ink); }
+  .shift-body p { margin-bottom: 10px; }
+  .shift-loading { display: flex; align-items: center; gap: 10px; font-size: 0.88rem; color: var(--maroon); font-style: italic; padding: 12px 0; }
+
+  /* THREE-BOX PROGRESSION */
+  .progression-track { display: grid; grid-template-columns: 1fr auto 1fr auto 1fr; gap: 0; align-items: stretch; margin-top: 4px; }
+  .prog-arrow { display: flex; align-items: center; justify-content: center; font-size: 1.4rem; color: var(--maroon); padding: 0 10px; font-weight: 700; }
+  .prog-box { background: white; border: 1.5px solid var(--border); border-radius: 4px; padding: 20px 18px; display: flex; flex-direction: column; min-height: 160px; }
+  .prog-box-num { font-family: 'Roboto Mono', monospace; font-size: 0.62rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 6px; }
+  .prog-box-label { font-family: 'Roboto Slab', serif; font-size: 1rem; font-weight: 700; color: var(--ink); margin-bottom: 10px; line-height: 1.25; }
+  .prog-box-text { font-size: 0.88rem; color: var(--ink-light); line-height: 1.6; flex: 1; }
+  .prog-box-text strong { color: var(--ink); }
+  .prog-box-loading { display: flex; align-items: center; justify-content: center; flex: 1; min-height: 120px; }
+  .prog-box:nth-child(1) { border-top: 4px solid var(--ink-light); }
+  .prog-box:nth-child(1) .prog-box-num { color: var(--ink-light); }
+  .prog-box:nth-child(3) { border-top: 4px solid var(--maroon); }
+  .prog-box:nth-child(3) .prog-box-num { color: var(--maroon); }
+  .prog-box:nth-child(5) { border-top: 4px solid var(--gold); background: var(--gold-soft); }
+  .prog-box:nth-child(5) .prog-box-num { color: #7a5c00; }
+  .prog-box:nth-child(5) .prog-box-label { color: var(--ink); }
+  @media (max-width: 680px) {
+    .progression-track { grid-template-columns: 1fr; }
+    .prog-arrow { transform: rotate(90deg); padding: 4px 0; min-height: 28px; }
+  }
+
+  /* CLOSING */
+  .closing-card { background: var(--maroon); color: white; border-radius: 4px; padding: 46px 50px; margin-top: 38px; position: relative; overflow: hidden; border-bottom: 6px solid var(--gold); }
+  .closing-card::before { content: ''; position: absolute; top: -40px; right: -40px; width: 220px; height: 220px; background: radial-gradient(circle, rgba(255,198,39,0.18) 0%, transparent 70%); pointer-events: none; }
+  .closing-card h2 { color: white; font-size: 1.6rem; margin-bottom: 12px; font-family: 'Roboto Slab', serif; }
+  .closing-card p { color: rgba(255,255,255,0.75); }
+  .mindset-shift { display: grid; grid-template-columns: 1fr auto 1fr; gap: 14px; align-items: center; margin: 24px 0; }
+  .mindset-from, .mindset-to { background: rgba(255,255,255,0.1); border-radius: 4px; padding: 14px 16px; }
+  .mindset-to { background: rgba(255,198,39,0.15); border: 1px solid rgba(255,198,39,0.3); }
+  .mlabel { font-size: 0.68rem; font-weight: 700; font-family: 'Roboto Mono', monospace; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 5px; }
+  .mindset-from .mlabel { color: rgba(255,255,255,0.45); }
+  .mindset-to .mlabel { color: var(--gold); }
+  .mindset-text { color: white; font-size: 0.88rem; font-weight: 500; line-height: 1.5; }
+  .mindset-arrow { color: var(--gold); font-size: 1.35rem; text-align: center; }
+
+  /* GO DEEPER toggle */
+  .go-deeper-toggle { display: inline-flex; align-items: center; gap: 8px; background: var(--ink); color: white; border: none; border-radius: 4px; padding: 12px 22px; font-family: 'Roboto', sans-serif; font-size: 0.88rem; font-weight: 700; cursor: pointer; margin-top: 16px; transition: all 0.2s; text-transform: uppercase; letter-spacing: 0.04em; }
+  .go-deeper-toggle:hover { background: #333; }
+  .go-deeper-section { display: none; margin-top: 20px; animation: fadeSlideUp 0.4s ease; }
+  .go-deeper-section.open { display: block; }
+
+  @keyframes fadeSlideUp { from { opacity:0; transform:translateY(14px); } to { opacity:1; transform:translateY(0); } }
+  @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+
+  @media (max-width:620px) {
+    .container { padding: 0 18px 60px; }
+    h1 { font-size: 1.85rem; }
+    .hero { padding: 30px 24px; }
+    .next-steps-grid, .mindset-shift, .pq-split { grid-template-columns: 1fr; }
+    .mindset-arrow, .shift-arrow { display: none; }
+    .stat-strip { grid-template-columns: 1fr 1fr; }
+    .closing-card { padding: 30px 24px; }
+    .spotlight-metrics { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- PREDICTED QUESTION MODAL -->
+<div class="pq-modal-overlay" id="pqModal">
+  <div class="pq-modal">
+    <div class="pq-modal-header">
+      <div class="pq-modal-title">📊 Predicted Question Performance <span class="platform-badge">CK-12 Foresights</span></div>
+      <button class="pq-close" onclick="closePQModal()">✕</button>
+    </div>
+    <div class="pq-modal-body">
+      <div class="pq-q-nav" id="pqNav"></div>
+      <div class="pq-split">
+        <div class="pq-question-box" id="pqQuestionBox"></div>
+        <div class="pq-perf" id="pqPerfBox"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<header class="site-header">
+  <div class="header-inner">
+    <div class="header-logo">What Would You <span>Do?</span></div>
+    <div class="progress-wrap">
+      <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+      <span id="progressLabel">0% complete</span>
+    </div>
+  </div>
+</header>
+
+<div class="container">
+
+<!-- INTRO -->
+<section class="section" id="sec-intro">
+  <div class="hero">
+    <div class="hero-kicker">Professional Learning · Case Study</div>
+    <h1>What Would You Do?</h1>
+    <p>A case-based experience exploring how CK-12 Learning Analytics can shift your instructional decision-making — from reacting to what students got wrong, to anticipating where each learner is headed next.</p>
+    <div class="hero-meta">
+      <div class="hero-meta-item"><span class="dot"></span>~25–30 minutes, self-paced</div>
+      <div class="hero-meta-item"><span class="dot"></span>3 acts · real classroom data</div>
+      <div class="hero-meta-item"><span class="dot"></span>AI-powered coaching throughout</div>
+    </div>
+    <div class="step-tracker">
+      <div class="step-node active" id="snode1"><span class="step-circle">1</span>Quiz Data</div>
+      <span class="step-sep">›</span>
+      <div class="step-node" id="snode2"><span class="step-circle">2</span>Foresights</div>
+      <span class="step-sep">›</span>
+      <div class="step-node" id="snode3"><span class="step-circle">3</span>Insights</div>
+      <span class="step-sep">›</span>
+      <div class="step-node" id="snode4"><span class="step-circle">4</span>Reflect</div>
+    </div>
+  </div>
+
+  <div class="persona-card">
+    <div class="persona-avatar">MR</div>
+    <div class="persona-info">
+      <div class="persona-name">Ms. Rivera</div>
+      <div class="persona-role">6th Grade Math Teacher · Demo Middle School</div>
+      <p class="persona-quote">"I just assigned Section 7.3 — Solving Addition and Subtraction Equations — to my class of 11 students. The data is starting to come in. I need to figure out what to do next."</p>
+    </div>
+  </div>
+  <div class="you-are-banner">
+    <div class="you-are-icon">👩‍🏫</div>
+    <div class="you-are-text">
+      <strong>You are Ms. Rivera.</strong>
+      Step into her classroom data. At each stage you'll see exactly what she sees — and decide what to do next. Your reflections will get personalized AI coaching as you go.
+    </div>
+  </div>
+  <div class="context-box">
+    <p><strong>How this works:</strong> Three acts of data, each revealing more. At each step you'll make a decision, get feedback, and reflect. Type into any reflection box and click "Get coaching" for a personalized response. At the end, AI will summarize how your thinking shifted across all three acts.</p>
+  </div>
+  <button class="continue-btn" onclick="revealAct1()">Step into the classroom <span class="arrow">→</span></button>
+</section>
+
+
+<!-- ACT 1 -->
+<div class="reveal-section" id="act1">
+<hr class="divider">
+<section class="section">
+  <div class="act-label">Act 1</div>
+  <h2>The First Look: Practice Performance</h2>
+  <p>You open CK-12. This is the first data available — how your class is predicted to perform on each question in the Section 7.3 practice set. <span style="color:var(--maroon);font-weight:500">Click any bar to see the question detail.</span></p>
+
+  <div class="platform-tip">
+    <div class="platform-tip-icon">🖥️</div>
+    <div class="platform-tip-text"><strong>On the platform:</strong> <strong>Foresights → Practice Performance Prediction</strong> panel on the right side of any FlexBook lesson. Click any question bar to open the full Predicted Question Performance modal showing the actual question and which students are predicted to get it right or miss it.</div>
+  </div>
+
+  <div class="data-panel">
+    <div class="data-panel-header">
+      <div class="data-panel-title">📊 Practice Performance by Question <span class="platform-badge">CK-12 Foresights</span></div>
+      <span style="font-size:0.74rem;color:var(--ink-light)">Section 7.3 · Your Class</span>
+    </div>
+    <div class="data-panel-body">
+      <p style="font-size:0.8rem;color:var(--ink-light);margin-bottom:14px">Predicted correct-response rate per question. Red = high miss rate. <strong style="color:var(--maroon)">Click a bar to see the question.</strong></p>
+      <div class="q-chart">
+        <div class="q-row"><span class="q-label">Q1</span><div class="q-bar-track" onclick="openPQModal(1)"><div class="q-bar-fill danger" data-w="28%"></div></div><span class="q-pct">28%</span><span class="q-flag">⚠ Most missed</span></div>
+        <div class="q-row"><span class="q-label">Q2</span><div class="q-bar-track" onclick="openPQModal(2)"><div class="q-bar-fill danger" data-w="34%"></div></div><span class="q-pct">34%</span><span class="q-flag">⚠ Most missed</span></div>
+        <div class="q-row"><span class="q-label">Q3</span><div class="q-bar-track" onclick="openPQModal(3)"><div class="q-bar-fill warning" data-w="40%"></div></div><span class="q-pct">40%</span><span class="q-flag" style="color:var(--gold)">⚠ Struggled</span></div>
+        <div class="q-row"><span class="q-label">Q4</span><div class="q-bar-track" onclick="openPQModal(4)"><div class="q-bar-fill warning" data-w="44%"></div></div><span class="q-pct">44%</span><span class="q-flag" style="color:var(--gold)">⚠ Struggled</span></div>
+        <div class="q-row"><span class="q-label">Q5</span><div class="q-bar-track" onclick="openPQModal(5)"><div class="q-bar-fill ok" data-w="62%"></div></div><span class="q-pct">62%</span><span class="q-flag"></span></div>
+        <div class="q-row"><span class="q-label">Q6</span><div class="q-bar-track" onclick="openPQModal(6)"><div class="q-bar-fill ok" data-w="68%"></div></div><span class="q-pct">68%</span><span class="q-flag"></span></div>
+        <div class="q-row"><span class="q-label">Q7</span><div class="q-bar-track" onclick="openPQModal(7)"><div class="q-bar-fill ok" data-w="71%"></div></div><span class="q-pct">71%</span><span class="q-flag"></span></div>
+        <div class="q-row"><span class="q-label">Q8</span><div class="q-bar-track" onclick="openPQModal(8)"><div class="q-bar-fill ok" data-w="74%"></div></div><span class="q-pct">74%</span><span class="q-flag"></span></div>
+        <div class="q-row"><span class="q-label">Q9</span><div class="q-bar-track" onclick="openPQModal(9)"><div class="q-bar-fill ok" data-w="76%"></div></div><span class="q-pct">76%</span><span class="q-flag"></span></div>
+        <div class="q-row"><span class="q-label">Q10</span><div class="q-bar-track" onclick="openPQModal(10)"><div class="q-bar-fill ok" data-w="79%"></div></div><span class="q-pct">79%</span><span class="q-flag"></span></div>
+        <div class="q-row"><span class="q-label">Q11–15</span><div class="q-bar-track" onclick="openPQModal(11)"><div class="q-bar-fill ok" data-w="84%"></div></div><span class="q-pct">84%+</span><span class="q-flag"></span></div>
+      </div>
+      <div class="chart-legend">
+        <div class="legend-item"><span class="legend-dot" style="background:#e05c5c"></span>High miss rate (&lt;35%)</div>
+        <div class="legend-item"><span class="legend-dot" style="background:var(--gold)"></span>Some struggle (35–50%)</div>
+        <div class="legend-item"><span class="legend-dot" style="background:var(--green)"></span>Mostly correct (&gt;50%)</div>
+      </div>
+      <p class="chart-hint">💡 Try clicking Q2 to see which specific students are predicted to miss it.</p>
+    </div>
+  </div>
+
+  <div class="question-prompt">
+    <div class="question-prompt-kicker">Your Turn · Act 1</div>
+    <h3>This is all you have right now. What do you do?</h3>
+    <p>Choose the response that best fits what you'd do as Ms. Rivera, given only this question-level data.</p>
+  </div>
+
+  <div class="choices" id="act1-choices">
+    <button class="choice-btn" onclick="selectChoice(this,'act1','a')"><span class="choice-letter">A</span><span class="choice-text">Re-teach the whole section — Q1–Q4 show real struggle, so start over with the class.<span class="choice-sub">Whole-class re-teach from the beginning of Section 7.3.</span></span></button>
+    <button class="choice-btn" onclick="selectChoice(this,'act1','b')"><span class="choice-letter">B</span><span class="choice-text">Pull a small group for targeted re-teaching on Q1–Q4 while others move forward.<span class="choice-sub">Differentiated small group focused on the most-missed questions.</span></span></button>
+    <button class="choice-btn" onclick="selectChoice(this,'act1','c')"><span class="choice-letter">C</span><span class="choice-text">Send all students back to independently re-practice Q1–Q4, then re-assess.<span class="choice-sub">Self-directed individual re-practice.</span></span></button>
+    <button class="choice-btn" onclick="selectChoice(this,'act1','d')"><span class="choice-letter">D</span><span class="choice-text">Pause — this shows what was hard, but not which students struggled. I need more before acting.<span class="choice-sub">Hold off and gather student-level data first.</span></span></button>
+  </div>
+
+  <div class="feedback-box" id="fb-act1">
+    <div class="feedback-header"><div class="feedback-icon">💡</div><div class="feedback-title" id="fb-act1-title"></div></div>
+    <div class="feedback-body" id="fb-act1-body"></div>
+    <div class="reflection-area">
+      <div class="reflection-label">What specific concepts in Q1–Q4 do you think students struggled with? What would you look for?</div>
+      <textarea placeholder="Type your thinking here..." id="reflect-act1"></textarea>
+      <button class="ai-respond-btn" onclick="getAICoaching('act1')" id="btn-act1">Get coaching</button>
+      <div class="ai-response-box" id="air-act1">
+        <div class="ai-response-header"><span class="ai-badge-subtle">AI Coach</span></div>
+        <div class="ai-response-text" id="air-act1-text"></div>
+      </div>
+    </div>
+  </div>
+  <div id="act1-continue" style="display:none">
+    <button class="continue-btn" onclick="revealAct2()">See the Skill Level Predictions <span class="arrow">→</span></button>
+  </div>
+</section>
+</div>
+
+
+<!-- ACT 2 -->
+<div class="reveal-section" id="act2">
+<hr class="divider">
+<section class="section">
+  <div class="act-label">Act 2</div>
+  <h2>The Bigger Picture: Skill Level Predictions</h2>
+  <p>You click to Foresights. Now you can see where <em>each student</em> is predicted to land on the skill spectrum — available <strong>before the lesson ended</strong>.</p>
+
+  <div class="platform-tip">
+    <div class="platform-tip-icon">🖥️</div>
+    <div class="platform-tip-text"><strong>On the platform:</strong> The <strong>Foresights tab → Skill Level Prediction</strong> scatter plots each student based on predicted placement using their prior performance history. Hover any dot to see the student's name and level. Click any student name in the sidebar to drill into their individual data.</div>
+  </div>
+
+  <div class="data-panel">
+    <div class="data-panel-header">
+      <div class="data-panel-title">🎯 Skill Level Prediction — Your Class <span class="platform-badge">CK-12 Foresights</span></div>
+    </div>
+    <div class="data-panel-body">
+      <p style="font-size:0.8rem;color:var(--ink-light);margin-bottom:11px">Each circle is one student. Position shows predicted skill level. Hover to see names.</p>
+      <div class="skill-scatter" id="skillScatter">
+        <div class="scatter-axis-x"><span>Beginning</span><span>Exploring</span><span>Developing</span><span>Proficient</span><span>Mastery</span></div>
+        <div class="scatter-axis-label">Predicted Skill Level →</div>
+      </div>
+      <div class="student-pills">
+        <span class="student-pill pill-red">CR — Beginning</span>
+        <span class="student-pill pill-yellow">JJ — Exploring</span>
+        <span class="student-pill pill-yellow">SJ — Exploring</span>
+        <span class="student-pill pill-blue">JD — Developing</span>
+        <span class="student-pill pill-blue">DS — Developing</span>
+        <span class="student-pill pill-blue">BS — Developing</span>
+        <span class="student-pill pill-green">MB — Proficient</span>
+        <span class="student-pill pill-green">TD — Proficient</span>
+        <span class="student-pill pill-green">SW — Mastery</span>
+        <span class="student-pill pill-gray">PW — Not enough data</span>
+        <span class="student-pill pill-gray">AS — Not enough data</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="question-prompt">
+    <div class="question-prompt-kicker">Your Turn · Act 2</div>
+    <h3>Now you can see individual students. Does your plan change?</h3>
+    <p>Think about how you'd group students and what you'd do for each cluster of learners.</p>
+  </div>
+
+  <div class="choices" id="act2-choices">
+    <button class="choice-btn" onclick="selectChoice(this,'act2','a')"><span class="choice-letter">A</span><span class="choice-text">Form three tiers: re-teach CR, JJ, SJ; extend practice for the developing group; assign challenge work to MB, TD, SW.<span class="choice-sub">Tiered grouping based on predicted skill level.</span></span></button>
+    <button class="choice-btn" onclick="selectChoice(this,'act2','b')"><span class="choice-letter">B</span><span class="choice-text">Focus on CR — she's the only Beginning student. The rest of the class can manage independently.<span class="choice-sub">Intensive 1:1 support for the lowest-predicted student.</span></span></button>
+    <button class="choice-btn" onclick="selectChoice(this,'act2','c')"><span class="choice-letter">C</span><span class="choice-text">Use this data proactively: pre-assign the prerequisite concept to CR, JJ, and SJ before the next lesson and adjust your entry point.<span class="choice-sub">Proactive differentiation before instruction begins.</span></span></button>
+    <button class="choice-btn" onclick="selectChoice(this,'act2','d')"><span class="choice-letter">D</span><span class="choice-text">These are predictions, not real results. I'd rather wait for actual performance data before grouping students.<span class="choice-sub">Reserve judgment until confirmed results are in.</span></span></button>
+  </div>
+
+  <div class="feedback-box" id="fb-act2">
+    <div class="feedback-header"><div class="feedback-icon">💡</div><div class="feedback-title" id="fb-act2-title"></div></div>
+    <div class="feedback-body" id="fb-act2-body"></div>
+    <div class="reflection-area">
+      <div class="reflection-label">How might knowing this data before the lesson change how you structure your class time?</div>
+      <textarea placeholder="What instructional moves become possible when you have predictive data?" id="reflect-act2"></textarea>
+      <button class="ai-respond-btn" onclick="getAICoaching('act2')" id="btn-act2">Get coaching</button>
+      <div class="ai-response-box" id="air-act2">
+        <div class="ai-response-header"><span class="ai-badge-subtle">AI Coach</span></div>
+        <div class="ai-response-text" id="air-act2-text"></div>
+      </div>
+    </div>
+  </div>
+  <div id="act2-continue" style="display:none">
+    <button class="continue-btn" onclick="revealAct3()">See the Full Insights Dashboard <span class="arrow">→</span></button>
+  </div>
+</section>
+</div>
+
+
+<!-- ACT 3 -->
+<div class="reveal-section" id="act3">
+<hr class="divider">
+<section class="section">
+  <div class="act-label">Act 3</div>
+  <h2>After the Lesson: Full Insights Dashboard</h2>
+  <p>Students have submitted. You switch to <strong>Insights</strong> to see what actually happened.</p>
+
+  <div class="platform-tip">
+    <div class="platform-tip-icon">🖥️</div>
+    <div class="platform-tip-text"><strong>On the platform:</strong> The <strong>Insights tab</strong> becomes active after students complete the assignment. Click any student name in the sidebar to see their individual breakdown — time on read, practice skill level, and engagement score. The whole-class view shows the engagement vs. skill scatter and AI-generated recommendations.</div>
+  </div>
+
+  <div class="stat-strip">
+    <div class="stat-card"><div class="stat-value">9<span style="font-size:1.1rem;color:var(--ink-light)">/11</span></div><div class="stat-label">Students turned in</div></div>
+    <div class="stat-card"><div class="stat-value red">3</div><div class="stat-label">Reached the practice goal (10 correct)</div></div>
+    <div class="stat-card"><div class="stat-value green">3</div><div class="stat-label">Doing exceptionally well</div></div>
+  </div>
+
+  <div class="data-panel">
+    <div class="data-panel-header"><div class="data-panel-title">📈 Engagement vs. Skill Level <span class="platform-badge">CK-12 Insights</span></div></div>
+    <div class="data-panel-body">
+      <p style="font-size:0.8rem;color:var(--ink-light);margin-bottom:11px">X-axis = Engagement (time, attempts). Y-axis = Skill Level reached. Hover dots to see names.</p>
+      <div class="insights-scatter" id="insightsScatter">
+        <div class="scatter-y-label">Skill Level ↑</div>
+        <div class="scatter-x-label">Engagement →</div>
+        <!-- Y-axis ticks -->
+        <div style="position:absolute;left:26px;top:12%;font-size:0.6rem;color:var(--ink-light);font-family:'Roboto Mono',monospace;font-weight:500">Mastery</div>
+        <div style="position:absolute;left:26px;top:30%;font-size:0.6rem;color:var(--ink-light);font-family:'Roboto Mono',monospace;font-weight:500">Proficient</div>
+        <div style="position:absolute;left:26px;top:49%;font-size:0.6rem;color:var(--ink-light);font-family:'Roboto Mono',monospace;font-weight:500">Developing</div>
+        <div style="position:absolute;left:26px;top:67%;font-size:0.6rem;color:var(--ink-light);font-family:'Roboto Mono',monospace;font-weight:500">Exploring</div>
+        <div style="position:absolute;left:26px;top:76%;font-size:0.6rem;color:var(--ink-light);font-family:'Roboto Mono',monospace;font-weight:500">Beginning</div>
+        <!-- horizontal guide lines -->
+        <div style="position:absolute;left:0;right:0;top:14%;height:1px;background:rgba(0,0,0,0.05)"></div>
+        <div style="position:absolute;left:0;right:0;top:32%;height:1px;background:rgba(0,0,0,0.05)"></div>
+        <div style="position:absolute;left:0;right:0;top:51%;height:1px;background:rgba(0,0,0,0.05)"></div>
+        <div style="position:absolute;left:0;right:0;top:70%;height:1px;background:rgba(0,0,0,0.05)"></div>
+      </div>
+      <div class="context-box">
+        <p><strong>Key finding:</strong> Students with low skill levels spent <strong>32% less time</strong> on this concept compared to higher-skill peers. Low engagement + low skill isn't just a learning gap — it may signal a student who disengaged or gave up. That's a relationship conversation, not just a re-assign.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="data-panel">
+    <div class="data-panel-header">
+      <div class="data-panel-title">Recommendations for Your Class <span class="ai-badge-subtle">AI-powered</span> <span class="platform-badge">CK-12 Insights</span></div>
+    </div>
+    <div class="data-panel-body">
+      <p style="font-size:0.8rem;color:var(--ink-light);margin-bottom:14px">Generated automatically from your class's data. Each recommendation links directly to resources and 1-click actions in CK-12.</p>
+      <div class="rec-card"><div class="rec-icon">⚠️</div><div class="rec-body"><div class="rec-label alert">Hasn't Turned In</div><div class="rec-text"><strong>PW (Wiess, Preston) and JJ (Jones, Jonathan)</strong> started but haven't submitted. 1-click nudge available.</div></div></div>
+      <div class="rec-card"><div class="rec-icon">📚</div><div class="rec-body"><div class="rec-label support">Prerequisite Gap</div><div class="rec-text">Students with low skill levels may be struggling with <strong>Symmetry on the Number Line</strong>. Flagged students: <strong>CR, JJ, SJ</strong></div></div></div>
+      <div class="rec-card"><div class="rec-icon">🔁</div><div class="rec-body"><div class="rec-label support">Review Target</div><div class="rec-text">Top 4 most-missed questions: <strong>Q1, Q2, Q3, Q4</strong> — all related to isolating variables using inverse operations.</div></div></div>
+      <div class="rec-card"><div class="rec-icon">🚀</div><div class="rec-body"><div class="rec-label enrich">Enrichment Ready</div><div class="rec-text"><strong>SW, TD, and AS</strong> are performing exceptionally well. Recommend assigning <strong>Solving Multiplication Equations</strong>.</div></div></div>
+      <div class="rec-card"><div class="rec-icon">📉</div><div class="rec-body"><div class="rec-label alert">Engagement Gap</div><div class="rec-text">Low-skill students engaged <strong>32% less</strong> than high-skill peers. Consider a check-in conversation before re-assigning practice.</div></div></div>
+    </div>
+  </div>
+
+  <!-- STUDENT SPOTLIGHT (brief) -->
+  <div class="context-box">
+    <p><strong>Want to go deeper?</strong> In the platform, you can click any student's name to see their individual breakdown — time on read, their exact skill level, and engagement score. Below is an optional deep-dive into one student's story. ↓</p>
+  </div>
+  <button class="go-deeper-toggle" onclick="toggleGoDeeper()">👤 Go Deeper: One Student's Story <span id="deeper-arrow">↓</span></button>
+
+  <div class="go-deeper-section" id="goDeeperSection">
+    <div class="student-spotlight">
+      <div class="student-spotlight-header">
+        <div class="spotlight-avatar">SW</div>
+        <div>
+          <div class="spotlight-name">Williams, Sally</div>
+          <div class="spotlight-role">Viewing Insights For: Williams, Sally · Section 7.3</div>
+        </div>
+      </div>
+      <div class="spotlight-metrics">
+        <div class="spotlight-metric"><div class="spotlight-metric-value">3:06</div><div class="spotlight-metric-label">Time on Read</div></div>
+        <div class="spotlight-metric"><div class="spotlight-metric-value mastery">Mastery</div><div class="spotlight-metric-label">Practice Skill Level</div></div>
+        <div class="spotlight-metric"><div class="spotlight-metric-value low">Low (39%)</div><div class="spotlight-metric-label">Engagement</div></div>
+      </div>
+      <div class="spotlight-body">
+        <h3 style="margin-bottom:8px">What does this tell you about Sally?</h3>
+        <p>Sally reached <strong>Mastery</strong> — the highest skill level. But her engagement score is <strong>Low at 39%</strong>. She spent only 3 minutes and 6 seconds on the reading portion.</p>
+        <div class="context-box" style="margin: 12px 0">
+          <p><strong>The tension:</strong> Sally is performing at the top of the class — yet her engagement is flagged as low. This isn't a struggling student. This is a student who may be <em>bored</em>. She got through the content quickly and correctly, but the platform can detect that she didn't spend time deeply engaging with it.</p>
+        </div>
+        <div class="reflection-area">
+          <div class="reflection-label">What would you do for Sally specifically, based on this individual data?</div>
+          <textarea placeholder="Think about a student who's mastered the content but has low engagement — what's your next move for her?" id="reflect-sally"></textarea>
+          <button class="ai-respond-btn" onclick="getAICoaching('sally')" id="btn-sally">Get coaching</button>
+          <div class="ai-response-box" id="air-sally">
+            <div class="ai-response-header"><span class="ai-badge-subtle">AI Coach</span></div>
+            <div class="ai-response-text" id="air-sally-text"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="question-prompt" style="margin-top:28px">
+    <div class="question-prompt-kicker">Your Turn · Act 3</div>
+    <h3>Full picture. What are your top 3 next moves?</h3>
+    <p>Select up to 3 actions. Think about all your students — struggling, on track, and ready for more.</p>
+  </div>
+
+  <div class="next-steps-grid" id="act3-choices">
+    <button class="next-step-card" onclick="toggleNextStep(this,'ns1')"><div class="step-icon">📩</div><div class="step-title">Nudge PW and JJ</div><div class="step-desc">1-click reminder to students who started but didn't turn in.</div></button>
+    <button class="next-step-card" onclick="toggleNextStep(this,'ns2')"><div class="step-icon">📚</div><div class="step-title">Assign prerequisite to CR, JJ, SJ</div><div class="step-desc">Send "Symmetry on the Number Line" to the three beginning/exploring students.</div></button>
+    <button class="next-step-card" onclick="toggleNextStep(this,'ns3')"><div class="step-icon">🗣️</div><div class="step-title">Check in with low-engagement students</div><div class="step-desc">Brief 1:1 with low-engagement + low-skill students to ask what got in the way.</div></button>
+    <button class="next-step-card" onclick="toggleNextStep(this,'ns4')"><div class="step-icon">🚀</div><div class="step-title">Assign enrichment to SW, TD, AS</div><div class="step-desc">Send "Solving Multiplication Equations" to your three top performers.</div></button>
+    <button class="next-step-card" onclick="toggleNextStep(this,'ns5')"><div class="step-icon">🔄</div><div class="step-title">Small group review of Q1–Q4</div><div class="step-desc">Pull together students who missed Q1–Q4 for a targeted 10-minute re-teach.</div></button>
+    <button class="next-step-card" onclick="toggleNextStep(this,'ns6')"><div class="step-icon">📋</div><div class="step-title">Create a targeted quiz</div><div class="step-desc">Use CK-12's Quiz Creator to build a 5-question formative check on Q1–Q4.</div></button>
+  </div>
+
+  <div class="feedback-box ai-glow" id="fb-act3" style="margin-top:14px">
+    <div class="feedback-header"><div class="feedback-icon">💡</div><div class="feedback-title">Good thinking. Here's what the data supports: <span class="ai-badge-subtle">AI-powered</span></div></div>
+    <div class="feedback-body">
+      <p>Every one of these moves is grounded in the data — but the <strong>most impactful combination</strong> addresses all three student groups simultaneously: struggling students get support, stuck students get re-engagement, and advanced students get challenge. The data tells you <em>who</em> needs what. You bring the relationship and the conversation.</p>
+      <p style="margin-top:10px"><strong>Notice what changed from Act 1:</strong> You started with four hard questions and no names. Now you know which students need what, why some disengaged, who's ready to accelerate, and who hasn't turned in. Same lesson — completely different picture.</p>
+    </div>
+    <div class="reflection-area">
+      <div class="reflection-label">What would you have done with only the Act 1 data? What does the full picture make possible?</div>
+      <textarea placeholder="Think about the difference between reacting to what went wrong vs. anticipating the full range of your learners..." id="reflect-act3"></textarea>
+      <button class="ai-respond-btn" onclick="getAICoaching('act3')" id="btn-act3">Get coaching</button>
+      <div class="ai-response-box" id="air-act3">
+        <div class="ai-response-header"><span class="ai-badge-subtle">AI Coach</span></div>
+        <div class="ai-response-text" id="air-act3-text"></div>
+      </div>
+    </div>
+  </div>
+  <div id="act3-continue" style="display:none">
+    <button class="continue-btn" onclick="revealClosing()">See How Your Thinking Shifted <span class="arrow">→</span></button>
+  </div>
+</section>
+</div>
+
+
+<!-- CLOSING -->
+<div class="reveal-section" id="closing">
+<hr class="divider">
+<section class="section">
+  <div class="act-label">Reflection</div>
+  <h2>How Your Thinking Shifted</h2>
+
+  <!-- AI-GENERATED SHIFT SUMMARY — THREE BOX PROGRESSION -->
+  <div class="shift-summary">
+    <div class="shift-summary-header">
+      <span class="ai-badge-subtle">AI-powered</span>
+      <div class="shift-summary-title">Your Progression Through This Case</div>
+    </div>
+    <div class="progression-track">
+      <div class="prog-box" id="prog-box-1">
+        <div class="prog-box-loading"><div class="ai-thinking-dots"><span></span><span></span><span></span></div></div>
+      </div>
+      <div class="prog-arrow">→</div>
+      <div class="prog-box" id="prog-box-2">
+        <div class="prog-box-loading"><div class="ai-thinking-dots"><span></span><span></span><span></span></div></div>
+      </div>
+      <div class="prog-arrow">→</div>
+      <div class="prog-box" id="prog-box-3">
+        <div class="prog-box-loading"><div class="ai-thinking-dots"><span></span><span></span><span></span></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="closing-card" style="margin-top:28px">
+    <h2>From Reacting to Anticipating</h2>
+    <p>This case wasn't really about CK-12. It was about what becomes possible when you have layered, AI-powered data — and how the questions you ask of that data change your teaching.</p>
+    <div class="mindset-shift">
+      <div class="mindset-from"><div class="mlabel">Before</div><div class="mindset-text">"What did students get wrong?"</div></div>
+      <div class="mindset-arrow">→</div>
+      <div class="mindset-to"><div class="mlabel">After</div><div class="mindset-text">"What does the full picture tell me about where each learner is headed — and what do I do now?"</div></div>
+    </div>
+    <div class="mindset-shift" style="margin-top:0">
+      <div class="mindset-from"><div class="mlabel">Before</div><div class="mindset-text">"I'll re-teach this concept to everyone."</div></div>
+      <div class="mindset-arrow">→</div>
+      <div class="mindset-to"><div class="mlabel">After</div><div class="mindset-text">"Three students need a prerequisite. Three need a challenge. Two haven't turned in. Here's my specific plan."</div></div>
+    </div>
+    <div class="mindset-shift" style="margin-top:0">
+      <div class="mindset-from"><div class="mlabel">Before</div><div class="mindset-text">"I find out who's struggling after they fail."</div></div>
+      <div class="mindset-arrow">→</div>
+      <div class="mindset-to"><div class="mlabel">After</div><div class="mindset-text">"I can see who's likely to struggle before it becomes failure — and act first."</div></div>
+    </div>
+  </div>
+
+  <div style="margin-top:34px">
+    <h3 style="margin-bottom:14px">Your Final Reflection</h3>
+    <div class="reflection-label" style="font-size:0.88rem;color:var(--ink-light);margin-bottom:10px">What's one thing you'd do differently in your own practice after working through Ms. Rivera's case?</div>
+    <textarea style="min-height:105px" placeholder="This is your takeaway — about data, planning, your students who are ready for more, or anything else this case surfaced." id="reflect-final"></textarea>
+    <button class="ai-respond-btn" onclick="getAICoaching('final')" id="btn-final" style="margin-top:8px">Get coaching</button>
+    <div class="ai-response-box" id="air-final">
+      <div class="ai-response-header"><span class="ai-badge-subtle">AI Coach</span></div>
+      <div class="ai-response-text" id="air-final-text"></div>
+    </div>
+    <button class="continue-btn" style="background:var(--gold);color:var(--ink);display:block;margin-top:20px" onclick="finishModule()">Complete the Module ✓</button>
+  </div>
+
+  <div id="complete-msg" style="display:none;animation:fadeSlideUp 0.5s ease">
+    <div style="background:var(--gold-soft);border:2px solid var(--gold);border-radius:4px;padding:22px 26px;margin-top:22px;text-align:center;border-top:4px solid var(--maroon)">
+      <div style="font-size:1.8rem;margin-bottom:7px">🎉</div>
+      <div style="font-family:'Roboto Slab',serif;font-size:1.15rem;font-weight:700;color:var(--maroon);margin-bottom:5px;text-transform:uppercase;letter-spacing:0.04em">Module Complete</div>
+      <p style="color:var(--ink-light);font-size:0.88rem;margin:0">Thank you for stepping into Ms. Rivera's classroom. The questions you asked here are the same ones CK-12's Foresights and Insights help every teacher ask — for every student, every lesson, every day.</p>
+    </div>
+  </div>
+</section>
+</div>
+
+</div><!-- /container -->
+
+<script>
+// ── STATE ───────────────────────────────────────────
+let act1Choice = null, act2Choice = null;
+let selectedSteps = [];
+const choiceLabels = { a:'Re-teach the whole section', b:'Pull a small group', c:'Send students to re-practice independently', d:'Pause — need more data first' };
+const act2Labels = { a:'Form three tiered groups', b:'Focus only on CR', c:'Pre-assign the prerequisite proactively', d:'Wait for confirmed results' };
+
+// ── PROGRESS ────────────────────────────────────────
+function setProgress(pct) {
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressLabel').textContent = Math.round(pct) + '% complete';
+}
+
+// ── BARS ────────────────────────────────────────────
+function animateBars() {
+  document.querySelectorAll('.q-bar-fill').forEach(b => { setTimeout(() => { b.style.width = b.dataset.w; }, 120); });
+}
+
+// ── SCATTER BUILD ───────────────────────────────────
+function buildSkillScatter() {
+  const s = document.getElementById('skillScatter');
+  const data = [['CR','beginning',8,54],['JJ','exploring',22,47],['SJ','exploring',27,61],['JD','developing',44,51],['DS','developing',49,37],['BS','developing',42,64],['MB','proficient',63,43],['TD','proficient',67,57],['SW','mastery',81,37],['PW','tbd',13,71],['AS','tbd',18,29]];
+  const names = {CR:'Rayes, Christine',JJ:'Jones, Jonathan',SJ:'Jones, Samantha',JD:'Doe, John',DS:'Smith, David',BS:'Smith, Bonnie',MB:'Brown, Molly',TD:'Davis, Thomas',SW:'Williams, Sally',PW:'Wiess, Preston',AS:'Sampson, Annie'};
+  const lvls = {beginning:'Beginning',exploring:'Exploring',developing:'Developing',proficient:'Proficient',mastery:'Mastery',tbd:'Not enough data'};
+  data.forEach(([i,l,x,y]) => {
+    const d = document.createElement('div');
+    d.className = `scatter-dot ${l} tooltip-wrap`;
+    d.style.left = x+'%'; d.style.top = y+'%'; d.textContent = i;
+    const t = document.createElement('div'); t.className = 'tooltip-content';
+    t.innerHTML = `${names[i]}<br><em>${lvls[l]}</em>`;
+    d.appendChild(t); s.appendChild(d);
+  });
+}
+
+function buildInsightsScatter() {
+  const s = document.getElementById('insightsScatter');
+  // [initials, level, x% left, y% from top — low skill=bottom so high y%, high skill=top so low y%]
+  // y is inverted: higher skill = lower top value (closer to top of box)
+  // leave ~15% at bottom for axis label, ~8% at top for padding
+  const data = [
+    ['CR','beginning', 12, 78],  // low engagement, low skill → bottom-left
+    ['JJ','exploring',  20, 68],  // low-med engagement, exploring
+    ['SJ','exploring',  26, 72],  // low-med engagement, exploring
+    ['JD','developing', 42, 52],  // mid engagement, developing
+    ['BS','developing', 44, 56],  // mid engagement, developing
+    ['DS','developing', 38, 48],  // mid engagement, developing
+    ['MB','proficient', 54, 32],  // higher engagement, proficient
+    ['TD','proficient', 60, 28],  // higher engagement, proficient
+    ['SW','mastery',    74, 14],  // high engagement area, mastery → top-right
+  ];
+  const names = {CR:'Rayes, Christine',SJ:'Jones, Samantha',JJ:'Jones, Jonathan',JD:'Doe, John',BS:'Smith, Bonnie',DS:'Smith, David',MB:'Brown, Molly',TD:'Davis, Thomas',SW:'Williams, Sally'};
+  const lvls = {beginning:'Beginning',exploring:'Exploring',developing:'Developing',proficient:'Proficient',mastery:'Mastery'};
+  data.forEach(([i,l,x,y]) => {
+    const d = document.createElement('div');
+    d.className = `scatter-dot ${l} tooltip-wrap`;
+    d.style.left = x+'%';
+    d.style.top = y+'%';
+    d.style.transform = 'translate(-50%, -50%)';
+    d.textContent = i;
+    const t = document.createElement('div'); t.className = 'tooltip-content';
+    t.innerHTML = `${names[i]}<br><em>${lvls[l]}</em>`;
+    d.appendChild(t); s.appendChild(d);
+  });
+}
+
+// ── PREDICTED QUESTION MODAL ────────────────────────
+const pqData = {
+  1: { q:'Find the value of x in the equation.\n22 + x = 40', choices:['a  18','b  62','c  22','d  17'], correct:[4], miss:['CR','SJ','JJ','JD','TD','MB'], ok:['SW','DS','BS','AS'], nodata:['PW'] },
+  2: { q:'Solve the equation to find the value of the variable.\n½x = 18', choices:['a  9','b  16','c  17.5','d  36'], correct:[4], miss:['CR','SJ','JJ','JD','TD','MB'], ok:['SW','BS','DS','AS'], nodata:['PW'] },
+  3: { q:'Solve for x:\nx − 5 = 12', choices:['a  7','b  17','c  60','d  -7'], correct:[4], miss:['CR','SJ','JJ'], ok:['JD','DS','BS','MB','TD','SW','AS'], nodata:['PW'] },
+  4: { q:'Which step isolates the variable in:\nx + 14 = 30', choices:['a  Subtract 14 from both sides','b  Add 14 to both sides','c  Multiply both sides by 14','d  Divide both sides by 14'], correct:[4], miss:['CR','SJ','JJ','JD'], ok:['DS','BS','MB','TD','SW','AS'], nodata:['PW'] },
+  5: { q:'Solve:\nx − 8 = 15', choices:['a  7','b  23','c  -7','d  120'], correct:[7], miss:['CR','SJ'], ok:['JJ','JD','DS','BS','MB','TD','SW','AS'], nodata:['PW'] },
+  6: { q:'If x + 33 = 40, what is x?', choices:['a  73','b  7','c  -7','d  13'], correct:[7], miss:['CR'], ok:['SJ','JJ','JD','DS','BS','MB','TD','SW','AS'], nodata:['PW'] },
+  7: { q:'Solve for x:\n15 = x − 6', choices:['a  9','b  21','c  -21','d  90'], correct:[8], miss:['CR','SJ'], ok:['JJ','JD','DS','BS','MB','TD','SW','AS'], nodata:['PW'] },
+  8: { q:'Alex earns $3 per hour at work. If Alex earns $15 totally, how many hours did he work?', choices:['a  12 hours','b  5 hours','c  15 hours','d  18 hours'], correct:[10], miss:[], ok:['AS','CR','SJ','JJ','JD','TD','MB'], nodata:['SW'] },
+  9: { q:'Which equation represents "a number decreased by 7 equals 10"?', choices:['a  x + 7 = 10','b  x − 7 = 10','c  7 − x = 10','d  10 − x = 7'], correct:[9], miss:['CR'], ok:['SJ','JJ','JD','DS','BS','MB','TD','SW','AS'], nodata:['PW'] },
+  10: { q:'Solve:\n45 = 18 + x', choices:['a  63','b  27','c  -27','d  810'], correct:[9], miss:['CR'], ok:['SJ','JJ','JD','DS','BS','MB','TD','SW','AS'], nodata:['PW'] },
+  11: { q:'Q11–Q15: Higher-order application and multi-step problems.', choices:['Mostly correct across the class','Predicted correct rate: 84%+','Strong performance on real-world applications','No significant concerns flagged'], correct:[10], miss:[], ok:['Most students'], nodata:[] }
+};
+let currentPQ = 1;
+
+function openPQModal(n) {
+  currentPQ = n;
+  renderPQModal();
+  document.getElementById('pqModal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closePQModal() {
+  document.getElementById('pqModal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function renderPQModal() {
+  // nav
+  const nav = document.getElementById('pqNav');
+  nav.innerHTML = '';
+  for (let i = 1; i <= 11; i++) {
+    const btn = document.createElement('button');
+    btn.className = 'pq-q-btn' + (i <= 4 ? ' danger' : '') + (i === currentPQ ? ' active' : '');
+    btn.textContent = i === 11 ? '11+' : i;
+    btn.onclick = () => { currentPQ = i; renderPQModal(); };
+    nav.appendChild(btn);
+  }
+  const d = pqData[currentPQ];
+  // question box
+  document.getElementById('pqQuestionBox').innerHTML = `
+    <div class="pq-question-label">Question ${currentPQ === 11 ? '11–15' : currentPQ}</div>
+    <div class="pq-question-text">${d.q.replace(/\n/g,'<br>')}</div>
+    ${d.choices.map(c => `<div class="pq-choice"><span class="pq-choice-letter">${c.charAt(0)}</span> <span>${c.slice(3)}</span></div>`).join('')}
+  `;
+  // perf box
+  const okHTML = d.ok.length ? `<div class="pq-perf-group"><div class="pq-perf-group-label">Predicted to get correct: (${d.ok.length})</div><div class="pq-pills">${d.ok.map(s => `<span class="pq-pill correct">${s}</span>`).join('')}</div></div>` : '';
+  const missHTML = d.miss.length ? `<div class="pq-perf-group"><div class="pq-perf-group-label">Predicted to miss: (${d.miss.length})</div><div class="pq-pills">${d.miss.map(s => `<span class="pq-pill miss">${s}</span>`).join('')}</div></div>` : '';
+  const nodataHTML = d.nodata.length ? `<div class="pq-perf-group"><div class="pq-perf-group-label">Not enough data: (${d.nodata.length})</div><div class="pq-pills">${d.nodata.map(s => `<span class="pq-pill nodata">${s}</span>`).join('')}</div></div>` : '';
+  document.getElementById('pqPerfBox').innerHTML = `<div class="pq-perf-label">Student Performance</div>${okHTML}${missHTML}${nodataHTML}`;
+}
+document.getElementById('pqModal').addEventListener('click', e => { if (e.target === document.getElementById('pqModal')) closePQModal(); });
+
+// ── CHOICE FEEDBACK ─────────────────────────────────
+const feedbacks = {
+  act1: {
+    a:{ cls:'partial', title:'A natural instinct — but it may overshoot.', body:`Re-teaching the whole section <strong>assumes everyone needs it</strong>. Students who got Q5–Q15 right don't need to go back to the start. The deeper problem: this data doesn't tell you <em>which students</em> to re-teach — you're planning for a group without knowing who's in it.` },
+    b:{ cls:'insight', title:'Good instinct — but you\'re missing one piece.', body:`Pulling a small group for targeted re-teaching is the right direction. <strong>The gap:</strong> this question-level data doesn't tell you who to pull. You know <em>what</em> was hard, not <em>who</em> struggled. You might pull the wrong students — or miss ones who quietly gave up.` },
+    c:{ cls:'partial', title:'This puts the work back on students without a plan.', body:`Independent re-practice can work — but only if students know <em>how</em> to correct their thinking. For students struggling with a foundational concept, re-doing the same questions often rehearses the same misunderstanding.` },
+    d:{ cls:'insight', title:'This is the most data-informed read. Stay with that instinct.', body:`Pausing because the data is incomplete is exactly right. Question-level data tells you <em>what</em> was hard — not <em>who</em>, <em>why</em>, or what each student needs. The instinct to wait for richer data before acting is the signal of a teacher who uses data well.` }
+  },
+  act2: {
+    a:{ cls:'insight', title:'Differentiated, responsive, and well-grounded.', body:`Forming three tiers based on skill prediction is exactly what this data is built to support. You're using predicted levels to <strong>plan differentiated instruction</strong> — not just react after failure. CR and the exploring students get a proactive support pathway before they fall further behind.` },
+    b:{ cls:'partial', title:'CR needs support — but she\'s not the whole story.', body:`It's right to prioritize CR. But JJ and SJ are also at exploring level with the same likely gap. Your developing students may benefit from targeted practice too, and MB, TD, SW are ready to accelerate. A plan that only serves the bottom misses eight other students.` },
+    c:{ cls:'insight', title:'This is Foresights used to its full potential.', body:`Using predicted data to <strong>pre-assign a prerequisite before the lesson ends</strong> is the proactive mindset shift this tool enables. Instead of discovering a gap after a failed assignment, you intervene before it becomes failure.` },
+    d:{ cls:'partial', title:'Healthy skepticism — but predictions have real value.', body:`Caution is reasonable. But waiting for confirmed failure means students like CR have already had a negative experience. The value of predictive data is <strong>shifting your default from reactive to proactive</strong>. Act on the prediction, stay curious, adjust if wrong.` }
+  }
+};
+
+function selectChoice(btn, act, choice) {
+  document.getElementById(act+'-choices').querySelectorAll('.choice-btn').forEach(b => { b.disabled = true; });
+  const fb = feedbacks[act][choice];
+  btn.classList.add(fb.cls === 'insight' ? 'correct' : 'partial');
+  btn.querySelector('.choice-letter').style.background = fb.cls === 'insight' ? 'var(--maroon)' : '#c8963e';
+  btn.querySelector('.choice-letter').style.color = 'white';
+  document.getElementById('fb-'+act+'-title').textContent = fb.title;
+  document.getElementById('fb-'+act+'-body').innerHTML = fb.body;
+  document.getElementById('fb-'+act).classList.add('visible');
+  if (act === 'act1') { act1Choice = choice; setProgress(25); }
+  if (act === 'act2') { act2Choice = choice; setProgress(55); }
+  setTimeout(() => { document.getElementById(act+'-continue').style.display = 'block'; scrollTo('fb-'+act); }, 350);
+}
+
+// ── ACT 3 ────────────────────────────────────────────
+function toggleNextStep(btn, id) {
+  if (btn.classList.contains('selected')) { btn.classList.remove('selected'); selectedSteps = selectedSteps.filter(s => s !== id); }
+  else { if (selectedSteps.length >= 3) return; btn.classList.add('selected'); selectedSteps.push(id); }
+  if (selectedSteps.length >= 2) { document.getElementById('fb-act3').classList.add('visible'); document.getElementById('act3-continue').style.display = 'block'; setProgress(80); }
+}
+
+// ── GO DEEPER ────────────────────────────────────────
+function toggleGoDeeper() {
+  const s = document.getElementById('goDeeperSection');
+  const a = document.getElementById('deeper-arrow');
+  if (s.classList.contains('open')) { s.classList.remove('open'); a.textContent = '↓'; }
+  else { s.classList.add('open'); a.textContent = '↑'; scrollTo('goDeeperSection'); }
+}
+
+// ── AI COACHING ──────────────────────────────────────
+async function getAICoaching(id) {
+  const textEl = document.getElementById('reflect-' + id);
+  const btn = document.getElementById('btn-' + id);
+  const responseBox = document.getElementById('air-' + id);
+  const responseText = document.getElementById('air-' + id + '-text');
+  const userText = textEl.value.trim();
+  if (!userText || userText.length < 10) { textEl.style.borderColor = 'var(--accent)'; setTimeout(() => { textEl.style.borderColor = ''; }, 1500); return; }
+  btn.disabled = true;
+  responseBox.classList.add('visible');
+  responseText.innerHTML = '<div class="ai-thinking"><div class="ai-thinking-dots"><span></span><span></span><span></span></div> Thinking…</div>';
+
+  const contexts = {
+    act1: `The teacher is working through a professional learning case study about CK-12 Learning Analytics. In Act 1, they only had question-level data showing Q1-Q4 were most missed (28-44% correct rate) for a 6th grade math class on Section 7.3 Solving Addition and Subtraction Equations. They chose: "${choiceLabels[act1Choice] || 'to reflect without choosing'}". Their reflection is: "${userText}". As an instructional coach, respond in 3-4 sentences: briefly affirm what's insightful in their thinking, name the specific teaching move they're describing, then probe deeper with one follow-up question that connects their thinking to the next layer of data they're about to see (individual student skill levels). Be warm, specific, and concise.`,
+    act2: `The teacher is in Act 2 of a PL case study. They now have both question-level data AND individual student skill level predictions (CR=Beginning, JJ/SJ=Exploring, JD/DS/BS=Developing, MB/TD=Proficient, SW=Mastery, PW/AS=Not enough data) for a 6th grade math class. They chose Act 1: "${choiceLabels[act1Choice] || 'unknown'}" and Act 2: "${act2Labels[act2Choice] || 'unknown'}". Their reflection on how predictive data changes planning: "${userText}". As an instructional coach, respond in 3-4 sentences: affirm the insight, name a specific instructional move they're articulating (e.g. proactive grouping, pre-teaching, tiering), then ask one question that helps them connect this to what they'd actually do in their own classroom. Be warm and specific.`,
+    act3: `The teacher has completed all three acts of a PL case study about CK-12 Learning Analytics. Act 1 (quiz data only) → Act 2 (Foresights skill predictions) → Act 3 (full Insights: 9/11 turned in, engagement scatter, AI recommendations including nudges, prerequisite gap for CR/JJ/SJ, enrichment for SW/TD/AS, 32% engagement gap). Their Act 3 reflection comparing Act 1 to the full picture: "${userText}". They chose: Act 1="${choiceLabels[act1Choice] || 'unknown'}", Act 2="${act2Labels[act2Choice] || 'unknown'}", final steps="${selectedSteps.join(', ')}". As an instructional coach, respond in 3-4 sentences: affirm the specific shift in thinking they're naming, explicitly call out the growth in their decision-making across the acts, and end with one question about how they'd apply this in their own classroom.`,
+    sally: `The teacher is exploring an individual student's data: Sally Williams reached Mastery skill level but has Low engagement (39%) and only spent 3 minutes 6 seconds on reading in a 6th grade math lesson. The teacher's reflection on what they'd do for Sally: "${userText}". As an instructional coach, respond in 3-4 sentences: affirm what's strong in their thinking about this tension between high performance and low engagement, name the instructional move they're describing (e.g. enrichment, differentiated path, acceleration), then probe with one question: what does Sally's pattern tell you about how your current lesson design might be serving — or under-serving — your highest learners?`,
+    final: `The teacher has just completed a full professional learning case study about CK-12 Learning Analytics (Foresights and Insights). Their final reflection about what they'd do differently in their own practice: "${userText}". Act 1 choice: "${choiceLabels[act1Choice] || 'unknown'}". Act 2 choice: "${act2Labels[act2Choice] || 'unknown'}". As an instructional coach, respond in 3-4 sentences: warmly affirm the specific change they're naming, connect it to the mindset shift from "reacting to what went wrong" to "anticipating where each learner is headed", and close with one concrete, actionable step they could take in their next lesson this week to start living this shift.`
+  };
+
+  try {
+    const res = await fetch('/.netlify/functions/claude', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        messages: [{ role: 'user', content: contexts[id] }]
+      })
+    });
+    const data = await res.json();
+    const text = data.content?.map(c => c.text || '').join('') || 'I wasn\'t able to generate a response right now. Try again in a moment.';
+    responseText.innerHTML = text.replace(/\n\n/g, '<br><br>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+  } catch (e) {
+    responseText.innerHTML = '<em>Coaching unavailable right now — but your reflection is valuable. Keep it and revisit it with a colleague!</em>';
+  }
+  btn.disabled = false;
+}
+
+// ── AI SHIFT SUMMARY — THREE BOXES ───────────────────
+async function callClaude(prompt) {
+  const res = await fetch('/.netlify/functions/claude', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: 'claude-sonnet-4-20250514',
+      max_tokens: 400,
+      messages: [{ role: 'user', content: prompt }]
+    })
+  });
+  const data = await res.json();
+  return (data.content?.map(c => c.text || '').join('') || '').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, ' ').trim();
+}
+
+function renderProgBox(boxId, num, numColor, label, content) {
+  document.getElementById(boxId).innerHTML = `
+    <div class="prog-box-num" style="color:${numColor}">${num}</div>
+    <div class="prog-box-label">${label}</div>
+    <div class="prog-box-text">${content}</div>
+  `;
+}
+
+async function generateShiftSummary() {
+  const r = {
+    act1: document.getElementById('reflect-act1').value || 'No reflection entered.',
+    act2: document.getElementById('reflect-act2').value || 'No reflection entered.',
+    act3: document.getElementById('reflect-act3').value || 'No reflection entered.',
+    sally: document.getElementById('reflect-sally').value || 'No reflection entered.',
+    final: document.getElementById('reflect-final').value || 'No reflection entered.'
+  };
+  const act1Label = choiceLabels[act1Choice] || 'Did not select a choice';
+  const act2Label = act2Labels[act2Choice] || 'Did not select a choice';
+  const stepsLabel = selectedSteps.length ? selectedSteps.join(', ') : 'none selected';
+
+  const context = `A teacher completed a PL case study about CK-12 Learning Analytics. Their journey:
+Act 1 choice (question-level data only): "${act1Label}". Reflection: "${r.act1}"
+Act 2 choice (skill predictions added): "${act2Label}". Reflection: "${r.act2}"
+Act 3 final moves: ${stepsLabel}. Reflection: "${r.act3}"
+Student spotlight reflection (Sally: Mastery but Low engagement): "${r.sally}"
+Final reflection: "${r.final}"`;
+
+  // Box 1 — Original Thinking
+  const p1 = `${context}
+
+Write 2-3 sentences for a box titled "Original Thinking" that captures what this teacher was thinking at the START (Act 1), when they only had question-level data. Name their specific choice and what instinct drove it. Be specific, warm, and use second person ("you"). No headers, no bullet points — flowing sentences only.`;
+
+  // Box 2 — What the Data Enabled
+  const p2 = `${context}
+
+Write 2-3 sentences for a box titled "What the Data Enabled" that captures what became possible for this teacher as the data deepened from Act 1 through Act 3. Focus on the specific instructional moves they named — tiering, proactive support, enrichment, prerequisite assignments, etc. Use second person ("you"), no headers, flowing sentences only.`;
+
+  // Box 3 — Your Next Move
+  const p3 = `${context}
+
+Write 2-3 sentences for a box titled "Your Next Move" that captures the ONE concrete action this teacher committed to taking back to their own classroom, drawn from their final reflection. Make it specific and actionable. If they didn't write much, suggest the most natural next step based on their overall journey. Use second person ("you"), no headers, flowing sentences only.`;
+
+  const fallbacks = [
+    `You started with the instinct to act on what you saw — ${act1Label.toLowerCase()} — which shows you're a teacher who responds to data. But at that stage, you were working with the question, not the student.`,
+    `As the data deepened, you gained the ability to name specific students, anticipate needs before failure, and plan differentiated pathways. The data turned a class-level problem into individual stories you could act on.`,
+    `Your next move is to open CK-12 Foresights before your next lesson and identify one student who might be predicted to struggle — and make a proactive plan for them before they ever hit the wall.`
+  ];
+
+  // Fire all three in parallel
+  const [box1, box2, box3] = await Promise.allSettled([
+    callClaude(p1), callClaude(p2), callClaude(p3)
+  ]);
+
+  renderProgBox('prog-box-1', '01 — Original Thinking', '#5C6670', 'Original Thinking',
+    box1.status === 'fulfilled' ? box1.value : fallbacks[0]);
+  renderProgBox('prog-box-2', '02 — What the Data Enabled', '#8C1D40', 'What the Data Enabled',
+    box2.status === 'fulfilled' ? box2.value : fallbacks[1]);
+  renderProgBox('prog-box-3', '03 — Your Next Move', '#7a5c00', 'Your Next Move',
+    box3.status === 'fulfilled' ? box3.value : fallbacks[2]);
+}
+
+// ── REVEAL / NAV ─────────────────────────────────────
+function show(id) { document.getElementById(id).classList.add('visible'); }
+function setStep(n, cls) { document.getElementById('snode'+n).className = 'step-node '+cls; }
+function scrollTo(id) { setTimeout(() => { const el = document.getElementById(id); if(el) el.scrollIntoView({behavior:'smooth',block:'start'}); }, 160); }
+
+function revealAct1() { show('act1'); setProgress(10); setStep(1,'done'); setStep(2,'active'); setTimeout(animateBars, 400); scrollTo('act1'); }
+function revealAct2() { show('act2'); setProgress(35); setStep(2,'done'); setStep(3,'active'); setTimeout(buildSkillScatter, 300); scrollTo('act2'); }
+function revealAct3() { show('act3'); setProgress(62); setStep(3,'done'); setStep(4,'active'); setTimeout(buildInsightsScatter, 300); scrollTo('act3'); }
+function revealClosing() { show('closing'); setProgress(88); generateShiftSummary(); scrollTo('closing'); }
+function finishModule() { document.getElementById('complete-msg').style.display = 'block'; setProgress(100); setStep(4,'done'); scrollTo('complete-msg'); }
+</script>
+</body>
+</html>
