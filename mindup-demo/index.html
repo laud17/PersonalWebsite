@@ -3,1043 +3,227 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MindUP Classroom Tool</title>
+<title>MindUP Unit 1 Classroom Tool</title>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fraunces:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet">
 <style>
-/* ===================== ROOT & RESET ===================== */
 :root {
-  --bg: #0d1829;
-  --panel: #162035;
-  --panel2: #1c2a44;
-  --border: rgba(255,255,255,0.08);
-  --teal: #2EC4B6;
-  --teal-glow: rgba(46,196,182,0.35);
-  --coral: #FF6B6B;
-  --gold: #FFD166;
-  --lavender: #b57ff5;
-  --pink: #F15BB5;
-  --sky: #00BBF9;
-  --white: #ffffff;
-  --muted: rgba(255,255,255,0.45);
-  --text: rgba(255,255,255,0.88);
+  --bg:#0d1829; --panel:#162035; --panel2:#1c2a44; --border:rgba(255,255,255,0.08);
+  --teal:#2EC4B6; --teal-glow:rgba(46,196,182,0.35); --coral:#FF6B6B; --gold:#FFD166;
+  --lavender:#b57ff5; --pink:#F15BB5; --sky:#00BBF9; --white:#ffffff;
+  --muted:rgba(255,255,255,0.45); --text:rgba(255,255,255,0.88);
+  --pfc:#FF6B6B; --amyg:#FFD166; --hipp:#2EC4B6; --cort:#00BBF9; --cere:#b57ff5; --stem:#F15BB5;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;overflow:hidden;}
+body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);display:flex;flex-direction:column;}
 
-  /* Brain region colors */
-  --pfc:  #FF6B6B;
-  --amyg: #FFD166;
-  --hipp: #2EC4B6;
-  --cort: #00BBF9;
-  --cere: #b57ff5;
-  --stem: #F15BB5;
-}
-* { box-sizing:border-box; margin:0; padding:0; }
-html, body { height:100%; overflow:hidden; }
-body {
-  font-family:'Nunito',sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  display:flex;
-  flex-direction:column;
-}
+/* HEADER */
+header{background:var(--panel);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 2rem;height:58px;flex-shrink:0;z-index:50;}
+.logo{display:flex;align-items:center;gap:12px;}
+.logo-mark{width:36px;height:36px;background:linear-gradient(135deg,var(--teal),var(--coral));border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;box-shadow:0 0 14px var(--teal-glow);}
+.logo-name{font-family:'Fraunces',serif;font-size:1.25rem;color:white;letter-spacing:-0.5px;}
+.logo-tag{font-size:0.65rem;color:var(--teal);font-weight:800;letter-spacing:2px;text-transform:uppercase;}
+.lesson-badge{background:rgba(46,196,182,0.12);border:1px solid rgba(46,196,182,0.3);border-radius:20px;padding:4px 14px;font-size:0.72rem;color:var(--teal);font-weight:800;letter-spacing:1.5px;text-transform:uppercase;}
 
-/* ===================== HEADER ===================== */
-header {
-  background: var(--panel);
-  border-bottom: 1px solid var(--border);
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding: 0 2rem;
-  height: 58px;
-  flex-shrink:0;
-  z-index:50;
-}
-.logo {
-  display:flex; align-items:center; gap:12px;
-}
-.logo-mark {
-  width:36px; height:36px;
-  background: linear-gradient(135deg, var(--teal), var(--coral));
-  border-radius:10px;
-  display:flex; align-items:center; justify-content:center;
-  font-size:18px;
-  box-shadow: 0 0 14px var(--teal-glow);
-}
-.logo-name {
-  font-family:'Fraunces',serif;
-  font-size:1.25rem;
-  color:white;
-  letter-spacing:-0.5px;
-}
-.logo-tag {
-  font-size:0.65rem;
-  color:var(--teal);
-  font-weight:800;
-  letter-spacing:2px;
-  text-transform:uppercase;
-}
-.header-right {
-  display:flex; gap:10px; align-items:center;
-}
-.lesson-badge {
-  background: rgba(46,196,182,0.12);
-  border:1px solid rgba(46,196,182,0.3);
-  border-radius:20px;
-  padding:4px 14px;
-  font-size:0.72rem;
-  color:var(--teal);
-  font-weight:800;
-  letter-spacing:1.5px;
-  text-transform:uppercase;
-}
+/* NAV */
+nav{background:var(--panel2);border-bottom:1px solid var(--border);display:flex;padding:0 1.5rem;flex-shrink:0;}
+.nav-tab{padding:0.9rem 1.4rem;border:none;background:none;cursor:pointer;font-family:'Nunito',sans-serif;font-size:0.82rem;font-weight:800;color:var(--muted);border-bottom:3px solid transparent;margin-bottom:-1px;letter-spacing:0.5px;transition:all 0.2s;display:flex;align-items:center;gap:7px;white-space:nowrap;}
+.nav-tab:hover{color:white;}
+.nav-tab.active{color:var(--teal);border-bottom-color:var(--teal);}
 
-/* ===================== NAV TABS ===================== */
-nav {
-  background: var(--panel2);
-  border-bottom:1px solid var(--border);
-  display:flex;
-  padding: 0 1.5rem;
-  flex-shrink:0;
-}
-.nav-tab {
-  padding:0.9rem 1.4rem;
-  border:none;
-  background:none;
-  cursor:pointer;
-  font-family:'Nunito',sans-serif;
-  font-size:0.82rem;
-  font-weight:800;
-  color:var(--muted);
-  border-bottom:3px solid transparent;
-  margin-bottom:-1px;
-  letter-spacing:0.5px;
-  transition:all 0.2s;
-  display:flex; align-items:center; gap:7px;
-  white-space:nowrap;
-}
-.nav-tab:hover { color:white; }
-.nav-tab.active {
-  color:var(--teal);
-  border-bottom-color:var(--teal);
-}
-.nav-tab .tab-icon { font-size:1rem; }
+/* MAIN */
+.main{flex:1;overflow:hidden;position:relative;}
+.screen{display:none;height:100%;overflow-y:auto;}
+.screen.active{display:flex;flex-direction:column;}
+::-webkit-scrollbar{width:5px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.12);border-radius:4px;}
 
-/* ===================== MAIN CONTENT ===================== */
-.main {
-  flex:1;
-  overflow:hidden;
-  position:relative;
-}
-.screen {
-  display:none;
-  height:100%;
-  overflow-y:auto;
-}
-.screen.active { display:flex; flex-direction:column; }
+/* ===== BRAIN EXPLORER ===== */
+#screen-brain{flex-direction:row;overflow:hidden;}
+.brain-left{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem;position:relative;overflow:hidden;}
+.brain-left-bg{position:absolute;inset:0;background:radial-gradient(ellipse at center,rgba(46,196,182,0.05) 0%,transparent 70%);pointer-events:none;}
+.brain-title-block{text-align:center;margin-bottom:1.5rem;}
+.brain-title-block h2{font-family:'Fraunces',serif;font-size:1.6rem;color:white;margin-bottom:4px;}
+.brain-title-block p{font-size:0.8rem;color:var(--muted);font-weight:600;}
+.brain-svg-wrap{width:100%;max-width:540px;position:relative;}
+.brain-svg-wrap svg{width:100%;height:auto;filter:drop-shadow(0 8px 40px rgba(0,0,0,0.5));}
+.brain-region{cursor:pointer;transition:filter 0.2s;}
+.brain-region:hover{filter:brightness(1.2) drop-shadow(0 0 8px rgba(255,255,255,0.3));}
+.brain-region.active{filter:brightness(1.4) drop-shadow(0 0 20px white) drop-shadow(0 0 40px white);animation:regionPulse 1.5s ease-in-out infinite;}
+@keyframes regionPulse{0%,100%{filter:brightness(1.4) drop-shadow(0 0 20px white) drop-shadow(0 0 35px white);}50%{filter:brightness(1.6) drop-shadow(0 0 30px white) drop-shadow(0 0 55px white);}}
+.region-pills{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:1.25rem;max-width:540px;}
+.region-pill{padding:6px 14px;border-radius:20px;border:2px solid var(--r-color);color:var(--r-color);background:transparent;font-family:'Nunito',sans-serif;font-size:0.78rem;font-weight:800;cursor:pointer;transition:all 0.2s;}
+.region-pill:hover,.region-pill.active{background:var(--r-color);color:#0d1829;box-shadow:0 0 16px var(--r-color);}
+.brain-right{width:380px;min-width:340px;background:var(--panel);border-left:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;}
+.brain-right-inner{flex:1;overflow-y:auto;padding:2rem 1.75rem;}
+.brain-placeholder{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;text-align:center;gap:16px;padding:2rem;opacity:0.4;}
+.brain-placeholder-emoji{font-size:3.5rem;}
+.brain-placeholder-text{font-size:0.85rem;font-weight:700;color:white;line-height:1.6;}
+.region-info{animation:fadeSlide 0.25s ease;}
+@keyframes fadeSlide{from{opacity:0;transform:translateX(12px);}to{opacity:1;transform:translateX(0);}}
+.ri-color-bar{height:4px;border-radius:2px;margin-bottom:1.5rem;}
+.ri-emoji{font-size:2.8rem;margin-bottom:0.5rem;display:block;}
+.ri-nickname{font-size:0.7rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;margin-bottom:6px;opacity:0.7;}
+.ri-name{font-family:'Fraunces',serif;font-size:1.6rem;color:white;margin-bottom:1rem;line-height:1.2;}
+.ri-section-label{font-size:0.65rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--teal);margin-bottom:6px;margin-top:1.25rem;}
+.ri-desc{font-size:0.86rem;line-height:1.7;color:rgba(255,255,255,0.78);}
+.ri-connection-box{background:rgba(46,196,182,0.08);border:1px solid rgba(46,196,182,0.25);border-radius:12px;padding:1rem 1.1rem;margin-top:0.5rem;font-size:0.84rem;line-height:1.7;color:rgba(255,255,255,0.82);}
+.ri-kids-box{background:rgba(255,209,102,0.08);border:1px solid rgba(255,209,102,0.2);border-radius:12px;padding:1rem 1.1rem;margin-top:0.5rem;font-size:0.84rem;line-height:1.7;color:rgba(255,255,255,0.82);}
+.ri-connection-box strong,.ri-kids-box strong{display:block;font-size:0.65rem;letter-spacing:2px;text-transform:uppercase;margin-bottom:4px;}
+.ri-connection-box strong{color:var(--teal);}
+.ri-kids-box strong{color:var(--gold);}
 
-/* ===================== SCROLLBAR ===================== */
-::-webkit-scrollbar { width:5px; }
-::-webkit-scrollbar-track { background:transparent; }
-::-webkit-scrollbar-thumb { background:rgba(255,255,255,0.12); border-radius:4px; }
+/* ===== UNIT 1 OVERVIEW ===== */
+#screen-overview{overflow-y:auto;padding:2.5rem;}
+.overview-header{text-align:center;margin-bottom:2.5rem;}
+.overview-header h2{font-family:'Fraunces',serif;font-size:2rem;color:white;margin-bottom:8px;}
+.overview-header p{color:var(--muted);font-size:0.85rem;font-weight:600;max-width:600px;margin:0 auto;}
+.unit-intro{background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:1.5rem 2rem;max-width:900px;margin:0 auto 2.5rem;display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:1.5rem;}
+.unit-stat{text-align:center;}
+.unit-stat-num{font-family:'Fraunces',serif;font-size:2rem;color:var(--teal);margin-bottom:4px;}
+.unit-stat-label{font-size:0.72rem;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);}
+.lessons-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(420px,1fr));gap:1.5rem;max-width:1200px;margin:0 auto;}
+.lesson-overview-card{background:var(--panel);border:1px solid var(--border);border-radius:16px;overflow:hidden;cursor:pointer;transition:all 0.25s;}
+.lesson-overview-card:hover{transform:translateY(-3px);box-shadow:0 16px 48px rgba(0,0,0,0.4);border-color:rgba(255,255,255,0.15);}
+.loc-header{padding:1.5rem;display:flex;gap:14px;align-items:flex-start;border-bottom:1px solid var(--border);}
+.loc-num{width:44px;height:44px;border-radius:12px;background:var(--lc);display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-size:1.2rem;color:#0d1829;flex-shrink:0;font-weight:900;}
+.loc-meta{flex:1;}
+.loc-label{font-size:0.65rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--lc);margin-bottom:4px;}
+.loc-title{font-family:'Fraunces',serif;font-size:1.1rem;color:white;margin-bottom:4px;}
+.loc-time{font-size:0.75rem;color:var(--muted);font-weight:700;}
+.loc-body{padding:1.25rem 1.5rem;}
+.loc-purpose{font-size:0.84rem;line-height:1.65;color:rgba(255,255,255,0.72);margin-bottom:1rem;}
+.loc-concepts{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:1rem;}
+.loc-concept-tag{padding:3px 10px;border-radius:20px;font-size:0.72rem;font-weight:800;background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.6);border:1px solid rgba(255,255,255,0.1);}
+.loc-objectives{list-style:none;}
+.loc-objectives li{display:flex;gap:8px;font-size:0.81rem;line-height:1.55;color:rgba(255,255,255,0.65);margin-bottom:5px;}
+.loc-objectives li::before{content:'→';color:var(--lc);flex-shrink:0;font-weight:800;}
+.loc-sel{margin-top:1rem;display:flex;gap:6px;flex-wrap:wrap;}
+.sel-chip{padding:3px 10px;border-radius:20px;font-size:0.7rem;font-weight:800;border:1px solid var(--lc);color:var(--lc);background:transparent;opacity:0.7;}
 
-/* ===================== BRAIN EXPLORER ===================== */
-#screen-brain {
-  flex-direction:row;
-  overflow:hidden;
-}
-.brain-left {
-  flex:1;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  padding:2rem;
-  position:relative;
-  overflow:hidden;
-}
-.brain-left-bg {
-  position:absolute;
-  inset:0;
-  background: radial-gradient(ellipse at center, rgba(46,196,182,0.05) 0%, transparent 70%);
-  pointer-events:none;
-}
-.brain-title-block {
-  text-align:center;
-  margin-bottom:1.5rem;
-}
-.brain-title-block h2 {
-  font-family:'Fraunces',serif;
-  font-size:1.6rem;
-  color:white;
-  margin-bottom:4px;
-}
-.brain-title-block p {
-  font-size:0.8rem;
-  color:var(--muted);
-  font-weight:600;
-}
-.brain-svg-wrap {
-  width:100%;
-  max-width:540px;
-  position:relative;
-}
-.brain-svg-wrap svg {
-  width:100%; height:auto;
-  filter: drop-shadow(0 8px 40px rgba(0,0,0,0.5));
-}
+/* ===== JUST-IN-TIME AI ===== */
+#screen-ai{flex-direction:row;overflow:hidden;}
+.ai-sidebar{width:280px;min-width:260px;background:var(--panel);border-right:1px solid var(--border);overflow-y:auto;padding:1.5rem 1.25rem;flex-shrink:0;}
+.ai-sidebar-title{font-family:'Fraunces',serif;font-size:1.1rem;color:white;margin-bottom:6px;}
+.ai-sidebar-sub{font-size:0.75rem;color:var(--muted);font-weight:600;margin-bottom:1.25rem;line-height:1.5;}
+.ai-what-it-does{background:rgba(46,196,182,0.07);border:1px solid rgba(46,196,182,0.2);border-radius:10px;padding:1rem;margin-bottom:1.25rem;font-size:0.8rem;line-height:1.6;color:rgba(255,255,255,0.78);}
+.ai-what-it-does strong{color:var(--teal);display:block;font-size:0.65rem;letter-spacing:2px;text-transform:uppercase;margin-bottom:6px;}
+.prompts-label{font-size:0.65rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:8px;margin-top:1rem;}
+.prompt-btn{display:block;width:100%;text-align:left;background:var(--panel2);border:1px solid var(--border);border-radius:9px;padding:9px 12px;font-family:'Nunito',sans-serif;font-size:0.79rem;font-weight:700;color:rgba(255,255,255,0.75);cursor:pointer;margin-bottom:6px;transition:all 0.2s;line-height:1.4;}
+.prompt-btn:hover{border-color:var(--teal);color:white;background:rgba(46,196,182,0.08);}
+.ai-main{flex:1;display:flex;flex-direction:column;overflow:hidden;}
+.ai-chat-header{padding:1.25rem 1.75rem;background:var(--panel2);border-bottom:1px solid var(--border);flex-shrink:0;}
+.ai-chat-header h3{font-family:'Fraunces',serif;font-size:1.2rem;color:white;margin-bottom:2px;}
+.ai-chat-header p{font-size:0.75rem;color:var(--muted);font-weight:600;}
+.ai-messages{flex:1;overflow-y:auto;padding:1.5rem 1.75rem;display:flex;flex-direction:column;gap:1rem;}
+.ai-welcome{background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:2rem;text-align:center;max-width:520px;margin:auto;}
+.ai-welcome-icon{font-size:2.8rem;margin-bottom:1rem;display:block;}
+.ai-welcome h3{font-family:'Fraunces',serif;font-size:1.3rem;color:white;margin-bottom:0.75rem;}
+.ai-welcome p{font-size:0.84rem;color:var(--muted);line-height:1.7;}
+.msg{max-width:85%;animation:fadeUp 0.3s ease;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+.msg.user{align-self:flex-end;}
+.msg.assistant{align-self:flex-start;max-width:90%;}
+.msg-label{font-size:0.65rem;font-weight:800;letter-spacing:1px;text-transform:uppercase;margin-bottom:5px;padding:0 4px;}
+.msg.user .msg-label{text-align:right;color:var(--muted);}
+.msg.assistant .msg-label{color:var(--teal);}
+.msg-bubble{padding:0.9rem 1.1rem;border-radius:14px;font-size:0.86rem;line-height:1.7;}
+.msg.user .msg-bubble{background:var(--teal);color:#0d1829;border-bottom-right-radius:4px;font-weight:700;}
+.msg.assistant .msg-bubble{background:var(--panel);border:1px solid var(--border);color:var(--text);border-bottom-left-radius:4px;}
+.msg-bubble p{margin-bottom:0.5rem;}
+.msg-bubble p:last-child{margin-bottom:0;}
+.msg-bubble strong{color:var(--teal);}
+.msg-bubble .source-tag{display:inline-block;background:rgba(46,196,182,0.12);border:1px solid rgba(46,196,182,0.25);border-radius:5px;padding:1px 7px;font-size:0.68rem;font-weight:800;color:var(--teal);letter-spacing:0.5px;margin-top:8px;}
+.typing-row{display:flex;align-items:center;gap:5px;padding:0.85rem 1.1rem;}
+.typing-dot{width:6px;height:6px;background:var(--teal);border-radius:50%;animation:tdot 1.2s infinite;}
+.typing-dot:nth-child(2){animation-delay:0.2s;}
+.typing-dot:nth-child(3){animation-delay:0.4s;}
+@keyframes tdot{0%,60%,100%{transform:translateY(0);opacity:0.4;}30%{transform:translateY(-6px);opacity:1;}}
+.ai-input-row{padding:1rem 1.75rem;border-top:1px solid var(--border);background:var(--panel);flex-shrink:0;display:flex;gap:10px;align-items:flex-end;}
+.ai-textarea-wrap{flex:1;background:var(--panel2);border:1.5px solid var(--border);border-radius:12px;padding:10px 14px;transition:border-color 0.2s;display:flex;align-items:flex-end;gap:10px;}
+.ai-textarea-wrap:focus-within{border-color:var(--teal);}
+.ai-textarea{flex:1;background:none;border:none;outline:none;font-family:'Nunito',sans-serif;font-size:0.87rem;color:white;resize:none;min-height:38px;max-height:110px;line-height:1.5;}
+.ai-textarea::placeholder{color:var(--muted);}
+.send-btn{width:40px;height:40px;background:var(--teal);border:none;border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#0d1829;flex-shrink:0;transition:all 0.2s;align-self:flex-end;}
+.send-btn:hover{background:#3dd6c8;transform:scale(1.06);}
+.send-btn:disabled{background:rgba(255,255,255,0.1);cursor:not-allowed;transform:none;}
 
-/* Brain region interaction */
-.brain-region {
-  cursor:pointer;
-  transition: filter 0.2s, transform 0.2s;
-  transform-origin:center;
-}
-.brain-region:hover {
-  filter: brightness(1.2) drop-shadow(0 0 8px rgba(255,255,255,0.3));
-}
-.brain-region.active {
-  filter: brightness(1.35) drop-shadow(0 0 18px white) drop-shadow(0 0 35px white);
-  animation: regionPulse 1.5s ease-in-out infinite;
-}
-@keyframes regionPulse {
-  0%,100% { filter: brightness(1.35) drop-shadow(0 0 18px white) drop-shadow(0 0 30px white); }
-  50% { filter: brightness(1.5) drop-shadow(0 0 28px white) drop-shadow(0 0 50px white); }
-}
+/* ===== STORY BUILDER ===== */
+#screen-story{flex-direction:row;overflow:hidden;}
+.story-config{width:340px;min-width:300px;background:var(--panel);border-right:1px solid var(--border);overflow-y:auto;padding:1.75rem 1.5rem;flex-shrink:0;}
+.story-config h2{font-family:'Fraunces',serif;font-size:1.2rem;color:white;margin-bottom:4px;}
+.story-config-sub{font-size:0.77rem;color:var(--muted);font-weight:600;margin-bottom:1.5rem;line-height:1.5;}
+.form-section{margin-bottom:1.5rem;}
+.form-label{display:block;font-size:0.68rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--teal);margin-bottom:8px;}
+.form-select,.form-input,.form-textarea{width:100%;background:var(--panel2);border:1.5px solid var(--border);border-radius:10px;padding:10px 14px;font-family:'Nunito',sans-serif;font-size:0.85rem;color:white;outline:none;transition:border-color 0.2s;}
+.form-select:focus,.form-input:focus,.form-textarea:focus{border-color:var(--teal);}
+.form-select option{background:#1c2a44;}
+.form-textarea{resize:none;min-height:80px;line-height:1.5;}
+.form-input::placeholder,.form-textarea::placeholder{color:var(--muted);}
+.topic-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;}
+.topic-chip{background:var(--panel2);border:1.5px solid var(--border);border-radius:9px;padding:8px 10px;font-family:'Nunito',sans-serif;font-size:0.76rem;font-weight:700;color:rgba(255,255,255,0.65);cursor:pointer;transition:all 0.2s;text-align:center;line-height:1.3;}
+.topic-chip:hover{border-color:var(--teal);color:white;}
+.topic-chip.selected{background:rgba(46,196,182,0.15);border-color:var(--teal);color:var(--teal);}
+.grade-buttons{display:flex;gap:7px;flex-wrap:wrap;}
+.grade-btn{flex:1;min-width:44px;background:var(--panel2);border:1.5px solid var(--border);border-radius:9px;padding:8px 6px;font-family:'Nunito',sans-serif;font-size:0.82rem;font-weight:800;color:rgba(255,255,255,0.6);cursor:pointer;transition:all 0.2s;text-align:center;}
+.grade-btn:hover{border-color:var(--gold);color:white;}
+.grade-btn.selected{background:rgba(255,209,102,0.15);border-color:var(--gold);color:var(--gold);}
+.generate-btn{width:100%;background:linear-gradient(135deg,var(--teal),#1a9e93);border:none;border-radius:12px;padding:13px;font-family:'Nunito',sans-serif;font-size:0.9rem;font-weight:800;color:#0d1829;cursor:pointer;transition:all 0.25s;box-shadow:0 4px 20px rgba(46,196,182,0.3);margin-top:0.5rem;}
+.generate-btn:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(46,196,182,0.4);}
+.generate-btn:disabled{background:rgba(255,255,255,0.1);color:var(--muted);box-shadow:none;transform:none;cursor:not-allowed;}
+.divider{display:flex;align-items:center;gap:10px;margin:1rem 0;font-size:0.7rem;color:var(--muted);font-weight:700;letter-spacing:1px;text-transform:uppercase;}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--border);}
+.story-output{flex:1;display:flex;flex-direction:column;overflow:hidden;}
+.story-output-header{padding:1.25rem 1.75rem;background:var(--panel2);border-bottom:1px solid var(--border);flex-shrink:0;display:flex;align-items:center;justify-content:space-between;}
+.story-output-header h3{font-family:'Fraunces',serif;font-size:1.1rem;color:white;}
+.story-output-header p{font-size:0.75rem;color:var(--muted);font-weight:600;margin-top:2px;}
+.print-btn{background:rgba(255,255,255,0.07);border:1px solid var(--border);border-radius:9px;padding:7px 16px;font-family:'Nunito',sans-serif;font-size:0.78rem;font-weight:800;color:rgba(255,255,255,0.7);cursor:pointer;transition:all 0.2s;display:flex;align-items:center;gap:6px;}
+.print-btn:hover{background:rgba(255,255,255,0.12);color:white;}
+.print-btn:disabled{opacity:0.3;cursor:not-allowed;}
+.story-output-body{flex:1;overflow-y:auto;padding:2rem 2.5rem;}
+.story-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;text-align:center;gap:16px;opacity:0.35;}
+.story-empty-icon{font-size:4rem;}
+.story-empty-text{font-size:0.9rem;font-weight:700;color:white;line-height:1.6;}
+.story-content{animation:fadeUp 0.4s ease;max-width:800px;margin:0 auto;}
+.story-section{margin-bottom:2rem;}
+.story-section-head{display:flex;align-items:center;gap:10px;margin-bottom:1rem;padding-bottom:0.75rem;border-bottom:1px solid var(--border);}
+.story-section-badge{padding:3px 12px;border-radius:20px;font-size:0.7rem;font-weight:800;letter-spacing:1px;text-transform:uppercase;}
+.story-section-head h3{font-family:'Fraunces',serif;font-size:1.1rem;color:white;}
+.story-text{font-size:0.95rem;line-height:1.85;color:rgba(255,255,255,0.82);}
+.story-text p{margin-bottom:0.85rem;}
+.story-text p:last-child{margin-bottom:0;}
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:0.75rem;}
+.vocab-card{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:0.85rem;}
+.vocab-word{font-weight:800;color:var(--teal);font-size:0.9rem;margin-bottom:4px;}
+.vocab-def{font-size:0.8rem;color:rgba(255,255,255,0.65);line-height:1.5;}
+.question-list{list-style:none;}
+.question-item{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:1rem 1.1rem;margin-bottom:0.75rem;font-size:0.87rem;line-height:1.6;color:rgba(255,255,255,0.82);display:flex;gap:12px;}
+.q-num{min-width:24px;height:24px;background:var(--teal);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.72rem;font-weight:900;color:#0d1829;flex-shrink:0;margin-top:1px;}
+.extension-box{background:rgba(181,127,245,0.08);border:1px solid rgba(181,127,245,0.25);border-radius:12px;padding:1.25rem;font-size:0.86rem;line-height:1.7;color:rgba(255,255,255,0.8);}
+.loading-story{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:16px;animation:fadeUp 0.3s ease;}
+.loading-story-icon{font-size:3rem;animation:spin 2s linear infinite;}
+@keyframes spin{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
+.loading-story-text{font-size:0.9rem;color:var(--muted);font-weight:700;}
 
-/* Region pill buttons below diagram */
-.region-pills {
-  display:flex;
-  flex-wrap:wrap;
-  gap:8px;
-  justify-content:center;
-  margin-top:1.25rem;
-  max-width:540px;
-}
-.region-pill {
-  padding:6px 14px;
-  border-radius:20px;
-  border:2px solid var(--r-color);
-  color:var(--r-color);
-  background:transparent;
-  font-family:'Nunito',sans-serif;
-  font-size:0.78rem;
-  font-weight:800;
-  cursor:pointer;
-  transition:all 0.2s;
-  letter-spacing:0.3px;
-}
-.region-pill:hover,
-.region-pill.active {
-  background:var(--r-color);
-  color: #0d1829;
-  box-shadow: 0 0 16px var(--r-color);
-}
-
-/* Brain right info panel */
-.brain-right {
-  width:380px;
-  min-width:340px;
-  background:var(--panel);
-  border-left:1px solid var(--border);
-  display:flex;
-  flex-direction:column;
-  overflow:hidden;
-}
-.brain-right-inner {
-  flex:1;
-  overflow-y:auto;
-  padding:2rem 1.75rem;
-}
-.brain-placeholder {
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  height:100%;
-  text-align:center;
-  gap:16px;
-  padding:2rem;
-  opacity:0.4;
-}
-.brain-placeholder-emoji { font-size:3.5rem; }
-.brain-placeholder-text { font-size:0.85rem; font-weight:700; color:white; line-height:1.6; }
-
-.region-info { animation: fadeSlide 0.25s ease; }
-@keyframes fadeSlide {
-  from { opacity:0; transform:translateX(12px); }
-  to { opacity:1; transform:translateX(0); }
-}
-.ri-color-bar {
-  height:4px;
-  border-radius:2px;
-  margin-bottom:1.5rem;
-}
-.ri-emoji { font-size:2.8rem; margin-bottom:0.5rem; display:block; }
-.ri-nickname {
-  font-size:0.7rem;
-  font-weight:800;
-  letter-spacing:2px;
-  text-transform:uppercase;
-  margin-bottom:6px;
-  opacity:0.7;
-}
-.ri-name {
-  font-family:'Fraunces',serif;
-  font-size:1.6rem;
-  color:white;
-  margin-bottom:1rem;
-  line-height:1.2;
-}
-.ri-section-label {
-  font-size:0.65rem;
-  font-weight:800;
-  letter-spacing:2px;
-  text-transform:uppercase;
-  color:var(--teal);
-  margin-bottom:6px;
-  margin-top:1.25rem;
-}
-.ri-desc {
-  font-size:0.86rem;
-  line-height:1.7;
-  color:rgba(255,255,255,0.78);
-}
-.ri-connection-box {
-  background:rgba(46,196,182,0.08);
-  border:1px solid rgba(46,196,182,0.25);
-  border-radius:12px;
-  padding:1rem 1.1rem;
-  margin-top:0.5rem;
-  font-size:0.84rem;
-  line-height:1.7;
-  color:rgba(255,255,255,0.82);
-}
-.ri-kids-box {
-  background:rgba(255,209,102,0.08);
-  border:1px solid rgba(255,209,102,0.2);
-  border-radius:12px;
-  padding:1rem 1.1rem;
-  margin-top:0.5rem;
-  font-size:0.84rem;
-  line-height:1.7;
-  color:rgba(255,255,255,0.82);
-}
-.ri-kids-box strong, .ri-connection-box strong {
-  display:block;
-  font-size:0.65rem;
-  letter-spacing:2px;
-  text-transform:uppercase;
-  margin-bottom:4px;
-}
-.ri-connection-box strong { color:var(--teal); }
-.ri-kids-box strong { color:var(--gold); }
-
-/* ===================== LESSON FLOW ===================== */
-#screen-lesson {
-  padding:2rem 2.5rem;
-  overflow-y:auto;
-}
-.lesson-header {
-  margin-bottom:2rem;
-  text-align:center;
-}
-.lesson-header h2 {
-  font-family:'Fraunces',serif;
-  font-size:2rem;
-  color:white;
-  margin-bottom:6px;
-}
-.lesson-header p { color:var(--muted); font-size:0.85rem; font-weight:700; }
-
-.lesson-grid {
-  display:grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px,1fr));
-  gap:1.25rem;
-  max-width:1200px;
-  margin:0 auto;
-}
-.lesson-card {
-  background:var(--panel);
-  border:1px solid var(--border);
-  border-radius:16px;
-  cursor:pointer;
-  transition:all 0.25s;
-  overflow:hidden;
-  position:relative;
-}
-.lesson-card:hover {
-  border-color:rgba(255,255,255,0.2);
-  transform:translateY(-3px);
-  box-shadow:0 12px 40px rgba(0,0,0,0.4);
-}
-.lesson-card.expanded {
-  border-color:var(--card-color);
-  box-shadow:0 0 0 1px var(--card-color), 0 12px 40px rgba(0,0,0,0.4);
-}
-.lesson-card-top {
-  padding:1.25rem 1.25rem 1rem;
-  display:flex;
-  align-items:flex-start;
-  gap:12px;
-}
-.lc-num {
-  width:34px; height:34px;
-  border-radius:10px;
-  background:var(--card-color);
-  color:#0d1829;
-  display:flex; align-items:center; justify-content:center;
-  font-weight:900;
-  font-size:0.9rem;
-  flex-shrink:0;
-}
-.lc-title {
-  font-weight:800;
-  font-size:0.92rem;
-  color:white;
-  margin-bottom:3px;
-}
-.lc-subtitle { font-size:0.76rem; color:var(--muted); font-weight:600; }
-.lc-expand-icon {
-  margin-left:auto;
-  color:var(--muted);
-  font-size:1rem;
-  transition:transform 0.25s;
-  flex-shrink:0;
-  margin-top:2px;
-}
-.lesson-card.expanded .lc-expand-icon { transform:rotate(180deg); }
-.lesson-card-body {
-  display:none;
-  padding:0 1.25rem 1.25rem;
-  border-top:1px solid var(--border);
-  margin-top:0;
-}
-.lesson-card.expanded .lesson-card-body { display:block; }
-.lesson-card-body-inner {
-  padding-top:1rem;
-  font-size:0.83rem;
-  line-height:1.7;
-  color:rgba(255,255,255,0.75);
-}
-.script-callout {
-  background:rgba(255,255,255,0.04);
-  border-left:3px solid var(--card-color);
-  border-radius:0 8px 8px 0;
-  padding:0.85rem 1rem;
-  margin:0.75rem 0;
-  font-size:0.81rem;
-}
-.script-line {
-  padding:3px 0;
-  color:rgba(255,255,255,0.85);
-}
-.script-line::before { content:'▸ '; color:var(--teal); }
-.tip-callout {
-  background:rgba(255,209,102,0.07);
-  border:1px solid rgba(255,209,102,0.2);
-  border-radius:8px;
-  padding:0.75rem 1rem;
-  margin:0.75rem 0;
-  font-size:0.8rem;
-  color:rgba(255,255,255,0.8);
-}
-.warn-callout {
-  background:rgba(255,107,107,0.07);
-  border:1px solid rgba(255,107,107,0.2);
-  border-radius:8px;
-  padding:0.75rem 1rem;
-  margin:0.75rem 0;
-  font-size:0.8rem;
-  color:rgba(255,255,255,0.8);
-}
-.callout-label {
-  font-size:0.65rem;
-  font-weight:800;
-  letter-spacing:1.5px;
-  text-transform:uppercase;
-  margin-bottom:5px;
-}
-.tip-callout .callout-label { color:var(--gold); }
-.warn-callout .callout-label { color:var(--coral); }
-
-/* Info strip at top of lesson screen */
-.lesson-meta-strip {
-  display:flex;
-  gap:1rem;
-  justify-content:center;
-  margin-bottom:2rem;
-  flex-wrap:wrap;
-}
-.meta-chip {
-  background:var(--panel);
-  border:1px solid var(--border);
-  border-radius:10px;
-  padding:8px 16px;
-  font-size:0.78rem;
-  font-weight:700;
-  color:rgba(255,255,255,0.7);
-  display:flex;
-  align-items:center;
-  gap:6px;
-}
-.meta-chip span { color:white; font-weight:800; }
-
-/* ===================== JUST-IN-TIME AI ===================== */
-#screen-ai {
-  flex-direction:row;
-  overflow:hidden;
-}
-.ai-sidebar {
-  width:280px;
-  min-width:260px;
-  background:var(--panel);
-  border-right:1px solid var(--border);
-  overflow-y:auto;
-  padding:1.5rem 1.25rem;
-  flex-shrink:0;
-}
-.ai-sidebar-title {
-  font-family:'Fraunces',serif;
-  font-size:1.1rem;
-  color:white;
-  margin-bottom:6px;
-}
-.ai-sidebar-sub {
-  font-size:0.75rem;
-  color:var(--muted);
-  font-weight:600;
-  margin-bottom:1.25rem;
-  line-height:1.5;
-}
-.ai-what-it-does {
-  background:rgba(46,196,182,0.07);
-  border:1px solid rgba(46,196,182,0.2);
-  border-radius:10px;
-  padding:1rem;
-  margin-bottom:1.25rem;
-  font-size:0.8rem;
-  line-height:1.6;
-  color:rgba(255,255,255,0.78);
-}
-.ai-what-it-does strong {
-  color:var(--teal);
-  display:block;
-  font-size:0.65rem;
-  letter-spacing:2px;
-  text-transform:uppercase;
-  margin-bottom:6px;
-}
-.prompts-label {
-  font-size:0.65rem;
-  font-weight:800;
-  letter-spacing:2px;
-  text-transform:uppercase;
-  color:var(--muted);
-  margin-bottom:8px;
-}
-.prompt-btn {
-  display:block;
-  width:100%;
-  text-align:left;
-  background:var(--panel2);
-  border:1px solid var(--border);
-  border-radius:9px;
-  padding:9px 12px;
-  font-family:'Nunito',sans-serif;
-  font-size:0.79rem;
-  font-weight:700;
-  color:rgba(255,255,255,0.75);
-  cursor:pointer;
-  margin-bottom:6px;
-  transition:all 0.2s;
-  line-height:1.4;
-}
-.prompt-btn:hover {
-  border-color:var(--teal);
-  color:white;
-  background:rgba(46,196,182,0.08);
-}
-
-.ai-main {
-  flex:1;
-  display:flex;
-  flex-direction:column;
-  overflow:hidden;
-}
-.ai-chat-header {
-  padding:1.25rem 1.75rem;
-  background:var(--panel2);
-  border-bottom:1px solid var(--border);
-  flex-shrink:0;
-}
-.ai-chat-header h3 {
-  font-family:'Fraunces',serif;
-  font-size:1.2rem;
-  color:white;
-  margin-bottom:2px;
-}
-.ai-chat-header p { font-size:0.75rem; color:var(--muted); font-weight:600; }
-
-.ai-messages {
-  flex:1;
-  overflow-y:auto;
-  padding:1.5rem 1.75rem;
-  display:flex;
-  flex-direction:column;
-  gap:1rem;
-}
-
-.ai-welcome {
-  background:var(--panel);
-  border:1px solid var(--border);
-  border-radius:16px;
-  padding:2rem;
-  text-align:center;
-  max-width:520px;
-  margin:auto;
-}
-.ai-welcome-icon { font-size:2.8rem; margin-bottom:1rem; display:block; }
-.ai-welcome h3 {
-  font-family:'Fraunces',serif;
-  font-size:1.3rem;
-  color:white;
-  margin-bottom:0.75rem;
-}
-.ai-welcome p { font-size:0.84rem; color:var(--muted); line-height:1.7; }
-
-.msg { max-width:85%; animation:fadeUp 0.3s ease; }
-@keyframes fadeUp {
-  from { opacity:0; transform:translateY(8px); }
-  to { opacity:1; transform:translateY(0); }
-}
-.msg.user { align-self:flex-end; }
-.msg.assistant { align-self:flex-start; max-width:90%; }
-.msg-label {
-  font-size:0.65rem;
-  font-weight:800;
-  letter-spacing:1px;
-  text-transform:uppercase;
-  margin-bottom:5px;
-  padding:0 4px;
-}
-.msg.user .msg-label { text-align:right; color:var(--muted); }
-.msg.assistant .msg-label { color:var(--teal); }
-.msg-bubble {
-  padding:0.9rem 1.1rem;
-  border-radius:14px;
-  font-size:0.86rem;
-  line-height:1.7;
-}
-.msg.user .msg-bubble {
-  background:var(--teal);
-  color:#0d1829;
-  border-bottom-right-radius:4px;
-  font-weight:700;
-}
-.msg.assistant .msg-bubble {
-  background:var(--panel);
-  border:1px solid var(--border);
-  color:var(--text);
-  border-bottom-left-radius:4px;
-}
-.msg-bubble p { margin-bottom:0.5rem; }
-.msg-bubble p:last-child { margin-bottom:0; }
-.msg-bubble strong { color:var(--teal); }
-.msg-bubble .source-tag {
-  display:inline-block;
-  background:rgba(46,196,182,0.12);
-  border:1px solid rgba(46,196,182,0.25);
-  border-radius:5px;
-  padding:1px 7px;
-  font-size:0.68rem;
-  font-weight:800;
-  color:var(--teal);
-  letter-spacing:0.5px;
-  margin-top:8px;
-}
-
-.typing-row { display:flex; align-items:center; gap:5px; padding:0.85rem 1.1rem; }
-.typing-dot { width:6px; height:6px; background:var(--teal); border-radius:50%; animation:tdot 1.2s infinite; }
-.typing-dot:nth-child(2) { animation-delay:0.2s; }
-.typing-dot:nth-child(3) { animation-delay:0.4s; }
-@keyframes tdot {
-  0%,60%,100% { transform:translateY(0); opacity:0.4; }
-  30% { transform:translateY(-6px); opacity:1; }
-}
-
-.ai-input-row {
-  padding:1rem 1.75rem;
-  border-top:1px solid var(--border);
-  background:var(--panel);
-  flex-shrink:0;
-  display:flex;
-  gap:10px;
-  align-items:flex-end;
-}
-.ai-textarea-wrap {
-  flex:1;
-  background:var(--panel2);
-  border:1.5px solid var(--border);
-  border-radius:12px;
-  padding:10px 14px;
-  transition:border-color 0.2s;
-  display:flex;
-  align-items:flex-end;
-  gap:10px;
-}
-.ai-textarea-wrap:focus-within { border-color:var(--teal); }
-.ai-textarea {
-  flex:1;
-  background:none;
-  border:none;
-  outline:none;
-  font-family:'Nunito',sans-serif;
-  font-size:0.87rem;
-  color:white;
-  resize:none;
-  min-height:38px;
-  max-height:110px;
-  line-height:1.5;
-}
-.ai-textarea::placeholder { color:var(--muted); }
-.send-btn {
-  width:40px; height:40px;
-  background:var(--teal);
-  border:none;
-  border-radius:10px;
-  cursor:pointer;
-  display:flex; align-items:center; justify-content:center;
-  color:#0d1829;
-  flex-shrink:0;
-  transition:all 0.2s;
-  align-self:flex-end;
-}
-.send-btn:hover { background:#3dd6c8; transform:scale(1.06); }
-.send-btn:disabled { background:rgba(255,255,255,0.1); cursor:not-allowed; transform:none; }
-.send-btn svg { pointer-events:none; }
-
-/* ===================== STORY BUILDER ===================== */
-#screen-story {
-  flex-direction:row;
-  overflow:hidden;
-}
-.story-config {
-  width:340px;
-  min-width:300px;
-  background:var(--panel);
-  border-right:1px solid var(--border);
-  overflow-y:auto;
-  padding:1.75rem 1.5rem;
-  flex-shrink:0;
-}
-.story-config h2 {
-  font-family:'Fraunces',serif;
-  font-size:1.2rem;
-  color:white;
-  margin-bottom:4px;
-}
-.story-config-sub {
-  font-size:0.77rem;
-  color:var(--muted);
-  font-weight:600;
-  margin-bottom:1.5rem;
-  line-height:1.5;
-}
-.form-section { margin-bottom:1.5rem; }
-.form-label {
-  display:block;
-  font-size:0.68rem;
-  font-weight:800;
-  letter-spacing:2px;
-  text-transform:uppercase;
-  color:var(--teal);
-  margin-bottom:8px;
-}
-.form-select, .form-input, .form-textarea {
-  width:100%;
-  background:var(--panel2);
-  border:1.5px solid var(--border);
-  border-radius:10px;
-  padding:10px 14px;
-  font-family:'Nunito',sans-serif;
-  font-size:0.85rem;
-  color:white;
-  outline:none;
-  transition:border-color 0.2s;
-}
-.form-select:focus, .form-input:focus, .form-textarea:focus { border-color:var(--teal); }
-.form-select option { background:#1c2a44; }
-.form-textarea { resize:none; min-height:80px; line-height:1.5; }
-.form-input::placeholder, .form-textarea::placeholder { color:var(--muted); }
-
-.topic-grid {
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:7px;
-}
-.topic-chip {
-  background:var(--panel2);
-  border:1.5px solid var(--border);
-  border-radius:9px;
-  padding:8px 10px;
-  font-family:'Nunito',sans-serif;
-  font-size:0.76rem;
-  font-weight:700;
-  color:rgba(255,255,255,0.65);
-  cursor:pointer;
-  transition:all 0.2s;
-  text-align:center;
-  line-height:1.3;
-}
-.topic-chip:hover { border-color:var(--teal); color:white; }
-.topic-chip.selected {
-  background:rgba(46,196,182,0.15);
-  border-color:var(--teal);
-  color:var(--teal);
-}
-
-.grade-buttons {
-  display:flex;
-  gap:7px;
-  flex-wrap:wrap;
-}
-.grade-btn {
-  flex:1;
-  min-width:44px;
-  background:var(--panel2);
-  border:1.5px solid var(--border);
-  border-radius:9px;
-  padding:8px 6px;
-  font-family:'Nunito',sans-serif;
-  font-size:0.82rem;
-  font-weight:800;
-  color:rgba(255,255,255,0.6);
-  cursor:pointer;
-  transition:all 0.2s;
-  text-align:center;
-}
-.grade-btn:hover { border-color:var(--gold); color:white; }
-.grade-btn.selected {
-  background:rgba(255,209,102,0.15);
-  border-color:var(--gold);
-  color:var(--gold);
-}
-
-.generate-btn {
-  width:100%;
-  background: linear-gradient(135deg, var(--teal), #1a9e93);
-  border:none;
-  border-radius:12px;
-  padding:13px;
-  font-family:'Nunito',sans-serif;
-  font-size:0.9rem;
-  font-weight:800;
-  color:#0d1829;
-  cursor:pointer;
-  letter-spacing:0.5px;
-  transition:all 0.25s;
-  box-shadow:0 4px 20px rgba(46,196,182,0.3);
-  margin-top:0.5rem;
-}
-.generate-btn:hover { transform:translateY(-2px); box-shadow:0 8px 28px rgba(46,196,182,0.4); }
-.generate-btn:disabled { background:rgba(255,255,255,0.1); color:var(--muted); box-shadow:none; transform:none; cursor:not-allowed; }
-
-.divider {
-  display:flex; align-items:center; gap:10px;
-  margin:1rem 0;
-  font-size:0.7rem;
-  color:var(--muted);
-  font-weight:700;
-  letter-spacing:1px;
-  text-transform:uppercase;
-}
-.divider::before, .divider::after {
-  content:'';
-  flex:1;
-  height:1px;
-  background:var(--border);
-}
-
-/* Story output panel */
-.story-output {
-  flex:1;
-  display:flex;
-  flex-direction:column;
-  overflow:hidden;
-}
-.story-output-header {
-  padding:1.25rem 1.75rem;
-  background:var(--panel2);
-  border-bottom:1px solid var(--border);
-  flex-shrink:0;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-}
-.story-output-header h3 {
-  font-family:'Fraunces',serif;
-  font-size:1.1rem;
-  color:white;
-}
-.story-output-header p { font-size:0.75rem; color:var(--muted); font-weight:600; margin-top:2px; }
-.print-btn {
-  background:rgba(255,255,255,0.07);
-  border:1px solid var(--border);
-  border-radius:9px;
-  padding:7px 16px;
-  font-family:'Nunito',sans-serif;
-  font-size:0.78rem;
-  font-weight:800;
-  color:rgba(255,255,255,0.7);
-  cursor:pointer;
-  transition:all 0.2s;
-  display:flex; align-items:center; gap:6px;
-}
-.print-btn:hover { background:rgba(255,255,255,0.12); color:white; }
-.print-btn:disabled { opacity:0.3; cursor:not-allowed; }
-
-.story-output-body {
-  flex:1;
-  overflow-y:auto;
-  padding:2rem 2.5rem;
-}
-.story-empty {
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  height:100%;
-  text-align:center;
-  gap:16px;
-  opacity:0.35;
-}
-.story-empty-icon { font-size:4rem; }
-.story-empty-text { font-size:0.9rem; font-weight:700; color:white; line-height:1.6; }
-
-/* Story content rendering */
-.story-content { animation:fadeUp 0.4s ease; max-width:800px; margin:0 auto; }
-.story-section {
-  margin-bottom:2rem;
-}
-.story-section-head {
-  display:flex;
-  align-items:center;
-  gap:10px;
-  margin-bottom:1rem;
-  padding-bottom:0.75rem;
-  border-bottom:1px solid var(--border);
-}
-.story-section-badge {
-  padding:3px 12px;
-  border-radius:20px;
-  font-size:0.7rem;
-  font-weight:800;
-  letter-spacing:1px;
-  text-transform:uppercase;
-}
-.story-section-head h3 {
-  font-family:'Fraunces',serif;
-  font-size:1.1rem;
-  color:white;
-}
-.story-text {
-  font-size:0.95rem;
-  line-height:1.85;
-  color:rgba(255,255,255,0.82);
-}
-.story-text p { margin-bottom:0.85rem; }
-.story-text p:last-child { margin-bottom:0; }
-
-.vocab-grid {
-  display:grid;
-  grid-template-columns:repeat(auto-fill, minmax(200px,1fr));
-  gap:0.75rem;
-}
-.vocab-card {
-  background:var(--panel);
-  border:1px solid var(--border);
-  border-radius:10px;
-  padding:0.85rem;
-}
-.vocab-word {
-  font-weight:800;
-  color:var(--teal);
-  font-size:0.9rem;
-  margin-bottom:4px;
-}
-.vocab-def {
-  font-size:0.8rem;
-  color:rgba(255,255,255,0.65);
-  line-height:1.5;
-}
-
-.question-list { list-style:none; }
-.question-item {
-  background:var(--panel);
-  border:1px solid var(--border);
-  border-radius:10px;
-  padding:1rem 1.1rem;
-  margin-bottom:0.75rem;
-  font-size:0.87rem;
-  line-height:1.6;
-  color:rgba(255,255,255,0.82);
-  display:flex;
-  gap:12px;
-}
-.q-num {
-  min-width:24px; height:24px;
-  background:var(--teal);
-  border-radius:50%;
-  display:flex; align-items:center; justify-content:center;
-  font-size:0.72rem;
-  font-weight:900;
-  color:#0d1829;
-  flex-shrink:0;
-  margin-top:1px;
-}
-
-.extension-box {
-  background:rgba(181,127,245,0.08);
-  border:1px solid rgba(181,127,245,0.25);
-  border-radius:12px;
-  padding:1.25rem;
-  font-size:0.86rem;
-  line-height:1.7;
-  color:rgba(255,255,255,0.8);
-}
-
-.loading-story {
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  height:100%;
-  gap:16px;
-  animation:fadeUp 0.3s ease;
-}
-.loading-story-icon { font-size:3rem; animation:spin 2s linear infinite; }
-@keyframes spin { from { transform:rotate(0deg); } to { transform:rotate(360deg); } }
-.loading-story-text { font-size:0.9rem; color:var(--muted); font-weight:700; }
-
-/* ===================== PRINT STYLES ===================== */
-@media print {
-  header, nav, .story-config, .story-output-header { display:none !important; }
-  body { background:white; color:black; overflow:auto; }
-  #screen-story { flex-direction:column; height:auto; overflow:visible; }
-  .story-output { height:auto; overflow:visible; }
-  .story-output-body { padding:1rem; overflow:visible; height:auto; }
-  .story-content { color:black; }
-  .story-section-head { border-color:#ccc; }
-  .story-section-head h3, .story-text, .vocab-def, .question-item { color:black; }
-  .vocab-card, .question-item, .extension-box { background:white; border-color:#ccc; }
-  .story-section-badge { background:#eee !important; color:black !important; }
-  .vocab-word { color:#007070; }
-  .q-num { background:#007070; color:white; }
+/* PRINT */
+@media print{
+  header,nav,.story-config,.story-output-header{display:none!important;}
+  body{background:white;color:black;overflow:auto;}
+  #screen-story{flex-direction:column;height:auto;overflow:visible;}
+  .story-output{height:auto;overflow:visible;}
+  .story-output-body{padding:1rem;overflow:visible;height:auto;}
+  .story-section-head{border-color:#ccc;}
+  .story-section-head h3,.story-text,.vocab-def,.question-item{color:black;}
+  .vocab-card,.question-item,.extension-box{background:white;border-color:#ccc;}
+  .story-section-badge{background:#eee!important;color:black!important;}
+  .vocab-word{color:#007070;}
+  .q-num{background:#007070;color:white;}
 }
 </style>
 </head>
 <body>
 
-<!-- HEADER -->
 <header>
   <div class="logo">
     <div class="logo-mark">🧠</div>
@@ -1048,31 +232,19 @@ nav {
       <div class="logo-tag">Interactive Projection Mode</div>
     </div>
   </div>
-  <div class="header-right">
-    <div class="lesson-badge">Unit 1 · Lesson 4 · Grades 3–5</div>
-  </div>
+  <div class="lesson-badge">Unit 1 · My Mindful Brain · Grades 3–5</div>
 </header>
 
-<!-- NAV -->
 <nav>
-  <button class="nav-tab active" onclick="switchScreen('brain')">
-    <span class="tab-icon">🧠</span> Brain Explorer
-  </button>
-  <button class="nav-tab" onclick="switchScreen('lesson')">
-    <span class="tab-icon">📋</span> Lesson Flow
-  </button>
-  <button class="nav-tab" onclick="switchScreen('ai')">
-    <span class="tab-icon">⚡</span> Just-in-Time Help
-  </button>
-  <button class="nav-tab" onclick="switchScreen('story')">
-    <span class="tab-icon">📖</span> Story Builder
-  </button>
+  <button class="nav-tab active" onclick="switchScreen('brain')"><span>🧠</span> Brain Explorer</button>
+  <button class="nav-tab" onclick="switchScreen('overview')"><span>📚</span> Unit 1 Overview</button>
+  <button class="nav-tab" onclick="switchScreen('ai')"><span>⚡</span> Just-in-Time Help</button>
+  <button class="nav-tab" onclick="switchScreen('story')"><span>📖</span> Story Builder</button>
 </nav>
 
-<!-- MAIN -->
 <div class="main">
 
-<!-- ======= SCREEN: BRAIN EXPLORER ======= -->
+<!-- ===== BRAIN EXPLORER ===== -->
 <div class="screen active" id="screen-brain">
   <div class="brain-left">
     <div class="brain-left-bg"></div>
@@ -1084,15 +256,12 @@ nav {
       <svg viewBox="0 0 560 380" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <radialGradient id="bgG" cx="50%" cy="48%" r="52%">
-            <stop offset="0%" stop-color="#1e3050"/>
-            <stop offset="100%" stop-color="#0d1829"/>
+            <stop offset="0%" stop-color="#1e3050"/><stop offset="100%" stop-color="#0d1829"/>
           </radialGradient>
           <filter id="sf"><feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="rgba(0,0,0,0.6)"/></filter>
-          <filter id="gf"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
         </defs>
         <rect width="560" height="380" fill="url(#bgG)" rx="12"/>
-
-        <!-- PREFRONTAL CORTEX -->
+        <!-- PFC -->
         <g class="brain-region" id="svgr-pfc" onclick="selectRegion('pfc')">
           <ellipse cx="138" cy="152" rx="92" ry="74" fill="#FF6B6B" filter="url(#sf)"/>
           <ellipse cx="138" cy="152" rx="76" ry="58" fill="#FF8E8E" opacity="0.55"/>
@@ -1103,8 +272,7 @@ nav {
           <text x="136" y="160" text-anchor="middle" fill="white" font-size="12" font-weight="800" font-family="Nunito">Cortex</text>
           <text x="136" y="174" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-size="10" font-family="Nunito">(PFC)</text>
         </g>
-
-        <!-- CEREBRAL CORTEX -->
+        <!-- Cerebral Cortex -->
         <g class="brain-region" id="svgr-cortex" onclick="selectRegion('cortex')">
           <ellipse cx="330" cy="138" rx="112" ry="86" fill="#00BBF9" filter="url(#sf)"/>
           <ellipse cx="330" cy="138" rx="95" ry="70" fill="#33CAFA" opacity="0.45"/>
@@ -1114,24 +282,21 @@ nav {
           <text x="330" y="131" text-anchor="middle" fill="white" font-size="12" font-weight="800" font-family="Nunito">Cerebral</text>
           <text x="330" y="146" text-anchor="middle" fill="white" font-size="12" font-weight="800" font-family="Nunito">Cortex</text>
         </g>
-
-        <!-- AMYGDALA -->
+        <!-- Amygdala -->
         <g class="brain-region" id="svgr-amygdala" onclick="selectRegion('amygdala')">
           <ellipse cx="255" cy="230" rx="56" ry="42" fill="#FFD166" filter="url(#sf)"/>
           <ellipse cx="255" cy="230" rx="42" ry="30" fill="#FFE49A" opacity="0.65"/>
           <text x="255" y="225" text-anchor="middle" fill="#5a3d00" font-size="11" font-weight="800" font-family="Nunito">Amygdala</text>
           <text x="255" y="239" text-anchor="middle" fill="#7a5500" font-size="10" font-family="Nunito">😤 Alert!</text>
         </g>
-
-        <!-- HIPPOCAMPUS -->
+        <!-- Hippocampus -->
         <g class="brain-region" id="svgr-hippocampus" onclick="selectRegion('hippocampus')">
           <path d="M358 208 Q400 192 430 214 Q452 230 436 262 Q414 284 380 272 Q346 260 340 238 Q337 220 358 208Z" fill="#2EC4B6" filter="url(#sf)"/>
           <path d="M366 218 Q398 205 424 224 Q444 238 430 262 Q412 278 382 266 Q356 255 350 236 Q348 220 366 218Z" fill="#5dd9d0" opacity="0.45"/>
           <text x="394" y="236" text-anchor="middle" fill="white" font-size="11" font-weight="800" font-family="Nunito">Hippocampus</text>
           <text x="394" y="250" text-anchor="middle" fill="rgba(255,255,255,0.75)" font-size="9.5" font-family="Nunito">Memory</text>
         </g>
-
-        <!-- CEREBELLUM -->
+        <!-- Cerebellum -->
         <g class="brain-region" id="svgr-cerebellum" onclick="selectRegion('cerebellum')">
           <ellipse cx="448" cy="300" rx="78" ry="56" fill="#b57ff5" filter="url(#sf)"/>
           <ellipse cx="448" cy="300" rx="62" ry="42" fill="#ca9ff8" opacity="0.45"/>
@@ -1141,23 +306,18 @@ nav {
           <text x="448" y="295" text-anchor="middle" fill="white" font-size="12" font-weight="800" font-family="Nunito">Cerebellum</text>
           <text x="448" y="310" text-anchor="middle" fill="rgba(255,255,255,0.75)" font-size="9.5" font-family="Nunito">Balance &amp; Body</text>
         </g>
-
-        <!-- BRAIN STEM -->
+        <!-- Brain Stem -->
         <g class="brain-region" id="svgr-brainstem" onclick="selectRegion('brainstem')">
           <path d="M202 268 Q218 256 238 268 Q255 280 258 308 Q258 340 244 355 Q228 366 212 355 Q197 340 196 308 Q194 280 202 268Z" fill="#F15BB5" filter="url(#sf)"/>
           <path d="M210 278 Q222 268 236 278 Q248 288 250 312 Q250 338 238 350 Q226 358 214 350 Q203 338 202 312 Q200 288 210 278Z" fill="#f57fc5" opacity="0.45"/>
           <text x="226" y="308" text-anchor="middle" fill="white" font-size="11" font-weight="800" font-family="Nunito">Brain</text>
           <text x="226" y="322" text-anchor="middle" fill="white" font-size="11" font-weight="800" font-family="Nunito">Stem</text>
         </g>
-
-        <!-- Direction labels -->
         <text x="42" y="26" fill="rgba(255,255,255,0.25)" font-size="9.5" font-family="Nunito" font-weight="800" letter-spacing="2">FRONT</text>
         <text x="494" y="26" fill="rgba(255,255,255,0.25)" font-size="9.5" font-family="Nunito" font-weight="800" letter-spacing="2">BACK</text>
         <line x1="42" y1="18" x2="514" y2="18" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
       </svg>
     </div>
-
-    <!-- Region pill nav -->
     <div class="region-pills">
       <button class="region-pill" style="--r-color:#FF6B6B" onclick="selectRegion('pfc')">Prefrontal Cortex</button>
       <button class="region-pill" style="--r-color:#FFD166" onclick="selectRegion('amygdala')">Amygdala</button>
@@ -1167,8 +327,6 @@ nav {
       <button class="region-pill" style="--r-color:#F15BB5" onclick="selectRegion('brainstem')">Brain Stem</button>
     </div>
   </div>
-
-  <!-- Right info panel -->
   <div class="brain-right">
     <div class="brain-right-inner" id="brainInfoPanel">
       <div class="brain-placeholder">
@@ -1177,86 +335,78 @@ nav {
       </div>
     </div>
   </div>
-</div><!-- /screen-brain -->
-
-
-<!-- ======= SCREEN: LESSON FLOW ======= -->
-<div class="screen" id="screen-lesson">
-  <div style="padding:2rem 2.5rem 0; flex-shrink:0;">
-    <div class="lesson-header">
-      <h2>Lesson 4: The Brain Break</h2>
-      <p>Click any step to expand scripts, tips, and guidance</p>
-    </div>
-    <div class="lesson-meta-strip">
-      <div class="meta-chip">⏱ <span>25–30 min</span></div>
-      <div class="meta-chip">🔔 <span>Chime</span> + Mindful Me Portfolio</div>
-      <div class="meta-chip">🎯 SEL: <span>Self-Awareness · Self-Management</span></div>
-      <div class="meta-chip">🧠 PFC <span>calms</span> Amygdala</div>
-      <div class="meta-chip">⚠️ Always <span>invitation</span>, never mandate</div>
-    </div>
-  </div>
-  <div style="flex:1; overflow-y:auto; padding:0 2.5rem 2.5rem;">
-    <div class="lesson-grid" id="lessonGrid"></div>
-  </div>
 </div>
 
+<!-- ===== UNIT 1 OVERVIEW ===== -->
+<div class="screen" id="screen-overview">
+  <div class="overview-header">
+    <h2>Unit 1: My Mindful Brain</h2>
+    <p>Four lessons that build students' understanding of brain structure, emotional regulation, and mindful awareness practices.</p>
+  </div>
+  <div class="unit-intro">
+    <div class="unit-stat"><div class="unit-stat-num">4</div><div class="unit-stat-label">Lessons</div></div>
+    <div class="unit-stat"><div class="unit-stat-num">~2</div><div class="unit-stat-label">Weeks</div></div>
+    <div class="unit-stat"><div class="unit-stat-num">3–5</div><div class="unit-stat-label">Grade Band</div></div>
+    <div class="unit-stat"><div class="unit-stat-num">SEL</div><div class="unit-stat-label">Self-Awareness</div></div>
+  </div>
+  <div class="lessons-grid" id="lessonsGrid"></div>
+</div>
 
-<!-- ======= SCREEN: JUST-IN-TIME AI ======= -->
+<!-- ===== JUST-IN-TIME AI ===== -->
 <div class="screen" id="screen-ai">
   <div class="ai-sidebar">
     <div class="ai-sidebar-title">Just-in-Time Help</div>
-    <div class="ai-sidebar-sub">Get instant, lesson-specific answers without digging through the curriculum.</div>
-
+    <div class="ai-sidebar-sub">Instant, lesson-grounded answers for any moment in Unit 1.</div>
     <div class="ai-what-it-does">
       <strong>🔍 What this does</strong>
-      Ask a question and this tool finds the <em>just-right</em> content from Lesson 4, MindUP brain science, and mindfulness pedagogy — then gives you a concise, teacher-ready answer with the lesson source cited.
+      Ask a question and this tool finds the <em>just-right</em> content from Unit 1 — brain science, lesson scripts, ethics guidelines, differentiation strategies — and gives you a concise, teacher-ready answer with the source cited.
     </div>
-
-    <div class="prompts-label">Quick Questions</div>
-    <button class="prompt-btn" onclick="aiQuick('How do I explain the amygdala to a 3rd grader in simple terms?')">🧠 Explain amygdala simply</button>
+    <div class="prompts-label">Lesson 1 — How Your Brain Works</div>
+    <button class="prompt-btn" onclick="aiQuick('How do I introduce the three brain regions to students in Lesson 1?')">🧠 Introduce brain regions</button>
+    <button class="prompt-btn" onclick="aiQuick('What is the key message students should leave Lesson 1 with?')">🎯 Lesson 1 key message</button>
+    <div class="prompts-label">Lesson 2 — Your Amygdala</div>
+    <button class="prompt-btn" onclick="aiQuick('How do I explain the amygdala and fight/flight/freeze to a 4th grader?')">😤 Explain amygdala simply</button>
+    <button class="prompt-btn" onclick="aiQuick('What is amygdala hijack and how does MindUP address it?')">⚡ Amygdala hijack</button>
+    <div class="prompts-label">Lesson 3 — Your Prefrontal Cortex</div>
+    <button class="prompt-btn" onclick="aiQuick('How does MindUP describe the PFC and how does it relate to the amygdala?')">🦉 PFC and the Wise Owl</button>
+    <button class="prompt-btn" onclick="aiQuick('Why does the PFC develop so slowly and why does that matter for students?')">🐢 PFC development</button>
+    <div class="prompts-label">Lesson 4 — The Brain Break</div>
+    <button class="prompt-btn" onclick="aiQuick('Walk me through the Brain Break script step by step.')">🫁 Brain Break script</button>
     <button class="prompt-btn" onclick="aiQuick('A student refuses to close their eyes during the Brain Break. What should I do?')">👁️ Student won\'t close eyes</button>
     <button class="prompt-btn" onclick="aiQuick('What is the ethical requirement around the Brain Break and student choice?')">⚠️ Ethics & student choice</button>
-    <button class="prompt-btn" onclick="aiQuick('How does slow breathing actually calm the brain? What\'s the science?')">🫁 Breathing science</button>
-    <button class="prompt-btn" onclick="aiQuick('A student says the Brain Break feels weird or boring. How do I respond?')">😐 Student says it\'s weird</button>
-    <button class="prompt-btn" onclick="aiQuick('What\'s neuroplasticity and how do I explain it to kids?')">🔄 Neuroplasticity for kids</button>
-    <button class="prompt-btn" onclick="aiQuick('Give me 3 simplification strategies for students who need extra support.')">♿ Simplify for learners</button>
-    <button class="prompt-btn" onclick="aiQuick('What is the difference between mindful and unmindful? How does MindUP define this?')">🌿 Mindful vs unmindful</button>
-    <button class="prompt-btn" onclick="aiQuick('How many times a day should the Brain Break be practiced, and why?')">📅 How often to practice</button>
-    <button class="prompt-btn" onclick="aiQuick('What does emotional regulation mean, and how does mindfulness support it?')">❤️ Emotional regulation</button>
+    <button class="prompt-btn" onclick="aiQuick('How does slow breathing actually calm the brain? What\'s the science?')">🔬 Breathing science</button>
+    <div class="prompts-label">Across Unit 1</div>
+    <button class="prompt-btn" onclick="aiQuick('What is neuroplasticity and how do I explain it to kids?')">🔄 Neuroplasticity for kids</button>
+    <button class="prompt-btn" onclick="aiQuick('Give me simplification strategies for students who need extra support across Unit 1.')">♿ Differentiation ideas</button>
   </div>
-
   <div class="ai-main">
     <div class="ai-chat-header">
       <h3>⚡ Just-in-Time Teacher Assistant</h3>
-      <p>Answers grounded in Lesson 4 content and MindUP curriculum · Sources cited in every response</p>
+      <p>Answers grounded in Unit 1 content and MindUP curriculum · Sources cited in every response</p>
     </div>
     <div class="ai-messages" id="aiMessages">
       <div class="ai-welcome">
         <span class="ai-welcome-icon">⚡</span>
-        <h3>Ask anything, get lesson-grounded answers</h3>
-        <p>This assistant knows Lesson 4 inside and out — scripts, ethics guidelines, brain science, differentiation, and discussion strategies. Every answer references the specific part of the lesson it came from.</p>
+        <h3>Ask anything about Unit 1</h3>
+        <p>This assistant knows all four lessons of Unit 1 — brain science, scripts, ethics, differentiation, and discussion strategies. Every answer cites the specific part of the curriculum it came from.</p>
       </div>
     </div>
     <div class="ai-input-row">
       <div class="ai-textarea-wrap">
-        <textarea class="ai-textarea" id="aiInput" placeholder="Type a question about the lesson, brain science, or a student situation..." rows="1" onkeydown="handleAiKey(event)" oninput="autoResize(this)"></textarea>
+        <textarea class="ai-textarea" id="aiInput" placeholder="Ask about any Unit 1 lesson, brain science, or a student situation..." rows="1" onkeydown="handleAiKey(event)" oninput="autoResize(this)"></textarea>
       </div>
       <button class="send-btn" id="aiSendBtn" onclick="sendAiMessage()">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-          <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
-        </svg>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
       </button>
     </div>
   </div>
-</div><!-- /screen-ai -->
+</div>
 
-
-<!-- ======= SCREEN: STORY BUILDER ======= -->
+<!-- ===== STORY BUILDER ===== -->
 <div class="screen" id="screen-story">
   <div class="story-config">
     <h2>📖 Story Builder</h2>
-    <div class="story-config-sub">Generate a custom story, vocabulary list, comprehension questions, and extension activity — all tied to Lesson 4 concepts.</div>
-
+    <div class="story-config-sub">Generate a custom story, vocabulary, comprehension questions, and extension activity — tied to any Unit 1 concept.</div>
     <div class="form-section">
       <label class="form-label">Grade Level</label>
       <div class="grade-buttons" id="gradeButtons">
@@ -1265,28 +415,26 @@ nav {
         <button class="grade-btn" data-grade="5" onclick="selectGrade(this)">5th</button>
       </div>
     </div>
-
     <div class="form-section">
       <label class="form-label">Story Topic</label>
       <div class="topic-grid" id="topicGrid">
-        <button class="topic-chip" onclick="selectTopic(this, 'A student named Maya who discovers the Brain Break before a big test')">😰 Test anxiety</button>
-        <button class="topic-chip" onclick="selectTopic(this, 'A student named Jordan whose amygdala fires during a tough moment on the playground')">🏃 Playground conflict</button>
-        <button class="topic-chip" onclick="selectTopic(this, 'A student named Sam who can\'t sleep and uses mindful breathing to calm down')">🌙 Can\'t sleep</button>
-        <button class="topic-chip" onclick="selectTopic(this, 'A family where a child teaches their parent the Brain Break')">👨‍👩‍👧 Teach a parent</button>
-        <button class="topic-chip" onclick="selectTopic(this, 'A student named Alex who feels their amygdala take over during an argument with a friend')">😠 Argument with friend</button>
-        <button class="topic-chip" onclick="selectTopic(this, 'A student who is nervous before a sports game and uses mindful breathing')">⚽ Sports nerves</button>
+        <button class="topic-chip" onclick="selectTopic(this,'A student named Maya who discovers the Brain Break before a big test')">😰 Test anxiety</button>
+        <button class="topic-chip" onclick="selectTopic(this,'A student named Jordan whose amygdala fires during a tough moment on the playground')">🏃 Playground conflict</button>
+        <button class="topic-chip" onclick="selectTopic(this,'A student named Sam who learns about their PFC and starts making better choices')">🦉 Using your PFC</button>
+        <button class="topic-chip" onclick="selectTopic(this,'A student who can\'t sleep and uses mindful breathing to calm their brain stem and nervous system')">🌙 Can\'t sleep</button>
+        <button class="topic-chip" onclick="selectTopic(this,'A student who teaches their family how the amygdala works and leads a Brain Break at home')">👨‍👩‍👧 Teach your family</button>
+        <button class="topic-chip" onclick="selectTopic(this,'A student who feels nervous before a sports game and uses what they know about their brain to calm down')">⚽ Sports nerves</button>
+        <button class="topic-chip" onclick="selectTopic(this,'A student discovers that the brain can change and grow with practice — neuroplasticity in action')">🔄 Brain can change</button>
+        <button class="topic-chip" onclick="selectTopic(this,'A student who gets angry in class, recognizes their amygdala hijack, and uses the PFC to respond instead of react')">😠 Amygdala hijack</button>
       </div>
     </div>
-
     <div class="divider">or customize</div>
-
     <div class="form-section">
       <label class="form-label">Custom Topic / Character</label>
-      <textarea class="form-textarea" id="customTopic" placeholder="E.g., 'A girl named Leila who is new to school and feels overwhelmed in the cafeteria...'"></textarea>
+      <textarea class="form-textarea" id="customTopic" placeholder="E.g., 'A girl named Leila who is new to school and feels overwhelmed...'"></textarea>
     </div>
-
     <div class="form-section">
-      <label class="form-label">Brain Concepts to Include</label>
+      <label class="form-label">Brain Concepts to Feature</label>
       <div class="topic-grid">
         <button class="topic-chip" id="concept-pfc" onclick="toggleConcept(this,'pfc')">🦉 PFC</button>
         <button class="topic-chip selected" id="concept-amygdala" onclick="toggleConcept(this,'amygdala')">😤 Amygdala</button>
@@ -1294,12 +442,12 @@ nav {
         <button class="topic-chip selected" id="concept-brainbreak" onclick="toggleConcept(this,'brainbreak')">⚡ Brain Break</button>
         <button class="topic-chip" id="concept-neuroplasticity" onclick="toggleConcept(this,'neuroplasticity')">🔄 Neuroplasticity</button>
         <button class="topic-chip" id="concept-mindful" onclick="toggleConcept(this,'mindful')">🌿 Mindfulness</button>
+        <button class="topic-chip" id="concept-hippocampus" onclick="toggleConcept(this,'hippocampus')">📚 Hippocampus</button>
+        <button class="topic-chip" id="concept-cortisol" onclick="toggleConcept(this,'cortisol')">💊 Cortisol/Stress</button>
       </div>
     </div>
-
     <button class="generate-btn" id="generateBtn" onclick="generateStory()">✨ Generate Story + Worksheet</button>
   </div>
-
   <div class="story-output">
     <div class="story-output-header">
       <div>
@@ -1311,109 +459,71 @@ nav {
     <div class="story-output-body" id="storyOutputBody">
       <div class="story-empty">
         <div class="story-empty-icon">📖</div>
-        <div class="story-empty-text">Choose a topic and grade level,<br>then click Generate to create<br>a custom story + worksheet</div>
+        <div class="story-empty-text">Choose a topic and grade level,<br>then click Generate</div>
       </div>
     </div>
   </div>
-</div><!-- /screen-story -->
+</div>
 
 </div><!-- /main -->
 
 <script>
-/* ================================================================
-   SCREEN SWITCHING
-================================================================ */
-function switchScreen(id) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
-  document.getElementById('screen-' + id).classList.add('active');
-  const tabs = ['brain','lesson','ai','story'];
-  document.querySelectorAll('.nav-tab')[tabs.indexOf(id)].classList.add('active');
+/* ── SCREEN SWITCHING ── */
+function switchScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('screen-'+id).classList.add('active');
+  ['brain','overview','ai','story'].forEach((s,i)=>{
+    if(s===id) document.querySelectorAll('.nav-tab')[i].classList.add('active');
+  });
 }
 
-/* ================================================================
-   BRAIN EXPLORER
-================================================================ */
-const REGIONS = {
-  pfc: {
-    color:'#FF6B6B',
-    emoji:'🦉',
-    nickname:'The Wise Owl',
-    name:'Prefrontal Cortex (PFC)',
-    desc:'Located right behind your forehead, the PFC is the brain\'s command center. It handles thinking clearly, making good decisions, planning ahead, and managing emotions. Remarkably, it\'s the last brain region to fully develop — not until our mid-20s!',
-    connection:'The Brain Break directly exercises the PFC. When students focus attention on the present moment — listening to the chime or noticing their breath — they are activating and strengthening this region. The PFC can literally "calm down" the amygdala, like a steady mentor helping an anxious friend.',
-    kids:'Try saying: "Your PFC is like a wise owl sitting at the front of your brain. When you take a Brain Break, you wake up your owl so it can help you think clearly and make good choices."'
-  },
-  amygdala: {
-    color:'#FFD166',
-    emoji:'🐕',
-    nickname:'The Guard Dog',
-    name:'Amygdala',
+/* ── BRAIN EXPLORER ── */
+const REGIONS={
+  pfc:{color:'#FF6B6B',emoji:'🦉',nickname:'The Wise Owl',name:'Prefrontal Cortex (PFC)',
+    desc:'Located right behind your forehead, the PFC is the brain\'s command center for thinking clearly, making good decisions, planning ahead, and managing emotions. It\'s the last brain region to fully develop — not until our mid-20s.',
+    connection:'The Brain Break directly activates the PFC. When students focus attention on the present moment — listening to the chime or noticing their breath — they are exercising this region. The PFC can "calm down" the amygdala like a wise mentor helping an anxious friend. Featured in Lesson 3 and Lesson 4.',
+    kids:'"Your PFC is like a wise owl at the front of your brain. When you take a Brain Break, you wake up your owl so it can help you think clearly and make good choices."'},
+  amygdala:{color:'#FFD166',emoji:'🐕',nickname:'The Guard Dog',name:'Amygdala',
     desc:'An almond-shaped structure deep inside the brain that processes emotions — especially fear, excitement, and perceived threats. When it detects danger (real or imagined), it triggers fight, flight, or freeze responses, flooding the body with stress hormones like cortisol.',
-    connection:'Stress or strong emotions can cause the amygdala to "hijack" the brain, making the PFC less accessible — sometimes called "flipping your lid." The Brain Break and slow exhale breathing calm the amygdala by activating the parasympathetic nervous system, letting the PFC regain the lead.',
-    kids:'Try saying: "Imagine your amygdala is a guard dog that barks when it senses trouble. Sometimes it barks even when there\'s no real danger! The Brain Break helps calm the dog down so you can think clearly."'
-  },
-  hippocampus: {
-    color:'#2EC4B6',
-    emoji:'📚',
-    nickname:'The Librarian',
-    name:'Hippocampus',
-    desc:'Shaped like a seahorse (the name comes from Greek for "sea horse"), the hippocampus is critical for forming new memories, learning, and connecting new information to prior knowledge. It\'s especially sensitive to stress hormones — high cortisol can actually impair memory formation.',
-    connection:'Chronic stress and amygdala overdrive can interfere with the hippocampus — making learning harder. By calming stress responses through the Brain Break, MindUP creates better biological conditions for memory and learning, directly supporting student academic performance.',
-    kids:'Try saying: "Your hippocampus is like the librarian of your brain — it files away everything you learn. When you\'re stressed, the librarian gets confused. The Brain Break helps the librarian get back to work!"'
-  },
-  cortex: {
-    color:'#00BBF9',
-    emoji:'🎩',
-    nickname:'The Thinking Cap',
-    name:'Cerebral Cortex',
-    desc:'The brain\'s outer wrinkled layer — all those folds create enormous surface area for billions of brain cells. It handles higher-order thinking: language, reasoning, creativity, perception, and conscious thought. It\'s what makes humans so uniquely capable of complex thought.',
-    connection:'Mindfulness practice strengthens the cortex, particularly regions governing attention and self-awareness. Over time, consistent Brain Break practice may actually increase the thickness of cortical regions tied to sustained attention — a real, measurable structural change from regular practice.',
-    kids:'Try saying: "The cerebral cortex is your thinking cap — it\'s where you do math, read stories, and solve problems. Mindfulness helps your thinking cap work even better by keeping stress from getting in the way."'
-  },
-  cerebellum: {
-    color:'#b57ff5',
-    emoji:'⚖️',
-    nickname:'The Coordinator',
-    name:'Cerebellum',
-    desc:'Located at the back-bottom of the brain, the cerebellum contains more than half of all the brain\'s neurons despite its smaller size. It coordinates movement, balance, and muscle timing, and emerging research suggests connections to emotional regulation and attention.',
-    connection:'During the Brain Break, stillness and controlled body posture engage the cerebellum. Its connections to emotional and attention centers may support the calming effects of mindful practice, particularly in activities that link breath to body awareness.',
-    kids:'Try saying: "Your cerebellum is your body\'s balance master! It keeps you from falling over, and it also helps your body feel calm and steady during the Brain Break."'
-  },
-  brainstem: {
-    color:'#F15BB5',
-    emoji:'💓',
-    nickname:'Life Support',
-    name:'Brain Stem',
-    desc:'Connecting the brain to the spinal cord, the brain stem controls automatic survival functions: breathing, heart rate, blood pressure, sleep cycles, and basic alertness. It operates continuously without conscious effort — keeping you alive 24/7.',
-    connection:'Here\'s the profound link: conscious breathing in the Brain Break is one of the few ways we can voluntarily influence brain stem functions. By intentionally slowing and deepening the breath, students use their conscious PFC to actually regulate their brain stem — and their entire nervous system state.',
-    kids:'Try saying: "Your brain stem runs your body automatically — like a computer running in the background. The amazing thing about breathing is that YOU can control it on purpose, and that changes how your whole body feels!"'
-  }
+    connection:'Stress or strong emotions can cause an "amygdala hijack" — making the PFC less accessible. The Brain Break and slow exhale breathing calm the amygdala by activating the parasympathetic nervous system. Central concept in Lesson 2 and Lesson 4.',
+    kids:'"Your amygdala is a guard dog that barks when it senses trouble. Sometimes it barks even when there\'s no real danger! The Brain Break helps calm the dog so you can think clearly."'},
+  hippocampus:{color:'#2EC4B6',emoji:'📚',nickname:'The Librarian',name:'Hippocampus',
+    desc:'Shaped like a seahorse, the hippocampus is critical for forming new memories, learning, and connecting new information to prior knowledge. It\'s especially sensitive to stress hormones — high cortisol can impair memory formation.',
+    connection:'By calming stress through the Brain Break, MindUP creates better biological conditions for memory and learning. When the amygdala is overactive, the hippocampus suffers. Reducing stress directly supports academic performance. Referenced across Unit 1.',
+    kids:'"Your hippocampus is the librarian of your brain — it files away everything you learn. When you\'re stressed, the librarian gets confused. The Brain Break helps the librarian get back to work!"'},
+  cortex:{color:'#00BBF9',emoji:'🎩',nickname:'The Thinking Cap',name:'Cerebral Cortex',
+    desc:'The brain\'s outer wrinkled layer — all those folds create enormous surface area for billions of neurons. It handles higher-order thinking: language, reasoning, creativity, perception, and conscious thought.',
+    connection:'Mindfulness practice strengthens cortical regions governing attention and self-awareness. Over time, consistent Brain Break practice may increase the thickness of these regions — a real, measurable structural brain change. Introduced in Lesson 1.',
+    kids:'"The cerebral cortex is your thinking cap — it\'s where you do math, read, and solve problems. Mindfulness helps your thinking cap work even better by keeping stress from getting in the way."'},
+  cerebellum:{color:'#b57ff5',emoji:'⚖️',nickname:'The Coordinator',name:'Cerebellum',
+    desc:'Located at the back-bottom of the brain, the cerebellum contains more than half of all the brain\'s neurons despite its smaller size. It coordinates movement, balance, and muscle timing, with emerging connections to emotional regulation.',
+    connection:'During the Brain Break, body stillness and controlled posture subtly engage the cerebellum. Its connections to emotional and attention centers may support the calming effects of mindful practice, especially in activities linking breath to body awareness.',
+    kids:'"Your cerebellum is your body\'s balance master! It keeps you steady and helps your body feel calm during the Brain Break."'},
+  brainstem:{color:'#F15BB5',emoji:'💓',nickname:'Life Support',name:'Brain Stem',
+    desc:'Connecting the brain to the spinal cord, the brain stem controls automatic survival functions: breathing, heart rate, blood pressure, and basic alertness. It operates continuously without conscious effort.',
+    connection:'Conscious breathing in the Brain Break is one of the few ways we can voluntarily influence brain stem functions. By intentionally slowing the breath, students use their conscious PFC to regulate their brain stem and their entire nervous system state. Referenced in Lesson 4.',
+    kids:'"Your brain stem runs your body automatically — like a background app. The amazing thing about breathing is YOU can control it on purpose, and that changes how your whole body feels!"'}
 };
 
-let activeRegion = null;
-
-function selectRegion(id) {
-  if(activeRegion) {
-    const prev = document.getElementById('svgr-' + activeRegion);
-    if(prev) prev.classList.remove('active');
-    document.querySelectorAll('.region-pill').forEach((p,i) => {
-      const rids = ['pfc','amygdala','hippocampus','cortex','cerebellum','brainstem'];
-      if(rids[i] === activeRegion) p.classList.remove('active');
+let activeRegion=null;
+function selectRegion(id){
+  if(activeRegion){
+    const p=document.getElementById('svgr-'+activeRegion);
+    if(p) p.classList.remove('active');
+    document.querySelectorAll('.region-pill').forEach((pill,i)=>{
+      if(['pfc','amygdala','hippocampus','cortex','cerebellum','brainstem'][i]===activeRegion) pill.classList.remove('active');
     });
   }
-  activeRegion = id;
-  const svgEl = document.getElementById('svgr-' + id);
-  if(svgEl) svgEl.classList.add('active');
-
-  // Highlight pill
-  const rids = ['pfc','amygdala','hippocampus','cortex','cerebellum','brainstem'];
-  document.querySelectorAll('.region-pill').forEach((p,i) => {
-    if(rids[i] === id) p.classList.add('active'); else p.classList.remove('active');
+  activeRegion=id;
+  const el=document.getElementById('svgr-'+id);
+  if(el) el.classList.add('active');
+  document.querySelectorAll('.region-pill').forEach((pill,i)=>{
+    const ids=['pfc','amygdala','hippocampus','cortex','cerebellum','brainstem'];
+    if(ids[i]===id) pill.classList.add('active'); else pill.classList.remove('active');
   });
-
-  const r = REGIONS[id];
-  document.getElementById('brainInfoPanel').innerHTML = `
+  const r=REGIONS[id];
+  document.getElementById('brainInfoPanel').innerHTML=`
     <div class="region-info">
       <div class="ri-color-bar" style="background:${r.color}"></div>
       <span class="ri-emoji">${r.emoji}</span>
@@ -1422,488 +532,275 @@ function selectRegion(id) {
       <div class="ri-section-label">What It Does</div>
       <div class="ri-desc">${r.desc}</div>
       <div class="ri-section-label">MindUP Connection</div>
-      <div class="ri-connection-box">
-        <strong>🧘 Brain Break Link</strong>${r.connection}
-      </div>
+      <div class="ri-connection-box"><strong>🧘 Unit 1 Link</strong>${r.connection}</div>
       <div class="ri-section-label">How to Say It to Students</div>
-      <div class="ri-kids-box">
-        <strong>🗣️ Student Language</strong>${r.kids}
-      </div>
-    </div>
-  `;
+      <div class="ri-kids-box"><strong>🗣️ Student Language</strong>${r.kids}</div>
+    </div>`;
 }
 
-/* ================================================================
-   LESSON FLOW
-================================================================ */
-const LESSON_STEPS = [
-  {
-    num:1,
-    color:'#2EC4B6',
-    title:'Review Community Agreement',
-    subtitle:'~3 min · Getting started',
-    body:`<p>Remind students about your agreed-upon ways of being together to create a safe, kind, and focused learning community.</p>
-    <div class="tip-callout"><div class="callout-label">✅ Why it matters</div>This sets psychological safety before introducing vulnerability of mindfulness practice. Students need to feel safe to close their eyes and be still.</div>`
-  },
-  {
-    num:2,
-    color:'#FF6B6B',
-    title:'Define Mindful vs. Unmindful',
-    subtitle:'Class discussion · 3–4 min',
-    body:`<p><strong>Being mindful</strong> = moment-to-moment, nonjudgmental awareness of our experience.</p>
-    <p><strong>Being unmindful</strong> = not paying attention to the present moment — mind is elsewhere.</p>
-    <div class="tip-callout"><div class="callout-label">📣 Discussion prompt</div>"Think of a time your mind wandered during school. What were you thinking about? That's being unmindful — and it happens to everyone, even teachers!"</div>`
-  },
-  {
-    num:3,
-    color:'#FFD166',
-    title:'Share Home Activity',
-    subtitle:'Optional share-out · 2 min',
-    body:`<p>Invite students to share experiences from the MindUP for Home and Life activity.</p>
-    <div class="script-callout">
-      <div class="script-line">What were you doing? How did you feel?</div>
-      <div class="script-line">What kinds of thoughts did you have?</div>
-      <div class="script-line">How were the two experiences different from each other?</div>
-    </div>`
-  },
-  {
-    num:4,
-    color:'#b57ff5',
-    title:'Set Focused Awareness Norms',
-    subtitle:'Community building · 3 min',
-    body:`<p>As a class, determine how your MindUP learning community agreement extends to mindful awareness activities.</p>
-    <div class="tip-callout"><div class="callout-label">💬 Sample norms to co-create</div>Be respectful of others' experience. If participation doesn't feel comfortable, you may choose an alternative. No judgment about how others do the practice.</div>
-    <div class="warn-callout"><div class="callout-label">⚠️ Never mandate</div>The Brain Break is always an invitation. Students who are not comfortable must always be able to opt out — no exceptions.</div>`
-  },
-  {
-    num:5,
-    color:'#00BBF9',
-    title:'Mindful Listening Activity',
-    subtitle:'With chime · 3–5 min',
-    body:`<p>Ask students to sit comfortably, optionally close their eyes (or look at hands if not comfortable), and listen to the chime as long as possible.</p>
-    <div class="script-callout">
-      <div class="script-line">Now we are going to practice our mindful listening.</div>
-      <div class="script-line">To get ready, please sit in a comfortable position.</div>
-      <div class="script-line">I invite you to close your eyes. If you're not comfortable, please just look down at your hands.</div>
-      <div class="script-line">Now, focus the best way you can, and listen to the sound of the instrument for as long as you can.</div>
-      <div class="script-line">When you can no longer hear the sound, you can quietly raise your hand.</div>
-    </div>
-    <div class="tip-callout"><div class="callout-label">🔔 Then</div>Ring chime. Repeat 1–2 times. This trains external attention before moving to internal (breath) attention.</div>`
-  },
-  {
-    num:6,
-    color:'#2EC4B6',
-    title:'Brain Break: Mindful Breathing',
-    subtitle:'Core activity · ~5 min with reflection',
-    body:`<p>Introduce the Brain Break, then guide students through ~1 minute of mindful breathing. Begin and end with one ring of the chime.</p>
-    <div class="script-callout">
-      <div class="script-line">Please sit down in a comfortable position.</div>
-      <div class="script-line">I am going to invite you to close your eyes. If not comfortable, look down at your hands.</div>
-      <div class="script-line">Please listen to the sound as long as you can.</div>
-    </div>
-    <div class="tip-callout"><div class="callout-label">🔔 Ring chime → wait for sound to end, then:</div></div>
-    <div class="script-callout">
-      <div class="script-line">Bring your attention to your breath. (PAUSE)</div>
-      <div class="script-line">If your mind wanders, that's okay — just bring focus back. (PAUSE)</div>
-      <div class="script-line">Breathe in through your nose and out through your mouth or nose.</div>
-      <div class="script-line">Notice your belly rise and fall. (PAUSE)</div>
-      <div class="script-line">When you hear the chime again, listen as long as you can. Then slowly look up.</div>
-    </div>
-    <div class="tip-callout"><div class="callout-label">🔔 Ring chime → Allow 30–45 sec for full return to room</div></div>`
-  },
-  {
-    num:7,
-    color:'#F15BB5',
-    title:'Share Experiences',
-    subtitle:'Discussion · 4–5 min',
-    body:`<div class="script-callout">
-      <div class="script-line">What did you think about the activity?</div>
-      <div class="script-line">Did you notice differences between how you normally breathe and breath during the exercise?</div>
-      <div class="script-line">Do you notice differences in your breath during sports? Music? Watching a show?</div>
-    </div>
-    <div class="tip-callout"><div class="callout-label">👂 Listen for</div>Students who say they couldn't focus, felt weird, or felt bored — these are perfect teaching moments for the next step.</div>`
-  },
-  {
-    num:8,
-    color:'#FF6B6B',
-    title:'Summarize Key Points',
-    subtitle:'Teacher-led · 3–4 min',
-    body:`<div class="script-callout">
-      <div class="script-line">Having trouble holding attention on breath is normal and expected.</div>
-      <div class="script-line">We're not trying to do anything right or avoid doing anything wrong.</div>
-      <div class="script-line">If you felt bored — that's okay! You are still strengthening your brain.</div>
-      <div class="script-line">By focusing on the present moment, we use our PFC to help calm our brain.</div>
-      <div class="script-line">From now on, we practice mindful listening and breathing three times a day, every day.</div>
-    </div>
-    <div class="warn-callout"><div class="callout-label">⚠️ Address concerns</div>Actively normalize "feeling weird" or "not being able to focus." These are not failures — they are the practice.</div>`
-  },
-  {
-    num:9,
-    color:'#b57ff5',
-    title:'Apply to Community Agreement',
-    subtitle:'Closing · 2–3 min',
-    body:`<div class="script-callout">
-      <div class="script-line">How might our new knowledge of mindful breathing help our class agreement?</div>
-      <div class="script-line">Where do you see connections?</div>
-      <div class="script-line">Is there anything we wish to add or change?</div>
-    </div>
-    <div class="tip-callout"><div class="callout-label">📓 Follow-up</div>Mindful Me Portfolio entry: "Focusing My Attention Looks Like..." — students can draw, write, or create any form they choose.</div>`
-  }
+/* ── UNIT 1 OVERVIEW ── */
+const UNIT1_LESSONS=[
+  {num:1,color:'#2EC4B6',title:'How Your Brain Works',time:'25–30 min',
+    purpose:'Students are introduced to the basic structure of the brain — specifically three key regions (brain stem, limbic system/amygdala, and prefrontal cortex) — and begin to understand how these regions work together and influence behavior, emotions, and learning.',
+    concepts:['Brain stem','Limbic system','Prefrontal cortex','Neuroplasticity','Brain as muscle'],
+    objectives:['Identify three key brain regions and their basic functions','Understand that the brain can change and grow with practice','Begin to connect brain structure to everyday experiences'],
+    sel:['Self-awareness','Responsible decision-making']},
+  {num:2,color:'#FFD166',title:'Your Amygdala',time:'25–30 min',
+    purpose:'Students deepen their understanding of the amygdala — the brain\'s emotional processing center — and explore how it triggers fight, flight, or freeze responses. They learn to recognize when their amygdala is activated and begin to understand the concept of emotional hijacking.',
+    concepts:['Amygdala','Fight/flight/freeze','Cortisol','Emotional hijack','Reactive vs. reflective'],
+    objectives:['Describe the amygdala\'s role in emotional response','Recognize personal triggers that activate their amygdala','Understand the difference between reacting and responding'],
+    sel:['Self-awareness','Self-management']},
+  {num:3,color:'#FF6B6B',title:'Your Prefrontal Cortex',time:'25–30 min',
+    purpose:'Students explore the prefrontal cortex (PFC) — the brain\'s center for decision-making, focus, and emotional regulation — and learn how it can work with or against the amygdala. They discover that the PFC develops slowly and that mindfulness strengthens it.',
+    concepts:['Prefrontal cortex (PFC)','Decision-making','Self-regulation','PFC + amygdala relationship','Late brain development'],
+    objectives:['Describe the PFC\'s role in thinking and self-regulation','Explain the relationship between the PFC and the amygdala','Connect mindfulness practice to PFC development'],
+    sel:['Self-awareness','Self-management','Responsible decision-making']},
+  {num:4,color:'#b57ff5',title:'The Brain Break',time:'25–30 min',
+    purpose:'Students are introduced to the core mindful awareness practices of the MindUP Brain Break: mindful listening and mindful breathing. They practice focusing attention on the present moment and learn that consistent daily practice strengthens the brain.',
+    concepts:['Mindful listening','Mindful breathing','Present-moment awareness','Diaphragmatic breathing','Consistent practice'],
+    objectives:['Practice mindful listening and breathing','Describe how the Brain Break activates the PFC','Identify how mindful breathing differs from everyday breathing'],
+    sel:['Self-awareness','Self-management','Responsible decision-making']}
 ];
 
-function buildLessonGrid() {
-  const grid = document.getElementById('lessonGrid');
-  grid.innerHTML = LESSON_STEPS.map(step => `
-    <div class="lesson-card" style="--card-color:${step.color}" onclick="toggleCard(this)">
-      <div class="lesson-card-top">
-        <div class="lc-num" style="background:${step.color}">${step.num}</div>
-        <div>
-          <div class="lc-title">${step.title}</div>
-          <div class="lc-subtitle">${step.subtitle}</div>
+function buildOverview(){
+  document.getElementById('lessonsGrid').innerHTML=UNIT1_LESSONS.map(l=>`
+    <div class="lesson-overview-card" style="--lc:${l.color}">
+      <div class="loc-header">
+        <div class="loc-num" style="background:${l.color}">${l.num}</div>
+        <div class="loc-meta">
+          <div class="loc-label">Lesson ${l.num}</div>
+          <div class="loc-title">${l.title}</div>
+          <div class="loc-time">⏱ ${l.time}</div>
         </div>
-        <div class="lc-expand-icon">▾</div>
       </div>
-      <div class="lesson-card-body">
-        <div class="lesson-card-body-inner">${step.body}</div>
+      <div class="loc-body">
+        <div class="loc-purpose">${l.purpose}</div>
+        <div class="loc-concepts">${l.concepts.map(c=>`<span class="loc-concept-tag">${c}</span>`).join('')}</div>
+        <ul class="loc-objectives">${l.objectives.map(o=>`<li>${o}</li>`).join('')}</ul>
+        <div class="loc-sel">${l.sel.map(s=>`<span class="sel-chip">${s}</span>`).join('')}</div>
       </div>
-    </div>
-  `).join('');
+    </div>`).join('');
 }
+buildOverview();
 
-function toggleCard(card) {
-  card.classList.toggle('expanded');
-}
+/* ── JUST-IN-TIME AI ── */
+const AI_SYSTEM=`You are an expert MindUP teacher assistant providing just-in-time support. You have deep knowledge of MindUP Unit 1: My Mindful Brain (Grades 3–5), covering all four lessons.
 
-buildLessonGrid();
+UNIT 1 OVERVIEW:
+Unit 1 introduces students to brain structure, emotional regulation, and mindful awareness. It consists of 4 lessons (~25-30 min each), spanning approximately 2 weeks. SEL connections: self-awareness, self-management, responsible decision-making.
 
-/* ================================================================
-   JUST-IN-TIME AI
-================================================================ */
-const AI_SYSTEM = `You are an expert MindUP teacher assistant providing just-in-time support. You know the following curriculum deeply:
+LESSON 1 — HOW YOUR BRAIN WORKS:
+Purpose: Introduce three key brain regions and establish that the brain can change and grow.
+Key brain regions introduced:
+- Brain Stem: automatic survival functions (breathing, heart rate, sleep). The "oldest" part of the brain evolutionarily.
+- Limbic System (including Amygdala): emotional processing, memory, motivation. Sometimes called the "emotional brain."
+- Prefrontal Cortex (PFC): higher-order thinking, decision-making, planning, self-regulation. The "thinking brain."
+Key concept: Neuroplasticity — the brain changes and grows stronger with practice, just like a muscle. The more we practice something (including mindfulness), the stronger those neural connections become.
+Objective: Students understand the basic architecture of the brain and that their choices and practices shape their brain development.
 
-LESSON 4 - THE BRAIN BREAK (Grades 3-5, MindUP Unit 1):
-Purpose: Introduce mindful listening and mindful breathing as the MindUP Brain Break. Students continue these practices throughout the program.
-
+LESSON 2 — YOUR AMYGDALA:
+Purpose: Deepen understanding of the amygdala and the fight/flight/freeze response.
 Key concepts:
-- Being mindful = moment-to-moment nonjudgmental awareness of experience
-- Being unmindful = not paying attention to the present moment
-- Focusing attention on present moment uses the Prefrontal Cortex (PFC)
-- PFC calms the amygdala → better decision-making
+- Amygdala = the "Guard Dog" or "Smoke Detector" — detects threats (real or perceived) and triggers survival responses
+- Fight/Flight/Freeze response: when amygdala fires, cortisol and adrenaline flood the body; heart races, breathing quickens, thinking narrows
+- Amygdala hijack ("flipping your lid"): when the amygdala takes over and the PFC becomes less accessible — explains reactive behavior
+- The amygdala cannot distinguish between real danger and perceived danger (e.g., social threat, test anxiety)
+- Cortisol: the stress hormone released during amygdala activation; prolonged cortisol impairs hippocampus and learning
+Key message: Students learn to recognize when their amygdala is activated and understand that reactive behavior often comes from the amygdala, not from deliberate choice.
+Discussion prompts: What makes your amygdala "bark"? What does your body feel like when that happens?
 
-Lesson steps: (1) Review community agreement (2) Class discussion: mindful vs unmindful (3) Share home activity (4) Set focused awareness norms (5) Mindful listening with chime (6) Brain Break ~1 min mindful breathing (7) Share experiences (8) Summarize key points (9) Apply to community agreement
+LESSON 3 — YOUR PREFRONTAL CORTEX:
+Purpose: Explore the PFC as the brain's self-regulation center and its relationship to the amygdala.
+Key concepts:
+- PFC = the "Wise Owl" — handles decision-making, planning, impulse control, empathy, and self-regulation
+- PFC development: the PFC is the last brain region to fully mature — not complete until mid-20s. This is why children and adolescents often struggle with impulse control.
+- PFC + Amygdala relationship: PFC can calm the amygdala ("the wise owl calms the guard dog"), but when the amygdala is in overdrive, the PFC is harder to access
+- Mindfulness practice strengthens the PFC — consistent practice builds the neural pathways that support reflective rather than reactive responses
+- Neuroplasticity in action: every Brain Break practice strengthens PFC circuits
+Key message: Students can actively build their PFC through mindfulness practice. It's not fixed — it grows.
 
-Materials: Chime, Mindful Me Portfolio. Time: 25-30 min.
+LESSON 4 — THE BRAIN BREAK:
+Purpose: Introduce the core MindUP practice: mindful listening + mindful breathing, done 3x daily.
+Key concepts:
+- Mindfulness = moment-to-moment, nonjudgmental awareness of experience
+- Unmindful = mind is elsewhere, not in the present moment
+- The Brain Break = mindful listening (chime) followed by ~1 min mindful breathing
+- Focusing on the present moment activates the PFC
 
-Mindful Listening Script: Sit comfortably → optional eye close (or look at hands) → listen to chime as long as possible → hand raise when can't hear. Repeat 1-2x.
-
-Brain Break Script: Sit comfortably → optional eye close → ring chime → focus on breath → "if mind wanders, that's okay, bring focus back" → breathe in nose out mouth/nose → notice belly rise/fall → ring chime to close → 30-45 sec transition.
-
-CRITICAL ETHICS (from lesson):
+CRITICAL ETHICS (Lesson 4):
 - Brain Break MUST be presented as invitation, NEVER mandated
-- Students who are not comfortable MUST be able to opt out
+- Students who are uncomfortable MUST be able to opt out
 - Do NOT use as classroom management/compliance tool
 - Goal is internal self-regulation, not external compliance
 
+Brain Break Script:
+1. Sit comfortably
+2. Invite (not require) eye close or look at hands
+3. Ring chime — listen until sound fades
+4. "Bring your attention to your breath" (pause)
+5. "If your mind wanders, that's okay — just bring focus back" (pause)
+6. "Breathe in through your nose, out through mouth or nose"
+7. "Notice your belly rise and fall" (pause)
+8. Ring chime to close — allow 30-45 sec transition
+
+Breathing science:
+- Diaphragmatic breathing reduces cortisol, releases acetylcholine (calming), calms sympathetic nervous system
+- Extending exhale longer than inhale activates parasympathetic (rest and digest)
+- Mouth breathing can activate fight/flight
+- Practice 3x daily — consistency matters more than duration
+
 Realistic expectations:
-- Minds will wander — that's normal! Their job is to notice and gently return
-- Focus on PRACTICE not perfection — not about controlling your brain
-- Consistent practice matters more than duration
-- Brain Break is "a journey, not a destination"
+- Minds will wander — that is normal and expected
+- Focus on practice, not perfection
+- It's okay to feel bored — still strengthening the brain
 
-BRAIN SCIENCE:
-- Prefrontal Cortex (PFC): "Wise Owl" — decision-making, focus, self-regulation. Last to develop (mid-20s). Activated by mindful attention. Can calm amygdala.
-- Amygdala: "Guard Dog" — emotional reactions, fight/flight/freeze, processes fear/excitement. Can "hijack" brain under stress (amygdala hijack/"flipping your lid"). Calmed by slow breathing and PFC activation.
-- Hippocampus: Memory formation and learning. Sensitive to cortisol. High stress impairs memory → reducing stress through Brain Break supports learning.
-- Cerebral Cortex: Higher-order thinking, language, perception. Mindfulness strengthens cortical thickness in attention regions.
-- Cerebellum: Balance, coordination, movement. Connections to emotional regulation.
-- Brain Stem: Controls automatic functions (breathing, heart rate). Breathing is unique — it can be consciously controlled, allowing voluntary influence over automatic functions.
-- Neuroplasticity: Brain changes with practice. Neural networks practiced most become default pathways. Consistent Brain Breaks strengthen attention and emotional control circuits. Shifts from reactive → reflective responses.
-
-BREATHING SCIENCE:
-- Diaphragmatic (deep belly) breathing reduces cortisol, calms sympathetic nervous system
-- Releases acetylcholine → calming effects, increased focus
-- Extend exhale longer than inhale → activates parasympathetic (rest & digest) system
-- Mouth breathing can activate fight/flight (shorter inhalations than exhalations)
-- To slow breath: exhale through nose, or add sound (humming, hissing, "shhh")
-- "Notice your belly rise and fall" — concrete anchor for attention
-
-EMOTIONAL REGULATION:
-- Includes noticing, understanding, labeling, then managing emotions
-- Mindful state = don't try to change, push away, or avoid difficult emotions
-- Mindful state helps reflect on rather than react to experiences
-- In reflective state → better handle difficult emotions, persevere toward goals
-
-DIFFERENTIATION:
-Simplification: shorter chime exposure, Hoberman sphere or hands to show breath, Mind Jar (glitter + water in sealed jar shows amygdala overdrive; deep breaths = glitter settles), lie on back with Lego on belly for belly breathing.
-Enrichment: lengthen Brain Break time, lengthen exhale, neuron models with toothpicks and plasticine, deeper amygdala discussion.
-
-FOLLOW-UP ACTIVITIES:
-- MindUP for Home and Life: Apply mindful breathing to daily life scenarios (before test, can't sleep, heated discussion, feeling overwhelmed)
-- Mindful Me Portfolio: "Focusing My Attention Looks Like..." — any format (drawing, poem, paragraph, photograph)
-
-SEL CONNECTIONS: Self-awareness, self-management, responsible decision-making.
-
-DAILY PRACTICE: 3 times per day, every day going forward.
+DIFFERENTIATION (across Unit 1):
+Simplification: shorter activities, concrete visuals (Mind Jar = glitter in water jar shows amygdala hijack; deep breaths = glitter settles), Hoberman sphere for breathing, Lego on belly for belly breathing.
+Enrichment: neuron models with toothpicks/plasticine, deeper brain region research, extended Brain Break duration, student-led Brain Breaks.
+Literature: Anh's Anger, Jabari Jumps, A Handful of Quiet, Breathe, Follow Your Breath!, Each Breath a Smile.
 
 RESPONSE GUIDELINES:
 - Be a warm, knowledgeable teaching colleague
-- Keep answers concise and actionable (3-6 sentences for simple, up to 10 for complex)
-- ALWAYS end your response with a brief "📍 Source:" line in italics that names which part of the lesson the answer came from (e.g., "Brain Break Ethics Guidelines," "Breathing Science Notes," "Lesson Step 6," etc.)
+- Keep answers concise and actionable
+- ALWAYS end with a brief "📍 Source:" line naming which lesson or curriculum section the answer came from
 - Use **bold** for key terms
-- Give practical, classroom-ready language teachers can use immediately
-- If asked for student-facing language, adjust vocabulary accordingly`;
+- Provide practical, immediately usable classroom language`;
 
-let aiHistory = [];
-let aiLoading = false;
+let aiHistory=[],aiLoading=false;
+function autoResize(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,110)+'px';}
+function handleAiKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendAiMessage();}}
+function aiQuick(p){document.getElementById('aiInput').value=p;sendAiMessage();}
 
-function autoResize(el) {
-  el.style.height = 'auto';
-  el.style.height = Math.min(el.scrollHeight, 110) + 'px';
-}
-
-function handleAiKey(e) {
-  if(e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendAiMessage(); }
-}
-
-function aiQuick(prompt) {
-  document.getElementById('aiInput').value = prompt;
-  sendAiMessage();
-}
-
-async function sendAiMessage() {
+async function sendAiMessage(){
   if(aiLoading) return;
-  const input = document.getElementById('aiInput');
-  const text = input.value.trim();
+  const input=document.getElementById('aiInput');
+  const text=input.value.trim();
   if(!text) return;
-
-  input.value = '';
-  input.style.height = 'auto';
-
-  // Remove welcome
-  const welcome = document.querySelector('.ai-welcome');
+  input.value='';input.style.height='auto';
+  const welcome=document.querySelector('.ai-welcome');
   if(welcome) welcome.remove();
-
-  addAiMsg('user', text);
-  aiHistory.push({role:'user', content:text});
-
-  aiLoading = true;
-  document.getElementById('aiSendBtn').disabled = true;
-
-  const typId = showTyping();
-
-  try {
-    const res = await fetch('/.netlify/functions/claude', {
+  addAiMsg('user',text);
+  aiHistory.push({role:'user',content:text});
+  aiLoading=true;
+  document.getElementById('aiSendBtn').disabled=true;
+  const typId=showTyping();
+  try{
+    const res=await fetch('/.netlify/functions/claude',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({
-        model:'claude-sonnet-4-20250514',
-        max_tokens:1000,
-        system:AI_SYSTEM,
-        messages:aiHistory
-      })
+      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,system:AI_SYSTEM,messages:aiHistory})
     });
-    const data = await res.json();
-    const reply = data.content?.[0]?.text || 'Having trouble connecting. Please try again.';
+    const data=await res.json();
+    const reply=data.content?.[0]?.text||'Having trouble connecting. Please try again.';
     removeTyping(typId);
-    aiHistory.push({role:'assistant', content:reply});
-    addAiMsg('assistant', reply);
-  } catch(e) {
-    removeTyping(typId);
-    addAiMsg('assistant','Connection error. Please try again.');
-  }
-
-  aiLoading = false;
-  document.getElementById('aiSendBtn').disabled = false;
+    aiHistory.push({role:'assistant',content:reply});
+    addAiMsg('assistant',reply);
+  }catch(e){removeTyping(typId);addAiMsg('assistant','Connection error. Please try again.');}
+  aiLoading=false;
+  document.getElementById('aiSendBtn').disabled=false;
   input.focus();
 }
 
-function formatMsg(text) {
+function formatMsg(text){
   return text
     .replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')
-    .replace(/📍 Source:(.*?)(\n|$)/g,'<div class="source-tag">📍 $1</div>')
-    .split('\n\n').map(p => `<p>${p.replace(/\n/g,'<br>')}</p>`).join('');
+    .replace(/📍 Source:(.*?)(\n|$)/g,'<div class="source-tag">📍$1</div>')
+    .split('\n\n').map(p=>`<p>${p.replace(/\n/g,'<br>')}</p>`).join('');
 }
-
-function addAiMsg(role, text) {
-  const c = document.getElementById('aiMessages');
-  const div = document.createElement('div');
-  div.className = `msg ${role}`;
-  div.innerHTML = `
-    <div class="msg-label">${role==='user'?'You':'⚡ MindUP Assistant'}</div>
-    <div class="msg-bubble">${formatMsg(text)}</div>
-  `;
-  c.appendChild(div);
-  c.scrollTop = c.scrollHeight;
+function addAiMsg(role,text){
+  const c=document.getElementById('aiMessages');
+  const div=document.createElement('div');
+  div.className=`msg ${role}`;
+  div.innerHTML=`<div class="msg-label">${role==='user'?'You':'⚡ MindUP Assistant'}</div><div class="msg-bubble">${formatMsg(text)}</div>`;
+  c.appendChild(div);c.scrollTop=c.scrollHeight;
 }
-
-let typingCount = 0;
-function showTyping() {
-  const id = 'typ-' + (++typingCount);
-  const c = document.getElementById('aiMessages');
-  const div = document.createElement('div');
-  div.className = 'msg assistant'; div.id = id;
-  div.innerHTML = `<div class="msg-label">⚡ MindUP Assistant</div>
-    <div class="msg-bubble" style="padding:0.75rem 1.1rem">
-      <div class="typing-row"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div>
-    </div>`;
-  c.appendChild(div); c.scrollTop = c.scrollHeight;
-  return id;
+let typCount=0;
+function showTyping(){
+  const id='typ-'+(++typCount);
+  const c=document.getElementById('aiMessages');
+  const div=document.createElement('div');
+  div.className='msg assistant';div.id=id;
+  div.innerHTML=`<div class="msg-label">⚡ MindUP Assistant</div><div class="msg-bubble" style="padding:0.75rem 1.1rem"><div class="typing-row"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div></div>`;
+  c.appendChild(div);c.scrollTop=c.scrollHeight;return id;
 }
-function removeTyping(id) { const el = document.getElementById(id); if(el) el.remove(); }
+function removeTyping(id){const el=document.getElementById(id);if(el)el.remove();}
 
-/* ================================================================
-   STORY BUILDER
-================================================================ */
-let selectedGrade = 4;
-let selectedTopic = '';
-let selectedConcepts = ['amygdala','brainbreak'];
-
-function selectGrade(btn) {
-  document.querySelectorAll('.grade-btn').forEach(b => b.classList.remove('selected'));
-  btn.classList.add('selected');
-  selectedGrade = parseInt(btn.dataset.grade);
+/* ── STORY BUILDER ── */
+let selectedGrade=4,selectedTopic='',selectedConcepts=['amygdala','brainbreak'];
+function selectGrade(btn){document.querySelectorAll('.grade-btn').forEach(b=>b.classList.remove('selected'));btn.classList.add('selected');selectedGrade=parseInt(btn.dataset.grade);}
+function selectTopic(btn,topic){
+  document.querySelectorAll('#topicGrid .topic-chip').forEach(b=>b.classList.remove('selected'));
+  btn.classList.add('selected');selectedTopic=topic;
+  document.getElementById('customTopic').value='';
 }
-
-function selectTopic(btn, topic) {
-  document.querySelectorAll('.topic-chip').forEach(b => {
-    if(b.parentElement.id === 'topicGrid') b.classList.remove('selected');
-  });
-  btn.classList.add('selected');
-  selectedTopic = topic;
-  document.getElementById('customTopic').value = '';
-}
-
-function toggleConcept(btn, concept) {
+function toggleConcept(btn,concept){
   btn.classList.toggle('selected');
-  if(btn.classList.contains('selected')) {
-    if(!selectedConcepts.includes(concept)) selectedConcepts.push(concept);
-  } else {
-    selectedConcepts = selectedConcepts.filter(c => c !== concept);
-  }
+  if(btn.classList.contains('selected')){if(!selectedConcepts.includes(concept))selectedConcepts.push(concept);}
+  else{selectedConcepts=selectedConcepts.filter(c=>c!==concept);}
 }
 
-const STORY_SYSTEM = `You are an expert children's educational story writer and curriculum designer specializing in social-emotional learning (SEL) and neuroscience for elementary students.
+const STORY_SYSTEM=`You are an expert children's educational story writer specializing in social-emotional learning (SEL) and neuroscience for elementary students.
 
-You write stories and worksheets based on the MindUP curriculum, specifically Unit 1 Lesson 4 "The Brain Break" which introduces mindful listening and mindful breathing. The core ideas include:
-- The Brain Break: a mindful listening (chime) + breathing practice done 3x daily
-- Prefrontal Cortex (PFC): the "Wise Owl" — decision-making, focus, self-regulation
-- Amygdala: the "Guard Dog" — emotional reactions, fight/flight/freeze
-- Mindful breathing: nose in, belly rises and falls, slow exhale calms the nervous system
-- Neuroplasticity: the brain gets stronger with practice
-- Mindfulness: moment-to-moment nonjudgmental awareness
-- Key message: It's okay if your mind wanders! Just notice and bring attention back.
+You write stories and worksheets based on the MindUP curriculum Unit 1: My Mindful Brain (Grades 3–5), covering:
+- Lesson 1: Three brain regions (brain stem = survival, limbic/amygdala = emotions, PFC = thinking/decisions) and neuroplasticity
+- Lesson 2: Amygdala as "Guard Dog" — fight/flight/freeze, cortisol, amygdala hijack, reactive vs. reflective
+- Lesson 3: PFC as "Wise Owl" — decision-making, self-regulation, slow development, PFC calms amygdala
+- Lesson 4: Brain Break — mindful listening (chime), mindful breathing (~1 min, 3x daily), belly breathing, present-moment awareness
+- Core message: The brain can change and grow with practice (neuroplasticity). Mindfulness strengthens the PFC and calms the amygdala.
+- Brain Break ethics: always an invitation, never required. It's okay if your mind wanders — that's normal!
 
 Grade-level reading guidelines:
-- Grade 3: Simple sentences, Lexile 520-820, max 8-10 words per sentence average, concrete language, relatable characters, short paragraphs (2-3 sentences), avoid complex vocabulary without definition
-- Grade 4: Moderate complexity, Lexile 740-940, mix of short and medium sentences, some figurative language, 3-4 sentence paragraphs, introduce 1-2 new vocabulary words in context
-- Grade 5: More complex sentences, Lexile 830-1010, figurative language and description, 4-5 sentence paragraphs, 3-4 vocabulary words, more nuanced emotional description
+- Grade 3: Simple sentences (avg 8-10 words), Lexile 520-820, concrete language, short paragraphs (2-3 sentences), avoid complex vocabulary without definition
+- Grade 4: Moderate complexity, Lexile 740-940, mix of sentence lengths, some figurative language, 3-4 sentence paragraphs, 2-3 new vocabulary words in context
+- Grade 5: More complex sentences, Lexile 830-1010, figurative language and description, 4-5 sentence paragraphs, 3-4 vocabulary words, nuanced emotional description
 
-RESPOND ONLY WITH VALID JSON, no preamble, no markdown fences. Use this exact structure:
-{
-  "title": "Story title",
-  "grade": 4,
-  "concept_tags": ["amygdala", "brain break"],
-  "story": "Full story text with paragraphs separated by \\n\\n",
-  "vocabulary": [
-    {"word": "amygdala", "definition": "A small part of your brain that helps you feel emotions like fear or excitement."},
-    {"word": "mindful", "definition": "Paying attention to what is happening right now, without judging it."}
-  ],
-  "questions": [
-    "What happened to make the main character feel stressed?",
-    "How did the character use the Brain Break to help themselves?",
-    "What brain part acts like a guard dog? What does it do?",
-    "Have you ever felt your heart beat fast when you were nervous? What happened?",
-    "How could YOU use the Brain Break in your own life?"
-  ],
-  "extension": "A 2-3 sentence creative or reflective extension activity prompt for students."
-}`;
+RESPOND ONLY WITH VALID JSON, no preamble, no markdown fences:
+{"title":"Story title","grade":4,"concept_tags":["amygdala","brain break"],"story":"Full story 300-400 words, paragraphs separated by \\n\\n","vocabulary":[{"word":"amygdala","definition":"A small part of your brain that helps you feel emotions like fear or excitement."}],"questions":["Q1","Q2","Q3","Q4","Q5"],"extension":"2-3 sentence extension activity prompt."}`;
 
-async function generateStory() {
-  const customTopic = document.getElementById('customTopic').value.trim();
-  const topic = customTopic || selectedTopic;
-
-  if(!topic) {
-    alert('Please select a story topic or enter a custom one!');
-    return;
-  }
-
-  const btn = document.getElementById('generateBtn');
-  btn.disabled = true;
-  btn.textContent = '✨ Generating...';
-
-  document.getElementById('storyOutputBody').innerHTML = `
-    <div class="loading-story">
-      <div class="loading-story-icon">✨</div>
-      <div class="loading-story-text">Writing your story and worksheet…</div>
-    </div>`;
-  document.getElementById('printBtn').disabled = true;
-
-  const conceptLabels = {
-    pfc:'Prefrontal Cortex (PFC / Wise Owl)',
-    amygdala:'Amygdala (Guard Dog)',
-    breathing:'Mindful Breathing science',
-    brainbreak:'The Brain Break practice',
-    neuroplasticity:'Neuroplasticity',
-    mindful:'Mindfulness definition and practice'
-  };
-  const conceptList = selectedConcepts.map(c => conceptLabels[c] || c).join(', ');
-
-  const userPrompt = `Write a MindUP story and worksheet with these specifications:
-- Grade level: ${selectedGrade} (adjust vocabulary, sentence length, and complexity accordingly)
-- Story topic/scenario: ${topic}
-- Brain concepts to include: ${conceptList || 'Brain Break and mindful breathing'}
-- The story should be 300-400 words, age-appropriate, engaging, and show a student using the Brain Break or mindfulness concept to navigate a challenge
-- Include 2-4 vocabulary words appropriate for grade ${selectedGrade}
-- Include 5 comprehension/reflection questions (mix of recall, inference, and personal connection)
+async function generateStory(){
+  const customTopic=document.getElementById('customTopic').value.trim();
+  const topic=customTopic||selectedTopic;
+  if(!topic){alert('Please select a story topic or enter a custom one!');return;}
+  const btn=document.getElementById('generateBtn');
+  btn.disabled=true;btn.textContent='✨ Generating...';
+  document.getElementById('storyOutputBody').innerHTML=`<div class="loading-story"><div class="loading-story-icon">✨</div><div class="loading-story-text">Writing your story and worksheet…</div></div>`;
+  document.getElementById('printBtn').disabled=true;
+  const conceptLabels={pfc:'Prefrontal Cortex (PFC/Wise Owl)',amygdala:'Amygdala (Guard Dog)',breathing:'Mindful Breathing',brainbreak:'Brain Break practice',neuroplasticity:'Neuroplasticity',mindful:'Mindfulness',hippocampus:'Hippocampus and memory',cortisol:'Cortisol and stress'};
+  const conceptList=selectedConcepts.map(c=>conceptLabels[c]||c).join(', ');
+  const userPrompt=`Write a MindUP Unit 1 story and worksheet:
+- Grade level: ${selectedGrade}
+- Story topic: ${topic}
+- Brain concepts to include: ${conceptList||'Brain Break and mindful breathing'}
+- Story: 300-400 words, age-appropriate, engaging, shows student using brain knowledge to navigate a real challenge
+- Include ${selectedGrade<=3?'2':'3-4'} vocabulary words appropriate for grade ${selectedGrade}
+- Include 5 questions mixing recall, inference, and personal connection
 - Include 1 extension activity
-
-Remember: RESPOND ONLY WITH VALID JSON using the exact structure specified.`;
-
-  try {
-    const res = await fetch('/.netlify/functions/claude', {
+Respond ONLY with valid JSON using the exact structure specified.`;
+  try{
+    const res=await fetch('/.netlify/functions/claude',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({
-        model:'claude-sonnet-4-20250514',
-        max_tokens:1000,
-        system:STORY_SYSTEM,
-        messages:[{role:'user', content:userPrompt}]
-      })
+      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,system:STORY_SYSTEM,messages:[{role:'user',content:userPrompt}]})
     });
-    const data = await res.json();
-    const raw = data.content?.[0]?.text || '';
-    const clean = raw.replace(/```json|```/g,'').trim();
-    const story = JSON.parse(clean);
-    renderStory(story);
-  } catch(e) {
-    document.getElementById('storyOutputBody').innerHTML = `<div class="story-empty"><div class="story-empty-icon">⚠️</div><div class="story-empty-text">Something went wrong generating the story.<br>Please try again.</div></div>`;
+    const data=await res.json();
+    const raw=data.content?.[0]?.text||'';
+    const clean=raw.replace(/```json|```/g,'').trim();
+    renderStory(JSON.parse(clean));
+  }catch(e){
+    document.getElementById('storyOutputBody').innerHTML=`<div class="story-empty"><div class="story-empty-icon">⚠️</div><div class="story-empty-text">Something went wrong.<br>Please try again.</div></div>`;
     console.error(e);
   }
-
-  btn.disabled = false;
-  btn.textContent = '✨ Generate Story + Worksheet';
+  btn.disabled=false;btn.textContent='✨ Generate Story + Worksheet';
 }
 
-function renderStory(s) {
-  document.getElementById('storyOutputTitle').textContent = s.title || 'Your Story';
-  document.getElementById('storyOutputMeta').textContent = `Grade ${s.grade} · ${(s.concept_tags||[]).join(', ')}`;
-  document.getElementById('printBtn').disabled = false;
-
-  const storyParas = (s.story||'').split('\n\n').filter(p=>p.trim()).map(p=>`<p>${p.trim()}</p>`).join('');
-
-  const vocabHtml = (s.vocabulary||[]).map(v=>`
-    <div class="vocab-card">
-      <div class="vocab-word">${v.word}</div>
-      <div class="vocab-def">${v.definition}</div>
-    </div>`).join('');
-
-  const questionsHtml = (s.questions||[]).map((q,i)=>`
-    <li class="question-item">
-      <div class="q-num">${i+1}</div>
-      <div>${q}</div>
-    </li>`).join('');
-
-  document.getElementById('storyOutputBody').innerHTML = `
+function renderStory(s){
+  document.getElementById('storyOutputTitle').textContent=s.title||'Your Story';
+  document.getElementById('storyOutputMeta').textContent=`Grade ${s.grade} · ${(s.concept_tags||[]).join(', ')}`;
+  document.getElementById('printBtn').disabled=false;
+  const storyParas=(s.story||'').split('\n\n').filter(p=>p.trim()).map(p=>`<p>${p.trim()}</p>`).join('');
+  const vocabHtml=(s.vocabulary||[]).map(v=>`<div class="vocab-card"><div class="vocab-word">${v.word}</div><div class="vocab-def">${v.definition}</div></div>`).join('');
+  const questionsHtml=(s.questions||[]).map((q,i)=>`<li class="question-item"><div class="q-num">${i+1}</div><div>${q}</div></li>`).join('');
+  document.getElementById('storyOutputBody').innerHTML=`
     <div class="story-content">
       <div class="story-section">
         <div class="story-section-head">
@@ -1913,30 +810,12 @@ function renderStory(s) {
         </div>
         <div class="story-text">${storyParas}</div>
       </div>
-
-      ${vocabHtml ? `<div class="story-section">
-        <div class="story-section-head">
-          <div class="story-section-badge" style="background:rgba(0,187,249,0.12);color:#00BBF9">📚 Vocabulary</div>
-          <h3>Key Words</h3>
-        </div>
-        <div class="vocab-grid">${vocabHtml}</div>
-      </div>` : ''}
-
+      ${vocabHtml?`<div class="story-section"><div class="story-section-head"><div class="story-section-badge" style="background:rgba(0,187,249,0.12);color:#00BBF9">📚 Vocabulary</div><h3>Key Words</h3></div><div class="vocab-grid">${vocabHtml}</div></div>`:''}
       <div class="story-section">
-        <div class="story-section-head">
-          <div class="story-section-badge" style="background:rgba(255,107,107,0.12);color:#FF6B6B">❓ Questions</div>
-          <h3>Comprehension &amp; Reflection</h3>
-        </div>
+        <div class="story-section-head"><div class="story-section-badge" style="background:rgba(255,107,107,0.12);color:#FF6B6B">❓ Questions</div><h3>Comprehension &amp; Reflection</h3></div>
         <ul class="question-list">${questionsHtml}</ul>
       </div>
-
-      ${s.extension ? `<div class="story-section">
-        <div class="story-section-head">
-          <div class="story-section-badge" style="background:rgba(181,127,245,0.12);color:#b57ff5">✏️ Extension</div>
-          <h3>Take It Further</h3>
-        </div>
-        <div class="extension-box">${s.extension}</div>
-      </div>` : ''}
+      ${s.extension?`<div class="story-section"><div class="story-section-head"><div class="story-section-badge" style="background:rgba(181,127,245,0.12);color:#b57ff5">✏️ Extension</div><h3>Take It Further</h3></div><div class="extension-box">${s.extension}</div></div>`:''}
     </div>`;
 }
 </script>
