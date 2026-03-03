@@ -48,17 +48,20 @@ nav{background:var(--panel2);border-bottom:1px solid var(--border);display:flex;
 .brain-title-block p{font-size:0.8rem;color:var(--muted);font-weight:600;}
 .brain-svg-wrap{width:100%;max-width:540px;position:relative;}
 .brain-svg-wrap svg{width:100%;height:auto;filter:drop-shadow(0 8px 40px rgba(0,0,0,0.5));}
-.brain-region{cursor:pointer;transition:filter 0.2s;}
-.brain-region:hover{filter:brightness(1.2) drop-shadow(0 0 8px rgba(255,255,255,0.3));}
-brain-region.active {
-  filter: brightness(1.55) drop-shadow(0 0 14px white) drop-shadow(0 0 32px white) drop-shadow(0 0 58px rgba(255,255,255,0.6));
-  animation: regionGlow 1.6s ease-in-out infinite;
+
+/* FIX 1: .brain-region.active — dot was missing, killing the glow entirely */
+.brain-region{cursor:pointer;transition:filter 0.25s ease;}
+.brain-region:hover{filter:brightness(1.18) drop-shadow(0 0 6px rgba(255,255,255,0.28));}
+.brain-region.active{
+  filter:brightness(1.55) drop-shadow(0 0 14px white) drop-shadow(0 0 32px white) drop-shadow(0 0 58px rgba(255,255,255,0.6));
+  animation:regionGlow 1.6s ease-in-out infinite;
 }
-@keyframes regionGlow {
-  0%,100% { filter: brightness(1.55) drop-shadow(0 0 14px white) drop-shadow(0 0 32px white) drop-shadow(0 0 58px rgba(255,255,255,0.6)); }
-  50% { filter: brightness(1.75) drop-shadow(0 0 24px white) drop-shadow(0 0 52px white) drop-shadow(0 0 90px rgba(255,255,255,0.8)); }
+@keyframes regionGlow{
+  0%,100%{filter:brightness(1.55) drop-shadow(0 0 14px white) drop-shadow(0 0 32px white) drop-shadow(0 0 58px rgba(255,255,255,0.6));}
+  50%{filter:brightness(1.75) drop-shadow(0 0 24px white) drop-shadow(0 0 52px white) drop-shadow(0 0 90px rgba(255,255,255,0.8));}
 }
-  .region-pills{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:1.25rem;max-width:540px;}
+
+.region-pills{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:1.25rem;max-width:540px;}
 .region-pill{padding:6px 14px;border-radius:20px;border:2px solid var(--r-color);color:var(--r-color);background:transparent;font-family:'Nunito',sans-serif;font-size:0.78rem;font-weight:800;cursor:pointer;transition:all 0.2s;}
 .region-pill:hover,.region-pill.active{background:var(--r-color);color:#0d1829;box-shadow:0 0 16px var(--r-color);}
 .brain-right{width:380px;min-width:340px;background:var(--panel);border-left:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;}
@@ -423,10 +426,11 @@ brain-region.active {
     </div>
     <div class="form-section">
       <label class="form-label">Story Topic</label>
+      <!-- FIX 2: Removed hardcoded names (Maya, Jordan, Sam) — AI will generate diverse names each time -->
       <div class="topic-grid" id="topicGrid">
-        <button class="topic-chip" onclick="selectTopic(this,'A student named Maya who discovers the Brain Break before a big test')">😰 Test anxiety</button>
-        <button class="topic-chip" onclick="selectTopic(this,'A student named Jordan whose amygdala fires during a tough moment on the playground')">🏃 Playground conflict</button>
-        <button class="topic-chip" onclick="selectTopic(this,'A student named Sam who learns about their PFC and starts making better choices')">🦉 Using your PFC</button>
+        <button class="topic-chip" onclick="selectTopic(this,'A student who discovers the Brain Break before a big test')">😰 Test anxiety</button>
+        <button class="topic-chip" onclick="selectTopic(this,'A student whose amygdala fires during a tough moment on the playground')">🏃 Playground conflict</button>
+        <button class="topic-chip" onclick="selectTopic(this,'A student who learns about their PFC and starts making better choices')">🦉 Using your PFC</button>
         <button class="topic-chip" onclick="selectTopic(this,'A student who can\'t sleep and uses mindful breathing to calm their brain stem and nervous system')">🌙 Can\'t sleep</button>
         <button class="topic-chip" onclick="selectTopic(this,'A student who teaches their family how the amygdala works and leads a Brain Break at home')">👨‍👩‍👧 Teach your family</button>
         <button class="topic-chip" onclick="selectTopic(this,'A student who feels nervous before a sports game and uses what they know about their brain to calm down')">⚽ Sports nerves</button>
@@ -745,6 +749,7 @@ function toggleConcept(btn,concept){
   else{selectedConcepts=selectedConcepts.filter(c=>c!==concept);}
 }
 
+/* FIX 2: Story system prompt now enforces name diversity and inclusive representation */
 const STORY_SYSTEM=`You are an expert children's educational story writer specializing in social-emotional learning (SEL) and neuroscience for elementary students.
 
 You write stories and worksheets based on the MindUP curriculum Unit 1: My Mindful Brain (Grades 3–5), covering:
@@ -754,6 +759,15 @@ You write stories and worksheets based on the MindUP curriculum Unit 1: My Mindf
 - Lesson 4: Brain Break — mindful listening (chime), mindful breathing (~1 min, 3x daily), belly breathing, present-moment awareness
 - Core message: The brain can change and grow with practice (neuroplasticity). Mindfulness strengthens the PFC and calms the amygdala.
 - Brain Break ethics: always an invitation, never required. It's okay if your mind wanders — that's normal!
+
+DIVERSITY AND INCLUSION — NON-NEGOTIABLE:
+Every story MUST reflect the real diversity of students in American classrooms. You MUST:
+- NEVER use the name Maya. NEVER repeat the same name across stories.
+- Rotate character names broadly across ethnicities and cultures every single time. Draw from names such as: Amir, Aaliyah, Bao, Caleb, Dani, Elena, Fatima, Gabriel, Hana, Isaiah, Jade, Kofi, Leila, Leo, Lila, Marcus, Mateo, Nadia, Noa, Omar, Priya, Quinn, Rosa, Ryo, Soren, Teo, Uma, Valentina, Wren, Xiomara, Yusuf, Zara, Amara, Caden, Destiny, Emmett, Freya, Ingrid, Javier, Kira, Naomi, Obinna, Rashida, Silas, Talia, Xochitl, Yasmin, Zion — and many others beyond this list.
+- Vary gender freely: use he/him, she/her, and they/them protagonists across stories. Do not default to any single gender.
+- Vary family structures: two parents, single parent, grandparent caregiver, blended family, foster family.
+- Vary settings authentically: urban apartments, rural towns, suburban schools, farms, mosques, churches, Indigenous community spaces, soccer fields, Vietnamese restaurants, subway rides, library programs. Cultural details should feel specific and authentic, never tokenizing.
+- Every child reading should be able to see themselves in these stories.
 
 Grade-level reading guidelines:
 - Grade 3: Simple sentences (avg 8-10 words), Lexile 520-820, concrete language, short paragraphs (2-3 sentences), avoid complex vocabulary without definition
@@ -777,6 +791,7 @@ async function generateStory(){
 - Grade level: ${selectedGrade}
 - Story topic: ${topic}
 - Brain concepts to include: ${conceptList||'Brain Break and mindful breathing'}
+- IMPORTANT: Choose a diverse character. NEVER use Maya. Pick a name from a wide range of cultural backgrounds, vary the gender, and set the story in a specific, authentic real-world context. Every child should be able to see themselves in this story.
 - Story: 300-400 words, age-appropriate, engaging, shows student using brain knowledge to navigate a real challenge
 - Include ${selectedGrade<=3?'2':'3-4'} vocabulary words appropriate for grade ${selectedGrade}
 - Include 5 questions mixing recall, inference, and personal connection
