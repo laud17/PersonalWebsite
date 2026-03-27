@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Amy — Your Amygdala</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&display=swap');
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{height:100%;overflow:hidden;}
+body{
+  background:linear-gradient(160deg,#1c0f00,#2e1a00,#1a1200);
+  font-family:'Nunito',sans-serif;color:#fff;
+  display:flex;align-items:center;justify-content:center;
+}
+
+/* ── Ambient bg ── */
+.orb{position:fixed;border-radius:50%;filter:blur(120px);pointer-events:none;z-index:0;}
+.orb1{width:600px;height:600px;background:#f59e0b1a;top:-200px;right:-150px;animation:drift 10s ease-in-out infinite alternate;}
+.orb2{width:400px;height:400px;background:#ef44441a;bottom:-150px;left:-100px;animation:drift 13s ease-in-out infinite alternate;}
+@keyframes drift{0%{transform:translate(0,0)}100%{transform:translate(20px,15px)}}
+
+/* ── Layout ── */
+.app{
+  position:relative;z-index:1;
+  display:flex;gap:32px;align-items:flex-start;
+  width:100%;max-width:900px;height:100vh;
+  padding:32px 24px;
+}
+
+/* ── Left: Amy ── */
+.amy-panel{
+  display:flex;flex-direction:column;align-items:center;
+  gap:14px;width:240px;min-width:240px;
+  padding-top:8px;
+}
+.amy-title{
+  font-size:2rem;font-weight:900;letter-spacing:-1px;
+  background:linear-gradient(135deg,#fde68a,#fbbf24,#fef9c3);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+.amy-sub{font-size:.65rem;letter-spacing:3px;text-transform:uppercase;opacity:.35;margin-top:-10px;}
+
+.mood-row{display:flex;gap:8px;}
+.mood-pill{
+  padding:4px 14px;border-radius:999px;font-size:.62rem;font-weight:700;
+  letter-spacing:1px;text-transform:uppercase;
+  border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04);
+  opacity:.35;transition:all .5s;
+}
+.mood-pill.calm.on{background:#f59e0b33;border-color:#f59e0b88;color:#fef3c7;opacity:1;}
+.mood-pill.alert.on{background:#ef444433;border-color:#ef444488;color:#fee2e2;opacity:1;}
+
+/* Avatar */
+.avatar-wrap{position:relative;width:200px;height:200px;display:flex;align-items:center;justify-content:center;cursor:pointer;}
+.glow{position:absolute;inset:-16px;border-radius:50%;background:conic-gradient(from 0deg,#f59e0b,#fde68a,#fbbf24,#f59e0b);animation:spin 6s linear infinite;opacity:.18;filter:blur(16px);transition:opacity .5s,animation-duration .4s;}
+.glow.on{opacity:.75;}
+.glow.speak{opacity:1;animation-duration:.8s;}
+@keyframes spin{to{transform:rotate(360deg)}}
+#svg{width:188px;height:188px;filter:drop-shadow(0 0 18px #f59e0b66);animation:bob 3.5s ease-in-out infinite;}
+@keyframes bob{0%,100%{transform:translateY(0) rotate(-1deg)}50%{transform:translateY(-9px) rotate(1.2deg)}}
+#svg.listen{animation:wiggle .32s ease-in-out infinite;}
+@keyframes wiggle{0%,100%{transform:rotate(-4deg) scale(1.05)}50%{transform:rotate(4deg) scale(1.08)}}
+#svg.speak{animation:talkbob .28s ease-in-out infinite;}
+@keyframes talkbob{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-5px) scale(1.05)}}
+#svg.think{animation:throb .75s ease-in-out infinite;}
+@keyframes throb{0%,100%{transform:scale(1)}50%{transform:scale(1.07)}}
+.eyelid{transform-origin:center 44%;animation:blink 5s ease-in-out infinite;}
+@keyframes blink{0%,91%,100%{transform:scaleY(1)}93%,95%{transform:scaleY(.04)}}
+
+.status{font-size:.7rem;text-align:center;opacity:.5;min-height:18px;color:#fde68a;transition:opacity .3s;}
+.status.lit{opacity:.9;}
+
+/* ── Breathing circle ── */
+.breath-wrap{display:none;flex-direction:column;align-items:center;gap:12px;padding:8px 0;}
+.breath-wrap.show{display:flex;}
+.breath-ring{
+  width:100px;height:100px;border-radius:50%;
+  border:3px solid #fbbf24;
+  display:flex;align-items:center;justify-content:center;
+  font-size:.8rem;font-weight:700;color:#fde68a;
+  transition:transform 1s ease-in-out, opacity .5s;
+  opacity:.6;
+}
+.breath-ring.expand{transform:scale(1.5);opacity:1;}
+.breath-ring.hold{transform:scale(1.5);opacity:.9;}
+.breath-ring.shrink{transform:scale(1);opacity:.6;}
+.breath-label{font-size:.75rem;opacity:.5;letter-spacing:1px;text-transform:uppercase;}
+.breath-stop{padding:6px 18px;border-radius:999px;border:1px solid #f59e0b55;background:rgba(255,255,255,.05);color:#fde68a;font-size:.72rem;cursor:pointer;font-family:'Nunito',sans-serif;transition:background .2s;}
+.breath-stop:hover{background:#f59e0b22;}
+
+/* ── Right: Chat ── */
+.chat-panel{flex:1;display:flex;flex-direction:column;height:calc(100vh - 64px);gap:12px;min-width:0;}
+
+.chat-scroll{
+  flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:10px;
+  padding-right:4px;scroll-behavior:smooth;
+}
+.chat-scroll::-webkit-scrollbar{width:3px;}
+.chat-scroll::-webkit-scrollbar-thumb{background:rgba(255,255,255,.12);border-radius:3px;}
+
+.bubble{border-radius:16px;padding:13px 17px;font-size:.93rem;line-height:1.7;word-wrap:break-word;max-width:100%;}
+.bubble .lbl{font-size:.55rem;font-weight:900;letter-spacing:2px;text-transform:uppercase;opacity:.4;margin-bottom:4px;}
+.bubble.amy{background:rgba(255,255,255,.05);border:1px solid #f59e0b33;color:#fef3c7;}
+.bubble.amy .lbl{color:#fbbf24;}
+.bubble.amy.alert{border-color:#ef444433;}
+.bubble.you{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);color:#fde68a;align-self:flex-end;max-width:85%;}
+.bubble.you .lbl{color:#fde68a;}
+
+/* Prompts */
+.prompts{display:flex;flex-wrap:wrap;gap:7px;}
+.p-btn{
+  padding:7px 14px;border-radius:999px;
+  border:1px solid #f59e0b44;background:rgba(255,255,255,.04);
+  color:#fef3c7;font-size:.72rem;cursor:pointer;
+  font-family:'Nunito',sans-serif;transition:all .2s;white-space:nowrap;
+}
+.p-btn:hover{background:#f59e0b22;border-color:#f59e0b88;}
+.p-btn.breath{border-color:#86efac55;color:#bbf7d0;}
+.p-btn.breath:hover{background:#86efac22;border-color:#86efac88;}
+
+/* Input row */
+.input-row{display:flex;gap:8px;align-items:center;}
+.txt{
+  flex:1;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);
+  border-radius:14px;padding:12px 16px;color:#fef3c7;
+  font-family:'Nunito',sans-serif;font-size:.9rem;outline:none;transition:border-color .2s;
+}
+.txt::placeholder{opacity:.3;color:#fde68a;}
+.txt:focus{border-color:#f59e0b55;}
+.icon-btn{
+  width:46px;height:46px;border-radius:50%;border:none;flex-shrink:0;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;font-size:1.15rem;
+  background:linear-gradient(135deg,#92400e,#fbbf24);
+  box-shadow:0 0 18px #f59e0b33;transition:all .2s;
+}
+.icon-btn:hover{transform:scale(1.08);}
+.icon-btn.rec{background:linear-gradient(135deg,#7f1d1d,#f87171);animation:rpulse 1s ease-in-out infinite;}
+@keyframes rpulse{0%,100%{box-shadow:0 0 14px #ef444433}50%{box-shadow:0 0 36px #ef4444aa}}
+
+.dots span{display:inline-block;width:6px;height:6px;background:#fbbf24;border-radius:50%;margin:0 2px;animation:db 1.1s ease-in-out infinite;}
+.dots span:nth-child(2){animation-delay:.18s}.dots span:nth-child(3){animation-delay:.36s}
+@keyframes db{0%,80%,100%{transform:translateY(0)}40%{transform:translateY(-8px)}}
+
+@media(max-width:640px){
+  .app{flex-direction:column;align-items:center;padding:16px;gap:16px;height:auto;overflow:auto;}
+  .amy-panel{width:100%;min-width:unset;flex-direction:row;flex-wrap:wrap;justify-content:center;gap:10px;}
+  .chat-panel{width:100%;height:60vh;}
+  #svg{width:130px;height:130px;}
+  .avatar-wrap{width:140px;height:140px;}
+}
+</style>
+</head>
+<body>
+<div class="orb orb1"></div>
+<div class="orb orb2"></div>
+
+<div class="app">
+
+  <!-- LEFT -->
+  <div class="amy-panel">
+    <div class="amy-title">Amy</div>
+    <div class="amy-sub">Your Amygdala</div>
+
+    <div class="mood-row">
+      <div class="mood-pill calm on" id="mCalm">Calm</div>
+      <div class="mood-pill alert" id="mAlert">Alert</div>
+    </div>
+
+    <div class="avatar-wrap" onclick="handleAvatarClick()">
+      <div class="glow" id="glow"></div>
+      <svg id="svg" viewBox="0 0 200 175" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="g1" cx="38%" cy="30%" r="65%">
+            <stop offset="0%" stop-color="#fef9c3"/>
+            <stop offset="45%" stop-color="#fbbf24"/>
+            <stop offset="100%" stop-color="#b45309"/>
+          </radialGradient>
+          <radialGradient id="g2" cx="60%" cy="38%" r="55%">
+            <stop offset="0%" stop-color="#fde68a"/>
+            <stop offset="100%" stop-color="#f59e0b"/>
+          </radialGradient>
+        </defs>
+        <!-- Body -->
+        <ellipse cx="100" cy="90" rx="75" ry="55" fill="url(#g1)" transform="rotate(-8 100 90)"/>
+        <ellipse cx="102" cy="87" rx="68" ry="48" fill="url(#g2)" opacity=".45" transform="rotate(-8 102 87)"/>
+        <!-- Folds left -->
+        <path d="M43 77 Q58 62 78 67 Q68 82 56 79" stroke="#fef3c7" stroke-width="2.5" fill="none" stroke-linecap="round" opacity=".7"/>
+        <path d="M36 98 Q53 86 70 91 Q61 106 48 102" stroke="#fef3c7" stroke-width="2" fill="none" stroke-linecap="round" opacity=".6"/>
+        <path d="M48 118 Q66 107 82 112 Q74 126 61 122" stroke="#fef3c7" stroke-width="2" fill="none" stroke-linecap="round" opacity=".5"/>
+        <!-- Folds right -->
+        <path d="M157 75 Q142 61 122 66 Q132 80 144 77" stroke="#fef3c7" stroke-width="2.5" fill="none" stroke-linecap="round" opacity=".7"/>
+        <path d="M164 98 Q148 86 131 91 Q140 106 153 102" stroke="#fef3c7" stroke-width="2" fill="none" stroke-linecap="round" opacity=".6"/>
+        <path d="M152 118 Q134 107 118 112 Q126 126 139 122" stroke="#fef3c7" stroke-width="2" fill="none" stroke-linecap="round" opacity=".5"/>
+        <!-- Shine -->
+        <ellipse cx="80" cy="69" rx="17" ry="9" fill="white" opacity=".2" transform="rotate(-18 80 69)"/>
+        <!-- Left eye -->
+        <g transform="translate(71,94)">
+          <circle r="13" fill="white"/>
+          <circle cx="1" cy="2" r="8" fill="#6b2600"/>
+          <circle cx="2" cy="3" r="4" fill="#1c0800"/>
+          <circle cx="-1.5" cy="0" r="3" fill="white" opacity=".9"/>
+          <rect class="eyelid" x="-13" y="-13" width="26" height="14" fill="#fbbf24" rx="4"/>
+          <line x1="-8" y1="-13" x2="-11" y2="-19" stroke="#92400e" stroke-width="2.2" stroke-linecap="round"/>
+          <line x1="0" y1="-13" x2="0" y2="-20" stroke="#92400e" stroke-width="2.2" stroke-linecap="round"/>
+          <line x1="8" y1="-13" x2="11" y2="-19" stroke="#92400e" stroke-width="2.2" stroke-linecap="round"/>
+          <!-- Smile crinkle -->
+          <path d="M-10 11 Q0 15 10 11" stroke="#d97706" stroke-width="1.8" fill="none" stroke-linecap="round" opacity=".55"/>
+        </g>
+        <!-- Right eye -->
+        <g transform="translate(129,93)">
+          <circle r="13" fill="white"/>
+          <circle cx="1" cy="2" r="8" fill="#6b2600"/>
+          <circle cx="2" cy="3" r="4" fill="#1c0800"/>
+          <circle cx="-1.5" cy="0" r="3" fill="white" opacity=".9"/>
+          <rect class="eyelid" x="-13" y="-13" width="26" height="14" fill="#fbbf24" rx="4"/>
+          <line x1="-8" y1="-13" x2="-11" y2="-19" stroke="#92400e" stroke-width="2.2" stroke-linecap="round"/>
+          <line x1="0" y1="-13" x2="0" y2="-20" stroke="#92400e" stroke-width="2.2" stroke-linecap="round"/>
+          <line x1="8" y1="-13" x2="11" y2="-19" stroke="#92400e" stroke-width="2.2" stroke-linecap="round"/>
+          <path d="M-10 11 Q0 15 10 11" stroke="#d97706" stroke-width="1.8" fill="none" stroke-linecap="round" opacity=".55"/>
+        </g>
+        <!-- Big rosy cheeks -->
+        <ellipse cx="52" cy="115" rx="15" ry="9" fill="#fb923c" opacity=".3"/>
+        <ellipse cx="148" cy="114" rx="15" ry="9" fill="#fb923c" opacity=".3"/>
+        <!-- Big warm smile -->
+        <path id="mS" d="M73 131 Q100 155 127 131" stroke="#92400e" stroke-width="4" fill="none" stroke-linecap="round"/>
+        <circle id="dL" cx="73" cy="131" r="3" fill="#b45309" opacity=".45"/>
+        <circle id="dR" cx="127" cy="131" r="3" fill="#b45309" opacity=".45"/>
+        <!-- Open mouth states -->
+        <ellipse id="m1" cx="100" cy="135" rx="11" ry="7" fill="#7c2d12" style="display:none"/>
+        <ellipse id="m2" cx="100" cy="136" rx="15" ry="10" fill="#7c2d12" style="display:none"/>
+        <g id="m3" style="display:none">
+          <ellipse cx="100" cy="137" rx="17" ry="13" fill="#7c2d12"/>
+          <ellipse cx="100" cy="132" rx="11" ry="4" fill="#fef3c7" opacity=".4"/>
+        </g>
+        <!-- Label -->
+        <text x="100" y="165" text-anchor="middle" font-size="8" fill="#fde68a" opacity=".5" font-family="Nunito,sans-serif" font-weight="700">amygdala</text>
+        <!-- Alert sparks -->
+        <g id="sparks" style="display:none">
+          <line x1="26" y1="50" x2="17" y2="36" stroke="#f97316" stroke-width="3" stroke-linecap="round"/>
+          <line x1="174" y1="50" x2="183" y2="36" stroke="#f97316" stroke-width="3" stroke-linecap="round"/>
+          <text x="10" y="34" font-size="14" fill="#fbbf24" font-family="sans-serif">!</text>
+          <text x="175" y="34" font-size="14" fill="#fbbf24" font-family="sans-serif">!</text>
+        </g>
+      </svg>
+    </div>
+
+    <!-- Breathing circle -->
+    <div class="breath-wrap" id="breathWrap">
+      <div class="breath-ring" id="breathRing">breathe</div>
+      <div class="breath-label" id="breathLabel">get ready...</div>
+      <button class="breath-stop" onclick="stopBreathing()">stop</button>
+    </div>
+
+    <div class="status" id="status">Tap Amy or type below to start</div>
+  </div>
+
+  <!-- RIGHT -->
+  <div class="chat-panel">
+    <div class="chat-scroll" id="chatScroll">
+      <div class="bubble amy">
+        <div class="lbl">Amy says</div>
+        Hi there! I am Amy, your amygdala. I help your brain handle feelings. You can talk to me, type to me, or try a breathing exercise. What is on your mind today?
+      </div>
+    </div>
+
+    <div class="prompts">
+      <button class="p-btn" onclick="q('What do you do?')">What do you do?</button>
+      <button class="p-btn" onclick="q('I am feeling really stressed')">I am stressed</button>
+      <button class="p-btn" onclick="q('What does flipping your lid mean?')">Flip my lid?</button>
+      <button class="p-btn" onclick="q('What is the upstairs and downstairs brain?')">Upstairs brain?</button>
+      <button class="p-btn" onclick="q('Tell me about the STOP technique')">STOP technique</button>
+      <button class="p-btn breath" onclick="startBreathing()">Breathing exercise</button>
+    </div>
+
+    <div class="input-row">
+      <input class="txt" id="txt" type="text" placeholder="Type something to Amy..." onkeydown="if(event.key==='Enter')send()"/>
+      <button class="icon-btn" onclick="send()" title="Send">&#10148;</button>
+      <button class="icon-btn" id="micBtn" onclick="toggleMic()" title="Speak">&#127908;</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+let history=[], recording=false, breathing=false;
+let mTimer=null, mIdx=0, breathTimer=null;
+const mSeq=['s','1','2','3','2','1'];
+
+const svg=document.getElementById('svg'),glow=document.getElementById('glow'),status=document.getElementById('status');
+const mS=document.getElementById('mS'),m1=document.getElementById('m1'),m2=document.getElementById('m2'),m3=document.getElementById('m3');
+const dL=document.getElementById('dL'),dR=document.getElementById('dR'),sparks=document.getElementById('sparks');
+const chatScroll=document.getElementById('chatScroll'),micBtn=document.getElementById('micBtn');
+const breathWrap=document.getElementById('breathWrap'),breathRing=document.getElementById('breathRing'),breathLabel=document.getElementById('breathLabel');
+
+// ── Mouth ──
+function setMouth(s){
+  [mS,m1,m2,m3].forEach(el=>el.style.display='none');
+  [dL,dR].forEach(el=>el.style.display='none');
+  if(s==='s'){mS.style.display='block';dL.style.display='block';dR.style.display='block';}
+  else if(s==='1')m1.style.display='block';
+  else if(s==='2')m2.style.display='block';
+  else if(s==='3')m3.style.display='block';
+}
+function startMouth(){mIdx=0;mTimer=setInterval(()=>setMouth(mSeq[mIdx++%mSeq.length]),145);}
+function stopMouth(){clearInterval(mTimer);setMouth('s');}
+
+// ── Avatar state ──
+function setAvatar(st){
+  svg.className=st==='listen'?'listen':st==='speak'?'speak':st==='think'?'think':'';
+  glow.className='glow'+(st==='speak'?' speak':st!=='idle'?' on':'');
+  stopMouth();
+  if(st==='speak')startMouth();
+}
+
+// ── Mood ──
+function setMood(alert){
+  document.getElementById('mCalm').className='mood-pill calm'+(alert?'':' on');
+  document.getElementById('mAlert').className='mood-pill alert'+(alert?' on':'');
+  sparks.style.display=alert?'block':'none';
+}
+
+// ── Status ──
+function setStatus(msg){status.textContent=msg;status.className='status'+(msg?' lit':'');}
+
+// ── Chat ──
+function esc(t){return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function addBubble(who,text,thinking=false){
+  const t=document.getElementById('thinking');if(t&&who==='amy')t.remove();
+  const d=document.createElement('div');d.className='bubble '+who;
+  if(thinking)d.id='thinking';
+  d.innerHTML=`<div class="lbl">${who==='amy'?'Amy says':'You'}</div>`+(thinking?'<div class="dots"><span></span><span></span><span></span></div>':esc(text));
+  chatScroll.appendChild(d);
+  setTimeout(()=>chatScroll.scrollTop=chatScroll.scrollHeight,50);
+  return d;
+}
+
+// ── Ask Amy ──
+async function ask(msg){
+  setAvatar('think');addBubble('amy','',true);setStatus('Amy is thinking...');
+  history.push({role:'user',content:msg});
+  try{
+    const res=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:history})});
+    const data=await res.json();
+    const reply=data.reply||'My neurons misfired. Try again!';
+    history.push({role:'assistant',content:reply});
+    const lower=reply.toLowerCase();
+    setMood(lower.includes('stress')||lower.includes('alarm')||lower.includes('cortisol')||lower.includes('flip')||lower.includes('worry')||lower.includes('anxious'));
+    addBubble('amy',reply);setStatus('');
+    await speak(reply);
+  }catch(e){
+    addBubble('amy','Something went wrong. Try again!');
+    setAvatar('idle');setStatus('');console.error(e);
+  }
+}
+
+function q(msg){addBubble('you',msg);ask(msg);}
+function send(){const t=document.getElementById('txt');const m=t.value.trim();if(!m)return;t.value='';addBubble('you',m);ask(m);}
+function handleAvatarClick(){if(!recording)startRec();}
+
+// ── TTS ──
+async function speak(text){
+  setAvatar('speak');setStatus('Amy is speaking...');
+  try{
+    const res=await fetch('/api/speak',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text})});
+    if(res.ok){
+      const blob=await res.blob();
+      const url=URL.createObjectURL(blob);
+      const audio=new Audio(url);
+      startMouth();
+      return new Promise(resolve=>{
+        audio.onended=()=>{URL.revokeObjectURL(url);setAvatar('idle');setStatus('Tap Amy or type to reply');resolve();};
+        audio.onerror=()=>{setAvatar('idle');resolve();};
+        audio.play().catch(()=>{setAvatar('idle');resolve();});
+      });
+    }
+  }catch(e){console.error('TTS error',e);}
+  setAvatar('idle');setStatus('Tap Amy or type to reply');
+}
+
+// ── Speech Recognition ──
+const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+let rec=null;
+if(SR){
+  rec=new SR();rec.continuous=false;rec.interimResults=false;rec.lang='en-US';
+  rec.onresult=async e=>{const t=e.results[0][0].transcript;addBubble('you',t);stopRec();await ask(t);};
+  rec.onerror=e=>{setStatus('Mic error: '+e.error);stopRec();setAvatar('idle');};
+  rec.onend=()=>{if(recording)stopRec();};
+}
+function startRec(){
+  if(!rec){alert('Speech recognition needs Chrome or Edge.');return;}
+  recording=true;micBtn.classList.add('rec');micBtn.innerHTML='&#9632;';
+  setAvatar('listen');setStatus('Listening... speak now');rec.start();
+}
+function stopRec(){recording=false;micBtn.classList.remove('rec');micBtn.innerHTML='&#127908;';try{rec?.stop();}catch(e){}}
+function toggleMic(){if(recording)stopRec();else startRec();}
+
+// ── Breathing Exercise ──
+const PHASES=[
+  {label:'Breathe in...',cls:'expand',dur:4000},
+  {label:'Hold...',cls:'hold',dur:2000},
+  {label:'Breathe out...',cls:'shrink',dur:6000},
+  {label:'Hold...',cls:'',dur:1000},
+];
+let breathPhase=0,breathCount=0;
+
+function startBreathing(){
+  if(breathing)return;
+  breathing=true;breathPhase=0;breathCount=0;
+  breathWrap.classList.add('show');
+  setMood(false);
+  addBubble('amy','Okay, let us do some belly breathing together. Watch the circle and breathe with it. Breathe in through your nose, hold, then breathe out slowly through your mouth. Ready? Here we go.');
+  runBreathPhase();
+}
+
+function runBreathPhase(){
+  if(!breathing)return;
+  const p=PHASES[breathPhase];
+  breathLabel.textContent=p.label;
+  breathRing.className='breath-ring '+p.cls;
+  breathTimer=setTimeout(()=>{
+    breathPhase=(breathPhase+1)%PHASES.length;
+    if(breathPhase===0)breathCount++;
+    if(breathCount>=4){stopBreathing();addBubble('amy','Amazing work! You just calmed your nervous system. How do you feel now?');}
+    else runBreathPhase();
+  },p.dur);
+}
+
+function stopBreathing(){
+  breathing=false;clearTimeout(breathTimer);
+  breathWrap.classList.remove('show');
+  breathRing.className='breath-ring';
+  breathLabel.textContent='';
+}
+</script>
+</body>
+</html>
