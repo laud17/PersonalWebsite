@@ -432,6 +432,12 @@ function stopBreathing(){
   breathRing.className='breath-ring';
   breathLabel.textContent='';
 }
+  // Unlock audio context on first interaction
+document.addEventListener('click', function unlock() {
+  const a = new Audio();
+  a.play().catch(() => {});
+  document.removeEventListener('click', unlock);
+}, { once: true });
 </script>
 </body>
 </html>
