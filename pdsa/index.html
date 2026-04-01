@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI and Team-Based Continuous Improvement | ASU Next Education Workforce</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: Arial, sans-serif; background: #fff; color: #1a1a1a; font-size: 15px; }
+
+/* NAV */
+.topnav { background: #8C1D40; border-bottom: 4px solid #FFC627; padding: 0 24px; display: flex; align-items: stretch; min-height: 54px; }
+.nav-brand { display: flex; flex-direction: column; justify-content: center; padding-right: 22px; margin-right: 6px; border-right: 1px solid rgba(255,255,255,0.18); }
+.nav-brand-title { font-size: 0.92rem; font-weight: 700; color: #fff; white-space: nowrap; }
+.nav-brand-sub { font-size: 0.6rem; color: rgba(255,255,255,0.5); letter-spacing: 0.08em; text-transform: uppercase; margin-top: 2px; }
+.nav-btn { display: flex; align-items: center; gap: 7px; padding: 0 16px; background: none; border: none; font-family: Arial, sans-serif; font-size: 0.78rem; font-weight: 400; color: rgba(255,255,255,0.6); cursor: pointer; border-bottom: 3px solid transparent; white-space: nowrap; position: relative; top: 3px; transition: color 0.15s; }
+.nav-btn:hover { color: #fff; }
+.nav-btn.active { color: #FFC627; font-weight: 700; border-bottom-color: #FFC627; }
+.nav-num { display: inline-flex; align-items: center; justify-content: center; width: 20px; height: 20px; border-radius: 50%; background: rgba(255,255,255,0.14); font-size: 0.65rem; font-weight: 700; flex-shrink: 0; }
+.nav-btn.active .nav-num { background: #FFC627; color: #8C1D40; }
+
+/* PAGES */
+.page { display: none; }
+.page.active { display: block; }
+
+/* HOME */
+.home-hero { background: #8C1D40; color: #fff; padding: 48px 56px 40px; border-bottom: 4px solid #FFC627; }
+.home-hero h1 { font-size: 2rem; font-weight: 700; line-height: 1.2; letter-spacing: -0.02em; max-width: 600px; }
+.home-hero h1 em { color: #FFC627; font-style: normal; }
+.home-hero p { margin-top: 14px; font-size: 0.92rem; color: rgba(255,255,255,0.78); line-height: 1.7; max-width: 560px; }
+.home-thesis { margin: 28px 56px; padding: 16px 22px; background: #FFF8E7; border-left: 4px solid #FFC627; border-radius: 0 7px 7px 0; font-size: 0.9rem; line-height: 1.7; max-width: 700px; }
+.home-thesis strong { color: #8C1D40; }
+.home-cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; padding: 4px 56px 40px; }
+.hcard { border: 1px solid #E5E7EB; border-radius: 9px; padding: 20px 18px; cursor: pointer; transition: border-color 0.2s, box-shadow 0.2s; }
+.hcard:hover { border-color: #8C1D40; box-shadow: 0 3px 14px rgba(140,29,64,0.09); }
+.hcard-step { font-size: 0.63rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: #8C1D40; margin-bottom: 8px; }
+.hcard h3 { font-size: 0.9rem; font-weight: 700; margin-bottom: 6px; line-height: 1.3; }
+.hcard p { font-size: 0.78rem; color: #6B7280; line-height: 1.55; }
+.hcard-link { display: inline-block; margin-top: 12px; font-size: 0.76rem; font-weight: 700; color: #8C1D40; background: none; border: 1px solid #8C1D40; border-radius: 4px; padding: 5px 11px; cursor: pointer; transition: all 0.15s; }
+.hcard-link:hover { background: #8C1D40; color: #fff; }
+.home-sched { background: #F9FAFB; border-top: 1px solid #E5E7EB; padding: 24px 56px 36px; }
+.home-sched h2 { font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #374151; margin-bottom: 14px; }
+.sched-row { display: flex; max-width: 860px; }
+.sblock { flex: 1; background: #fff; border: 1px solid #E5E7EB; border-right: none; padding: 12px 14px; }
+.sblock:first-child { border-radius: 7px 0 0 7px; }
+.sblock:last-child { border-right: 1px solid #E5E7EB; border-radius: 0 7px 7px 0; }
+.sblock-time { font-size: 0.65rem; font-weight: 700; color: #8C1D40; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 3px; }
+.sblock-title { font-size: 0.8rem; font-weight: 700; color: #1a1a1a; margin-bottom: 2px; }
+.sblock-note { font-size: 0.7rem; color: #9CA3AF; }
+
+/* SELF-ASSESSMENT */
+.assess-wrap { max-width: 780px; margin: 0 auto; padding: 40px; }
+.assess-wrap h2 { font-size: 1.4rem; font-weight: 700; margin-bottom: 8px; }
+.assess-wrap .intro { font-size: 0.87rem; color: #6B7280; line-height: 1.7; margin-bottom: 26px; max-width: 580px; }
+.playlab-box { background: #F9FAFB; border: 2px solid #E5E7EB; border-radius: 10px; padding: 36px; text-align: center; margin-bottom: 36px; }
+.playlab-box p { font-size: 0.88rem; color: #6B7280; margin-bottom: 18px; line-height: 1.6; }
+.btn-playlab { display: inline-flex; align-items: center; gap: 9px; padding: 13px 28px; background: #8C1D40; color: #fff; border: none; border-radius: 7px; font-family: Arial, sans-serif; font-size: 0.9rem; font-weight: 700; cursor: pointer; text-decoration: none; transition: background 0.15s; }
+.btn-playlab:hover { background: #6B1632; }
+.patterns-section h3 { font-size: 0.95rem; font-weight: 700; margin-bottom: 4px; }
+.patterns-section .pdesc { font-size: 0.82rem; color: #6B7280; margin-bottom: 16px; line-height: 1.6; }
+.pgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.pcard-a { border: 1px solid #E5E7EB; border-radius: 8px; padding: 16px 18px; }
+.pcard-a .pname { font-size: 0.8rem; font-weight: 700; color: #8C1D40; margin-bottom: 6px; }
+.pcard-a .pdescr { font-size: 0.77rem; color: #6B7280; line-height: 1.55; }
+.pcard-a .pmove { font-size: 0.74rem; color: #374151; font-weight: 700; margin-top: 8px; padding-top: 8px; border-top: 1px solid #F3F4F6; }
+
+/* SCENARIOS */
+.sc-layout { display: grid; grid-template-columns: 1fr 340px; min-height: calc(100vh - 58px); }
+.sc-main { padding: 30px 34px; overflow-y: auto; border-right: 1px solid #E5E7EB; max-height: calc(100vh - 58px); }
+.sc-tag { display: inline-block; font-size: 0.63rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; background: #FDF2F5; color: #8C1D40; border-radius: 4px; padding: 3px 9px; margin-bottom: 10px; }
+.sc-main h2 { font-size: 1.4rem; font-weight: 700; margin-bottom: 8px; letter-spacing: -0.01em; line-height: 1.25; }
+.sc-main h2 span { color: #8C1D40; }
+.sc-context { font-size: 0.85rem; color: #6B7280; line-height: 1.65; max-width: 540px; margin-bottom: 24px; padding-bottom: 20px; border-bottom: 1px solid #E5E7EB; }
+.sc-phase-lbl { display: flex; align-items: center; gap: 10px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: #374151; margin: 22px 0 12px; padding-bottom: 8px; border-bottom: 2px solid #F3F4F6; }
+.sc-pip { width: 22px; height: 22px; border-radius: 50%; background: #8C1D40; color: #fff; display: inline-flex; align-items: center; justify-content: center; font-size: 0.72rem; font-weight: 700; }
+.sf { margin-bottom: 14px; }
+.sf-lbl { font-size: 0.68rem; font-weight: 700; color: #8C1D40; text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 5px; }
+.sf-val { background: #F9FAFB; border: 1px solid #E5E7EB; border-radius: 6px; padding: 11px 14px; font-size: 0.83rem; color: #374151; line-height: 1.7; }
+.btn-load { display: inline-flex; align-items: center; gap: 8px; margin-top: 26px; padding: 11px 22px; background: #FFC627; color: #1a1a1a; border: none; border-radius: 7px; font-family: Arial, sans-serif; font-size: 0.88rem; font-weight: 700; cursor: pointer; transition: background 0.15s; }
+.btn-load:hover { background: #e6b020; }
+.sc-sidebar { background: #F9FAFB; padding: 22px 20px; overflow-y: auto; max-height: calc(100vh - 58px); }
+.sb-lbl { font-size: 0.63rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: #8C1D40; margin-bottom: 10px; }
+.ccard { background: #fff; border: 1px solid #E5E7EB; border-radius: 8px; padding: 14px 16px; margin-bottom: 12px; }
+.ccard-lbl { font-size: 0.62rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.09em; color: #6B7280; margin-bottom: 7px; }
+.ccard-text { font-size: 0.79rem; color: #374151; line-height: 1.7; }
+.ccard-text strong { color: #1a1a1a; }
+.fac-note { background: #FFF8E7; border: 1px solid #FCD34D; border-radius: 7px; padding: 13px 15px; margin-top: 18px; }
+.fac-lbl { font-size: 0.6rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.09em; color: #92400E; margin-bottom: 5px; }
+.fac-text { font-size: 0.77rem; color: #78350F; line-height: 1.65; }
+
+/* TOOL */
+.tool-layout { display: grid; grid-template-columns: 1fr 356px; min-height: calc(100vh - 58px); }
+.tool-left { display: flex; flex-direction: column; overflow: hidden; max-height: calc(100vh - 58px); }
+.tool-bar { background: #F9FAFB; border-bottom: 1px solid #E5E7EB; padding: 9px 22px; display: flex; align-items: center; gap: 14px; flex-wrap: wrap; flex-shrink: 0; }
+.tb-field { display: flex; align-items: center; gap: 7px; }
+.tb-field label { font-size: 0.7rem; color: #6B7280; text-transform: uppercase; letter-spacing: 0.05em; white-space: nowrap; }
+.tb-field input { font-family: Arial, sans-serif; font-size: 0.79rem; padding: 5px 10px; border-radius: 5px; border: 1px solid #D1D5DB; background: #fff; color: #1a1a1a; outline: none; width: 155px; transition: border-color 0.2s; }
+.tb-field input:focus { border-color: #8C1D40; }
+.tb-actions { margin-left: auto; display: flex; gap: 7px; }
+.tbbtn { font-family: Arial, sans-serif; font-size: 0.73rem; font-weight: 700; padding: 6px 13px; border-radius: 5px; cursor: pointer; border: none; transition: all 0.15s; }
+.tbbtn-gold { background: #FFC627; color: #1a1a1a; }
+.tbbtn-gold:hover { background: #e6b020; }
+.tbbtn-out { background: transparent; border: 1px solid #D1D5DB; color: #6B7280; }
+.tbbtn-out:hover { border-color: #8C1D40; color: #8C1D40; }
+.tool-tabs { display: flex; background: #fff; border-bottom: 2px solid #E5E7EB; padding: 0 18px; gap: 2px; flex-shrink: 0; }
+.ttab { display: flex; align-items: center; gap: 7px; padding: 11px 16px 9px; cursor: pointer; background: none; border: none; border-bottom: 3px solid transparent; font-family: Arial, sans-serif; font-size: 0.82rem; font-weight: 400; color: #6B7280; white-space: nowrap; transition: all 0.18s; position: relative; top: 2px; }
+.ttab:hover { color: #374151; }
+.ttab.active { color: #8C1D40; font-weight: 700; border-bottom-color: #8C1D40; }
+.ttab .tl { display: inline-flex; align-items: center; justify-content: center; width: 23px; height: 23px; border-radius: 50%; background: #E5E7EB; font-weight: 700; font-size: 0.78rem; color: #6B7280; transition: all 0.18s; flex-shrink: 0; }
+.ttab.active .tl { background: #8C1D40; color: #fff; }
+.ttab.done .tl { background: #D1FAE5; color: #065F46; }
+.tool-scroll { overflow-y: auto; flex: 1; }
+.phase-pane { display: none; padding: 26px 26px 40px; }
+.phase-pane.active { display: block; }
+.phase-hd { margin-bottom: 20px; }
+.phase-hd h2 { font-size: 1.35rem; font-weight: 700; margin-bottom: 5px; }
+.phase-hd h2 span { color: #8C1D40; }
+.phase-hd p { font-size: 0.83rem; color: #6B7280; line-height: 1.6; max-width: 520px; }
+.prior-box { background: #F9FAFB; border: 1px solid #E5E7EB; border-radius: 8px; margin-bottom: 20px; overflow: hidden; }
+.prior-hdr { display: flex; align-items: center; justify-content: space-between; padding: 9px 15px; background: #F3F4F6; border-bottom: 1px solid #E5E7EB; cursor: pointer; user-select: none; }
+.prior-hdr:hover { background: #EAEBED; }
+.prior-title { font-size: 0.76rem; font-weight: 700; color: #374151; text-transform: uppercase; letter-spacing: 0.05em; display: flex; align-items: center; gap: 7px; }
+.pbadge { background: #8C1D40; color: #fff; font-size: 0.59rem; padding: 1px 7px; border-radius: 9px; font-weight: 700; }
+.pchev { font-size: 0.72rem; color: #9CA3AF; transition: transform 0.2s; }
+.pchev.open { transform: rotate(180deg); }
+.prior-body { padding: 13px 15px; display: none; }
+.prior-body.open { display: block; }
+.pf { margin-bottom: 9px; }
+.pf:last-child { margin-bottom: 0; }
+.pf-lbl { font-size: 0.65rem; font-weight: 700; color: #8C1D40; text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 3px; }
+.pf-val { font-size: 0.79rem; color: #374151; line-height: 1.6; background: #fff; border: 1px solid #E5E7EB; border-radius: 4px; padding: 7px 10px; }
+.pf-empty { font-size: 0.77rem; color: #9CA3AF; font-style: italic; }
+.pcards { display: flex; flex-direction: column; gap: 15px; }
+.pcard { border: 1px solid #E5E7EB; border-radius: 8px; padding: 15px 17px; transition: border-color 0.18s; }
+.pcard:focus-within { border-color: #8C1D40; }
+.pcard-hdr { display: flex; align-items: flex-start; gap: 9px; margin-bottom: 5px; }
+.pcard-num { font-size: 0.62rem; font-weight: 700; color: #8C1D40; background: #FDF2F5; border-radius: 3px; padding: 2px 7px; letter-spacing: 0.05em; margin-top: 2px; flex-shrink: 0; }
+.pcard-lbl { font-size: 0.87rem; font-weight: 700; color: #1a1a1a; line-height: 1.3; }
+.pcard-hint { font-size: 0.74rem; color: #6B7280; margin-bottom: 8px; line-height: 1.5; margin-left: 33px; }
+.pcard textarea { width: 100%; font-family: Arial, sans-serif; font-size: 0.83rem; color: #1a1a1a; background: #FAFAFA; border: 1px solid #E5E7EB; border-radius: 5px; padding: 9px 11px; resize: vertical; min-height: 76px; line-height: 1.65; outline: none; transition: border-color 0.18s, background 0.18s; }
+.pcard textarea.tall { min-height: 94px; }
+.pcard textarea:focus { border-color: #8C1D40; background: #fff; }
+.pcard textarea::placeholder { color: #9CA3AF; }
+.fc-row { display: flex; align-items: center; justify-content: flex-end; margin-top: 5px; }
+.btn-fc { font-family: Arial, sans-serif; font-size: 0.7rem; font-weight: 700; padding: 4px 10px; background: #fff; border: 1px solid #D1D5DB; border-radius: 4px; color: #6B7280; cursor: pointer; transition: all 0.15s; display: flex; align-items: center; gap: 5px; }
+.btn-fc:hover { border-color: #8C1D40; color: #8C1D40; }
+.btn-fc:disabled { opacity: 0.38; cursor: not-allowed; }
+.fc-result { display: none; margin-top: 7px; background: #F0FDF4; border: 1px solid #86EFAC; border-radius: 5px; padding: 9px 12px; font-size: 0.77rem; color: #166534; line-height: 1.65; }
+.fc-result.err { background: #FFF1F2; border-color: #FECACA; color: #991B1B; }
+.fc-result.show { display: block; }
+.act-row { display: flex; align-items: center; justify-content: space-between; margin-top: 20px; padding-top: 16px; border-top: 1px solid #E5E7EB; gap: 10px; flex-wrap: wrap; }
+.btn-coach { display: flex; align-items: center; gap: 7px; padding: 10px 20px; background: #8C1D40; color: #fff; border: none; border-radius: 6px; font-family: Arial, sans-serif; font-size: 0.86rem; font-weight: 700; cursor: pointer; transition: background 0.15s; }
+.btn-coach:hover { background: #6B1632; }
+.btn-coach:disabled { opacity: 0.4; cursor: not-allowed; }
+.spin { display: inline-block; animation: spin 1s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.btn-fwd { font-family: Arial, sans-serif; font-size: 0.82rem; color: #6B7280; background: none; border: 1px solid #D1D5DB; border-radius: 6px; padding: 10px 15px; cursor: pointer; transition: all 0.15s; }
+.btn-fwd:hover { border-color: #8C1D40; color: #8C1D40; }
+.restore-pane { max-width: 580px; padding: 28px 26px; }
+.restore-pane h2 { font-size: 1.15rem; font-weight: 700; margin-bottom: 7px; }
+.restore-pane p { font-size: 0.83rem; color: #6B7280; line-height: 1.6; margin-bottom: 14px; }
+.restore-pane textarea { width: 100%; font-family: monospace; font-size: 0.72rem; color: #374151; background: #F9FAFB; border: 1px solid #D1D5DB; border-radius: 6px; padding: 11px; height: 170px; resize: vertical; outline: none; line-height: 1.5; }
+.restore-pane textarea:focus { border-color: #8C1D40; }
+.btn-restore { display: inline-flex; align-items: center; gap: 7px; margin-top: 9px; padding: 10px 20px; background: #8C1D40; color: #fff; border: none; border-radius: 6px; font-family: Arial, sans-serif; font-size: 0.85rem; font-weight: 700; cursor: pointer; transition: background 0.15s; }
+.btn-restore:hover { background: #6B1632; }
+.restore-tip { margin-top: 18px; background: #FEF9EC; border: 1px solid #FCD34D; border-radius: 6px; padding: 12px 14px; font-size: 0.79rem; color: #78350F; line-height: 1.6; }
+
+/* COACH PANEL */
+.coach-panel { background: #F9FAFB; border-left: 1px solid #E5E7EB; display: flex; flex-direction: column; max-height: calc(100vh - 58px); position: sticky; top: 0; }
+.coach-hdr { padding: 13px 17px; border-bottom: 1px solid #E5E7EB; background: #fff; display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+.coach-orb { width: 8px; height: 8px; border-radius: 50%; background: #D1D5DB; flex-shrink: 0; transition: all 0.3s; }
+.coach-orb.thinking { background: #FFC627; animation: pulse 1.2s ease-in-out infinite; }
+.coach-orb.done { background: #4ade80; }
+@keyframes pulse { 0%,100% { box-shadow: 0 0 0 3px rgba(255,198,39,0.14); } 50% { box-shadow: 0 0 0 7px rgba(255,198,39,0.05); } }
+.coach-title { font-size: 0.76rem; font-weight: 700; color: #374151; text-transform: uppercase; letter-spacing: 0.07em; }
+.coach-tag { margin-left: auto; font-size: 0.62rem; font-weight: 700; padding: 2px 8px; background: #FDF2F5; color: #8C1D40; border-radius: 4px; }
+.coach-body { flex: 1; overflow-y: auto; padding: 16px; }
+.coach-empty { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 36px 18px; height: 100%; gap: 10px; }
+.coach-empty-icon { font-size: 1.7rem; opacity: 0.18; }
+.coach-empty-text { font-size: 0.79rem; color: #9CA3AF; line-height: 1.6; max-width: 195px; }
+.coach-out { display: none; }
+.coach-out.show { display: block; }
+.cs { margin-bottom: 15px; padding-bottom: 13px; border-bottom: 1px solid #E5E7EB; }
+.cs:last-child { border-bottom: none; margin-bottom: 0; }
+.cs-lbl { font-size: 0.6rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: #8C1D40; margin-bottom: 6px; }
+.cs-text { font-size: 0.79rem; line-height: 1.75; color: #374151; }
+.cs-text strong { color: #1a1a1a; font-weight: 700; }
+.coach-footer { border-top: 1px solid #E5E7EB; padding: 9px 17px; background: #fff; display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+.cpip { width: 7px; height: 7px; border-radius: 50%; background: #E5E7EB; border: 2px solid #D1D5DB; cursor: pointer; transition: all 0.18s; }
+.cpip.done { background: #D1FAE5; border-color: #4ade80; }
+.cpip.active { background: #8C1D40; border-color: #8C1D40; }
+.cpip-lbl { margin-left: auto; font-size: 0.63rem; color: #9CA3AF; }
+
+/* TOAST + MODAL */
+.toast { position: fixed; bottom: 18px; left: 50%; transform: translateX(-50%) translateY(12px); background: #1a1a1a; color: #fff; border-radius: 6px; padding: 8px 17px; font-size: 0.79rem; opacity: 0; transition: all 0.28s; pointer-events: none; z-index: 9999; }
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+.modal-bg { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.48); z-index: 1000; align-items: center; justify-content: center; padding: 18px; }
+.modal-bg.open { display: flex; }
+.modal-box { background: #fff; border-radius: 9px; width: 100%; max-width: 600px; padding: 24px; box-shadow: 0 18px 54px rgba(0,0,0,0.22); display: flex; flex-direction: column; gap: 11px; }
+.modal-title { font-size: 0.98rem; font-weight: 700; }
+.modal-note { font-size: 0.79rem; color: #6B7280; line-height: 1.6; background: #FEF9EC; border: 1px solid #FCD34D; border-radius: 5px; padding: 8px 11px; }
+.modal-ta { width: 100%; height: 210px; font-family: monospace; font-size: 0.7rem; background: #F9FAFB; border: 1px solid #D1D5DB; border-radius: 5px; padding: 9px; resize: vertical; outline: none; line-height: 1.5; color: #374151; }
+.modal-foot { display: flex; gap: 7px; justify-content: flex-end; }
+.mmbtn { font-family: Arial, sans-serif; font-size: 0.83rem; padding: 8px 17px; border-radius: 5px; cursor: pointer; border: none; transition: all 0.15s; }
+.mmbtn-cancel { background: #fff; border: 1px solid #D1D5DB; color: #6B7280; }
+.mmbtn-cancel:hover { background: #F9FAFB; }
+.mmbtn-copy { background: #8C1D40; color: #fff; font-weight: 700; }
+.mmbtn-copy:hover { background: #6B1632; }
+
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #D1D5DB; border-radius: 4px; }
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <div class="nav-brand">
+    <div class="nav-brand-title">AI and Team-Based CI</div>
+    <div class="nav-brand-sub">ASU Next Education Workforce</div>
+  </div>
+  <button class="nav-btn active" data-page="home" onclick="goPage('home')"><span class="nav-num">1</span> Overview</button>
+  <button class="nav-btn" data-page="assess" onclick="goPage('assess')"><span class="nav-num">2</span> Self-Assessment</button>
+  <button class="nav-btn" data-page="s1" onclick="goPage('s1')"><span class="nav-num">3</span> Scenario 1</button>
+  <button class="nav-btn" data-page="s2" onclick="goPage('s2')"><span class="nav-num">4</span> Scenario 2</button>
+  <button class="nav-btn" data-page="tool" onclick="goPage('tool')"><span class="nav-num">5</span> Your PDSA</button>
+</nav>
+
+<!-- HOME -->
+<div class="page active" id="page-home">
+  <div class="home-hero">
+    <h1>AI works differently<br>when <em>teams</em> are the unit.</h1>
+    <p>Most educators are using AI on their own, for lesson prep and content generation. This workshop looks at what changes when a team uses AI together to run continuous improvement cycles. The difference is not the tool. It is the structure around it.</p>
+  </div>
+  <div class="home-thesis">
+    <strong>The argument:</strong> The one-teacher/one-classroom model is an architecture problem, not a pedagogy problem. AI hits the same ceiling every technology has hit, not because tools fail, but because the grammar of schooling pulls everything into individual practice. <strong>Team-based staffing creates the conditions for AI to work as a shared intelligence tool, not just a personal assistant.</strong>
+  </div>
+  <div class="home-cards">
+    <div class="hcard" onclick="goPage('assess')">
+      <div class="hcard-step">Step 1</div>
+      <h3>Self-Assessment</h3>
+      <p>Find out where your team currently sits in using AI across the improvement cycle. Takes about 5 minutes.</p>
+      <button class="hcard-link">Start Here</button>
+    </div>
+    <div class="hcard" onclick="goPage('s1')">
+      <div class="hcard-step">Step 2</div>
+      <h3>Scenario 1: A Team Cycle</h3>
+      <p>A 3rd grade math team uses PDSA to improve student mathematical discourse. See how AI coaching fits into a real cycle.</p>
+      <button class="hcard-link">View Scenario</button>
+    </div>
+    <div class="hcard" onclick="goPage('s2')">
+      <div class="hcard-step">Step 3</div>
+      <h3>Scenario 2: A Coach Cycle</h3>
+      <p>An instructional coach runs a PDSA cycle about how a team functions, not about a single lesson. Same tool, different level.</p>
+      <button class="hcard-link">View Scenario</button>
+    </div>
+    <div class="hcard" onclick="goPage('tool')">
+      <div class="hcard-step">Step 4</div>
+      <h3>Your PDSA</h3>
+      <p>Use the live tool with your own team's problem. Get feedback on individual fields and on the full phase.</p>
+      <button class="hcard-link">Open Tool</button>
+    </div>
+  </div>
+  <div class="home-sched">
+    <h2>Workshop Flow</h2>
+    <div class="sched-row">
+      <div class="sblock"><div class="sblock-time">20 min</div><div class="sblock-title">The Structural Argument</div><div class="sblock-note">Why structure matters for AI</div></div>
+      <div class="sblock"><div class="sblock-time">10 min</div><div class="sblock-title">Self-Assessment</div><div class="sblock-note">AI use across your CI cycle</div></div>
+      <div class="sblock"><div class="sblock-time">10 min</div><div class="sblock-title">Scenario 1</div><div class="sblock-note">Team instructional cycle</div></div>
+      <div class="sblock"><div class="sblock-time">10 min</div><div class="sblock-title">Scenario 2</div><div class="sblock-note">Coach teaming cycle</div></div>
+      <div class="sblock"><div class="sblock-time">20 min</div><div class="sblock-title">Your PDSA</div><div class="sblock-note">Live with your context</div></div>
+      <div class="sblock"><div class="sblock-time">20 min</div><div class="sblock-title">Synthesis and Close</div><div class="sblock-note">Aggregation and local action</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- SELF-ASSESSMENT -->
+<div class="page" id="page-assess">
+  <div class="assess-wrap">
+    <h2>Self-Assessment: AI Use for Team-Based Continuous Improvement</h2>
+    <p class="intro">This short assessment looks at where AI currently shows up in your team's work, and whether that use is individual or collective. It covers the full PDSA cycle: planning, implementation, evidence gathering, and decision-making. You get a pattern interpretation at the end, plus one concrete structural move.</p>
+    <div class="playlab-box">
+      <p>The assessment runs as a short AI conversation in Playlab. It takes about 5 minutes. Have your team context in mind before you start.</p>
+      <a class="btn-playlab" href="https://playlab.ai" target="_blank">Open Assessment in Playlab</a>
+    </div>
+    <div class="patterns-section">
+      <h3>Four Common Patterns</h3>
+      <p class="pdesc">Most teams land in one of these four places. Use these to frame your table conversation after the assessment.</p>
+      <div class="pgrid">
+        <div class="pcard-a">
+          <div class="pname">Individual Planner</div>
+          <div class="pdescr">AI helps one person prepare for the team. Lesson plans, agendas, and content get generated before the meeting. The team never touches the tool together.</div>
+          <div class="pmove">Next move: bring one AI output into a team meeting and study it together rather than delivering it as finished work.</div>
+        </div>
+        <div class="pcard-a">
+          <div class="pname">Collective Planner</div>
+          <div class="pdescr">The team uses AI together to plan instruction. Roles, routines, and lesson structures get built in shared sessions. AI use is collective but still limited to planning.</div>
+          <div class="pmove">Next move: use AI in the Study phase to analyze student evidence, not just to prepare for instruction.</div>
+        </div>
+        <div class="pcard-a">
+          <div class="pname">Evidence Studier</div>
+          <div class="pdescr">The team uses AI to help make sense of student work and observation data. AI gets used mid-cycle, not just at the planning stage. This is uncommon and worth building on.</div>
+          <div class="pmove">Next move: connect AI use in Study back to your aim statement. Make sure the evidence you are analyzing ties to what you said you would measure.</div>
+        </div>
+        <div class="pcard-a">
+          <div class="pname">Full Cycle User</div>
+          <div class="pdescr">The team uses AI across all four phases. AI supports planning, surfaces observations, helps analyze evidence, and informs Act decisions. This is the target state for team-based CI.</div>
+          <div class="pmove">Next move: document what is working and share it. Your team's practice is worth spreading to others who are earlier in the cycle.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SCENARIO 1 -->
+<div class="page" id="page-s1">
+  <div class="sc-layout">
+    <div class="sc-main">
+      <div class="sc-tag">Scenario 1 of 2</div>
+      <h2>A Team Running Its Own <span>Instructional Cycle</span></h2>
+      <p class="sc-context">A 3rd grade math team at a school using a team-based staffing model. The team includes a lead teacher, two associates, and a student teacher. They have shared planning time three times per week. Their problem is not curriculum. It is what happens during small group time.</p>
+
+      <div class="sc-phase-lbl"><span class="sc-pip">P</span> Plan</div>
+      <div class="sf"><div class="sf-lbl">Problem of Practice</div><div class="sf-val">During small group math blocks, students work side by side but rarely talk to each other about the math. When a student gets stuck, they wait for an adult. Misconceptions do not surface until the lead teacher or associate circulates and catches them one at a time. Peer conversation is not happening, and we are not set up to make it happen.</div></div>
+      <div class="sf"><div class="sf-lbl">Aim Statement</div><div class="sf-val">By the end of this 6-week cycle, 75 percent of students will demonstrate at least one instance of peer mathematical explanation per observed small group session, as documented in weekly team observation notes.</div></div>
+      <div class="sf"><div class="sf-lbl">Change Idea</div><div class="sf-val">Introduce an explain-and-challenge routine at the start of each small group. One student explains their approach to a problem. One peer asks one clarifying question before the group moves on. The associate runs this routine so the lead teacher can observe and take notes.</div></div>
+      <div class="sf"><div class="sf-lbl">Prediction</div><div class="sf-val">If the routine runs consistently, students who rarely speak in whole-group settings will engage more because the stakes are lower. We expect the first two weeks to feel slow. By week three we predict discourse quality will improve. We also predict the associate will need support with facilitation in the first week.</div></div>
+      <div class="sf"><div class="sf-lbl">Measures</div><div class="sf-val">Outcome: percent of students demonstrating peer explanation per session. Process: percent of sessions where the routine was used with fidelity. Balancing: lesson pacing, since the routine should not consistently cut into core instructional time by more than five minutes.</div></div>
+
+      <div class="sc-phase-lbl"><span class="sc-pip">D</span> Do</div>
+      <div class="sf"><div class="sf-lbl">What Was Implemented and When</div><div class="sf-val">The routine ran in three small group sessions per week across weeks one through three. In week one the lead teacher modeled it before the associate took over. By week two the associate launched it independently at the start of each session.</div></div>
+      <div class="sf"><div class="sf-lbl">Observations of Student Learning</div><div class="sf-val">Week one: most explanations were procedural. Students described steps but not reasoning. The clarifying question step mostly produced silence. Week two: two students began pushing back on each other without being prompted. Week three: six of nine students used math vocabulary during explanations.</div></div>
+      <div class="sf"><div class="sf-lbl">Data Collected</div><div class="sf-val">Week one: three of nine students demonstrated peer explanation (33 percent). Week two: five of nine (56 percent). Week three: seven of nine (78 percent). Routine fidelity: eight of nine sessions. Two sessions ran six minutes over the five-minute pacing threshold.</div></div>
+      <div class="sf"><div class="sf-lbl">Surprises and Deviations</div><div class="sf-val">Two students who almost never participate in whole-group instruction engaged actively in the peer routine. This was not expected. One session was cut short because of a fire drill and was not counted.</div></div>
+
+      <div class="sc-phase-lbl"><span class="sc-pip">S</span> Study</div>
+      <div class="sf"><div class="sf-lbl">Prediction vs. Reality</div><div class="sf-val">We predicted early friction and improvement by week three. Both happened. We did not predict that quieter students would engage more than in whole-group settings. We hit 78 percent peer explanation by week three, ahead of the 75 percent target set for week six.</div></div>
+      <div class="sf"><div class="sf-lbl">What the Data Says About Student Learning</div><div class="sf-val">The increase in peer explanation matches an increase in math vocabulary in observation notes. But we are measuring frequency, not quality. We do not yet know if deeper reasoning is developing or if students are meeting the form of the routine without the substance.</div></div>
+      <div class="sf"><div class="sf-lbl">What We Learned About the Learning Environment</div><div class="sf-val">Students need a structured lower-stakes entry point to academic discourse. Whole-group discussion was not creating it. The peer routine reduced performance anxiety for at least two students. This is a design problem, not a student problem.</div></div>
+      <div class="sf"><div class="sf-lbl">Confidence Level</div><div class="sf-val">Moderate confidence in the frequency finding. Low confidence that we are capturing quality. We need a way to distinguish procedural explanation from conceptual explanation, and to check whether discourse quality is showing up in independent written work.</div></div>
+
+      <div class="sc-phase-lbl"><span class="sc-pip">A</span> Act</div>
+      <div class="sf"><div class="sf-lbl">Decision</div><div class="sf-val">Adapt. The routine is working but we are not measuring the right things yet. We will keep the structure and add a two-level explanation rubric. Not ready to adopt or spread.</div></div>
+      <div class="sf"><div class="sf-lbl">Changes for Next Cycle</div><div class="sf-val">Add a student self-assessment prompt after each explanation: was that a steps explanation or a reasons explanation? Collect one piece of written work per week. Keep the routine structure unchanged.</div></div>
+      <div class="sf"><div class="sf-lbl">Next Cycle Hypothesis</div><div class="sf-val">If students self-assess explanation type and we collect weekly work samples, we predict the proportion of conceptual explanations will increase from roughly 20 percent to 40 percent by week three of the next cycle.</div></div>
+      <div class="sf"><div class="sf-lbl">What the System Needs to Do</div><div class="sf-val">We need 30 minutes at the next all-team PL session to share what we are learning, not just what we are doing. We also need access to prior assessment data to check whether discourse gains are connecting to formal assessment results.</div></div>
+
+      <button class="btn-load" onclick="loadScenario(1)">Load This Scenario Into the Tool</button>
+    </div>
+    <div class="sc-sidebar">
+      <div class="sb-lbl">AI Coaching Responses</div>
+      <div class="ccard"><div class="ccard-lbl">Plan Phase</div><div class="ccard-text">The aim statement is specific and time-bound. The prediction is the strongest part of this plan. It names expected friction, a timeline for improvement, and a specific risk around the associate's facilitation. That is a real hypothesis, not just optimism. <strong>The gap is in the measures.</strong> You have an outcome measure and a process measure, but the balancing measure only tracks time. Think about whether there is a student experience measure worth watching, something that would tell you if the lower-stakes structure is actually reducing anxiety or just adding a new routine students are performing.</div></div>
+      <div class="ccard"><div class="ccard-lbl">Do Phase</div><div class="ccard-text">The surprise about quieter students is the most important data point in this section. Treat it as a finding, not an anecdote. <strong>The gap is that you do not yet know if what students are saying is mathematically substantive.</strong> You are counting explanations. You are not yet describing them. Before you move to Study, agree on what a good explanation looks like so you can distinguish it from a compliant one.</div></div>
+      <div class="ccard"><div class="ccard-lbl">Study Phase</div><div class="ccard-text">This team is doing something most teams skip: they are being honest about the limits of their own evidence. Naming the difference between frequency and quality is a real analytical move. <strong>The question to sit with:</strong> your theory assumes the routine produces discourse, and discourse produces learning. You have evidence for the first step. You do not yet have evidence for the second. That is not a failure. It is what the next cycle is for.</div></div>
+      <div class="ccard"><div class="ccard-lbl">Act Phase</div><div class="ccard-text">The adapt decision is well-grounded and appropriately cautious. The next cycle hypothesis is testable and directly addresses the evidence gap from Study. <strong>One thing to watch:</strong> the student self-assessment prompt is doing a lot of work in the next cycle. Test it with two students before rolling it out to make sure it is simple enough to use honestly, not just correctly.</div></div>
+      <div class="fac-note"><div class="fac-lbl">Facilitator Note</div><div class="fac-text">The key moment in this scenario is the Study phase, where the team names what they do not know. Point this out to the room. Most teams skip this step or treat the end of a cycle as a verdict. This team treats it as the beginning of the next question. That is the habit improvement science is trying to build.</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- SCENARIO 2 -->
+<div class="page" id="page-s2">
+  <div class="sc-layout">
+    <div class="sc-main">
+      <div class="sc-tag">Scenario 2 of 2</div>
+      <h2>A Coach Running a Cycle <span>About Teaming</span></h2>
+      <p class="sc-context">An instructional coach at a middle school is working with a newly formed educator team: a lead teacher, two associates, and a specialist. The team has the right people. What it does not have is functioning planning meetings. The coach uses PDSA not to improve a lesson, but to improve how the team works as an improvement unit.</p>
+
+      <div class="sc-phase-lbl"><span class="sc-pip">P</span> Plan</div>
+      <div class="sf"><div class="sf-lbl">Problem of Practice</div><div class="sf-val">This team's weekly planning meetings do not produce instructional decisions. People show up, the lead teacher runs through what is coming, and everyone leaves with tasks but not shared agreements. There is no shared look at student evidence. Associates and the specialist are not shaping the plan. The meeting format is producing compliance, not collaboration.</div></div>
+      <div class="sf"><div class="sf-lbl">Aim Statement</div><div class="sf-val">By the end of this 4-week cycle, at least 75 percent of planning meetings will open with a structured 10-minute student evidence review, and at least two team members other than the lead teacher will contribute an instructional decision per meeting, as logged by the coach.</div></div>
+      <div class="sf"><div class="sf-lbl">Change Idea</div><div class="sf-val">Introduce an evidence protocol at the start of each planning meeting. The coach selects two or three student work samples before the meeting. The team spends 10 minutes describing what they see before any planning begins. The lead teacher does not speak first.</div></div>
+      <div class="sf"><div class="sf-lbl">Prediction</div><div class="sf-val">If the protocol runs consistently, associates and the specialist will begin offering instructional suggestions because the conversation will start with shared evidence rather than the lead teacher's agenda. We predict early awkwardness, especially for the lead teacher. We expect the specialist to engage most readily because she has the clearest role in the evidence.</div></div>
+      <div class="sf"><div class="sf-lbl">Measures</div><div class="sf-val">Outcome: number of instructional decisions per meeting contributed by team members other than the lead teacher. Process: percent of meetings that used the evidence protocol for the full 10 minutes. Balancing: lead teacher's sense of meeting effectiveness, tracked through a brief weekly check-in.</div></div>
+
+      <div class="sc-phase-lbl"><span class="sc-pip">D</span> Do</div>
+      <div class="sf"><div class="sf-lbl">What Was Implemented and When</div><div class="sf-val">The evidence protocol ran at the start of four consecutive weekly planning meetings. The coach selected work samples in advance. The lead teacher was briefed the day before each meeting. The coach observed and logged each meeting but did not facilitate the protocol.</div></div>
+      <div class="sf"><div class="sf-lbl">Observations of Team Functioning</div><div class="sf-val">Meeting one: the team described the work samples but defaulted to the lead teacher to interpret them. No one offered an instructional suggestion unprompted. Meeting two: the specialist named a pattern and suggested a grouping change. Meeting three: one associate asked a question that led to a four-minute conversation about differentiation. Meeting four: the team debated two approaches to a reteach.</div></div>
+      <div class="sf"><div class="sf-lbl">Data Collected</div><div class="sf-val">Protocol fidelity: four of four meetings. Instructional decisions from non-lead members: meeting one zero, meeting two one, meeting three two, meeting four three. Lead teacher check-in scores: 6, 5, 7, 8 out of 10.</div></div>
+      <div class="sf"><div class="sf-lbl">Surprises and Deviations</div><div class="sf-val">The specialist engaged faster than expected, which matched the prediction. The lead teacher's score dropped in week two, which was not expected. In a brief conversation she said she felt less like the expert in week two. The feeling shifted by week three as she saw the team's contributions improving the plan.</div></div>
+
+      <div class="sc-phase-lbl"><span class="sc-pip">S</span> Study</div>
+      <div class="sf"><div class="sf-lbl">Prediction vs. Reality</div><div class="sf-val">We predicted early awkwardness and specialist engagement. Both happened. We did not predict the lead teacher's week two dip or that it would resolve on its own. Growth in non-lead contributions across four weeks was faster than expected.</div></div>
+      <div class="sf"><div class="sf-lbl">What the Data Says About Team Functioning</div><div class="sf-val">The protocol changed who speaks and when, and that changed what gets decided. But we are measuring contributions, not quality of contributions. We do not yet know if the decisions made collaboratively are better than what the lead teacher would have made alone.</div></div>
+      <div class="sf"><div class="sf-lbl">What We Learned About the Team System</div><div class="sf-val">The team had capacity the old meeting format was not activating. Associates and the specialist have useful knowledge about students that was not entering the instructional plan. The protocol created a structured opening for that knowledge. Without the opening, it does not get used. This is a design problem, not a people problem.</div></div>
+      <div class="sf"><div class="sf-lbl">Confidence Level</div><div class="sf-val">Moderate confidence in the meeting functioning data. Low confidence that improved team decisions are reaching students. We need to connect what happens in planning meetings to what happens in instruction, and then to student outcomes.</div></div>
+
+      <div class="sc-phase-lbl"><span class="sc-pip">A</span> Act</div>
+      <div class="sf"><div class="sf-lbl">Decision</div><div class="sf-val">Adopt the protocol structure and adapt the evidence selection process. Right now the coach is selecting work samples, which is not sustainable. In the next cycle the team will rotate who selects evidence. That shifts ownership and tests whether the protocol holds without the coach.</div></div>
+      <div class="sf"><div class="sf-lbl">Changes for Next Cycle</div><div class="sf-val">Rotate evidence selection responsibility across all four team members on a weekly schedule. Add one brief reflection question at the end of each meeting: did the evidence we looked at change what we planned? Track yes or no over time.</div></div>
+      <div class="sf"><div class="sf-lbl">Next Cycle Hypothesis</div><div class="sf-val">If team members rotate evidence selection, we predict the quality of evidence brought to meetings will vary but the sense of shared ownership will increase. We predict at least one meeting where the evidence selection itself becomes a learning moment.</div></div>
+      <div class="sf"><div class="sf-lbl">What the System Needs to Do</div><div class="sf-val">The principal needs to know this is happening and why. If the coach is asking teams to practice distributed leadership in planning meetings, the school needs to name that as a value. Right now it is a quiet experiment that puts the lead teacher in an ambiguous position.</div></div>
+
+      <button class="btn-load" onclick="loadScenario(2)">Load This Scenario Into the Tool</button>
+    </div>
+    <div class="sc-sidebar">
+      <div class="sb-lbl">AI Coaching Responses</div>
+      <div class="ccard"><div class="ccard-lbl">Plan Phase</div><div class="ccard-text">The aim statement is strong and measurable. The change idea is focused and bounded. <strong>The gap is in the theory of improvement.</strong> The plan assumes that starting with evidence will shift who contributes. That may be true. But it is worth naming what you think is actually blocking non-lead contributions right now. Is it the meeting structure, the team's sense of role, or the lead teacher's habits? The answer changes what you watch for in Do.</div></div>
+      <div class="ccard"><div class="ccard-lbl">Do Phase</div><div class="ccard-text">The observation notes here are unusually detailed. The week-by-week picture of who spoke and when is exactly what you need for Study. <strong>The most important data point is the lead teacher's week two dip.</strong> Do not let that become a footnote. It is evidence that the change cost something for the person with the most to lose.</div></div>
+      <div class="ccard"><div class="ccard-lbl">Study Phase</div><div class="ccard-text">The framing that this is a design problem, not a people problem, is exactly right and worth saying out loud to the team. <strong>The question this coaching would push on:</strong> you have evidence that team contributions increased. You do not yet have evidence that those contributions are connected to student learning. Name it as such and build it into your Act decision.</div></div>
+      <div class="ccard"><div class="ccard-lbl">Act Phase</div><div class="ccard-text">Rotating evidence selection is a smart and appropriately challenging next move. <strong>The system support point is critical.</strong> If the principal does not know this is the direction, the lead teacher is being asked to share power in a system that has not yet sanctioned that. That is not fair to her and it will limit how far this goes.</div></div>
+      <div class="fac-note"><div class="fac-lbl">Facilitator Note</div><div class="fac-text">After this scenario, ask the room: what is the same about this cycle and Scenario 1, and what is different? The same: the logic of the cycle, the structure of prediction and evidence. The different: the unit of analysis. In Scenario 1 the team is studying students. In Scenario 2 the coach is studying the team. Both are improvement cycles. That is the reframe you want the room to sit with.</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- PDSA TOOL -->
+<div class="page" id="page-tool">
+  <div class="tool-layout">
+    <div class="tool-left">
+      <div class="tool-bar">
+        <div class="tb-field"><label>Cycle</label><input type="text" id="cycleLabel" placeholder="e.g. Cycle 1, Fall 2025"></div>
+        <div class="tb-field"><label>Team</label><input type="text" id="teamName" placeholder="e.g. 6th Grade ELA"></div>
+        <div class="tb-actions">
+          <button class="tbbtn tbbtn-gold" onclick="saveSession()">Save Session</button>
+          <button class="tbbtn tbbtn-out" onclick="exportText()">Export Summary</button>
+        </div>
+      </div>
+      <div class="tool-tabs">
+        <button class="ttab active" data-ttab="plan" onclick="switchPhase('plan')"><span class="tl">P</span> Plan</button>
+        <button class="ttab" data-ttab="do" onclick="switchPhase('do')"><span class="tl">D</span> Do</button>
+        <button class="ttab" data-ttab="study" onclick="switchPhase('study')"><span class="tl">S</span> Study</button>
+        <button class="ttab" data-ttab="act" onclick="switchPhase('act')"><span class="tl">A</span> Act</button>
+        <button class="ttab" data-ttab="restore" onclick="switchPhase('restore')"><span class="tl" style="font-size:0.58rem">↩</span> Restore</button>
+      </div>
+      <div class="tool-scroll">
+
+        <!-- PLAN -->
+        <div class="phase-pane active" id="pane-plan">
+          <div class="phase-hd"><h2>Plan <span>/ Theory of Improvement</span></h2><p>Define the instructional problem, your aim, and the specific change you are testing. Your prediction is your hypothesis. Be concrete before you start.</p></div>
+          <div class="pcards">
+            <div class="pcard">
+              <div class="pcard-hdr"><span class="pcard-num">01</span><span class="pcard-lbl">Problem of Practice</span></div>
+              <div class="pcard-hint">Describe the specific instructional gap your team is addressing. Ground it in what students are experiencing, not in adult behavior.</div>
+              <textarea class="tall" id="plan-1" placeholder="e.g. Students in our collaborative math blocks are not engaging in productive discourse. During small group time, most students work individually rather than explaining their reasoning to one another."></textarea>
+              <div class="fc-row"><button class="btn-fc" onclick="fieldCoach(this,'plan-1','Problem of Practice','Is this problem specific, bounded, and grounded in student experience rather than adult behavior? Is it narrow enough to test in one cycle?')">Get feedback on this</button></div>
+              <div class="fc-result" id="fc-plan-1"></div>
+            </div>
+            <div class="pcard">
+              <div class="pcard-hdr"><span class="pcard-num">02</span><span class="pcard-lbl">Aim Statement</span></div>
+              <div class="pcard-hint">Who, what, how much, by when. Focus on student learning. Make it measurable and time-bound.</div>
+              <textarea id="plan-2" placeholder="e.g. By the end of this 6-week cycle, 75 percent of students will demonstrate at least one peer mathematical explanation per observed small group session."></textarea>
+              <div class="fc-row"><button class="btn-fc" onclick="fieldCoach(this,'plan-2','Aim Statement','Does this include who, what, how much, and by when? Is it student-centered and measurable? Would two people interpret it the same way?')">Get feedback on this</button></div>
+              <div class="fc-result" id="fc-plan-2"></div>
+            </div>
+            <div class="pcard">
+              <div class="pcard-hdr"><span class="pcard-num">03</span><span class="pcard-lbl">Change Idea</span></div>
+              <div class="pcard-hint">What specific change will your team test? Be precise about what will look different in the learning environment.</div>
+              <textarea id="plan-3" placeholder="e.g. Introduce a structured explain-and-challenge routine at the start of each small group. One student explains their approach while a peer asks one clarifying question before the group moves on."></textarea>
+              <div class="fc-row"><button class="btn-fc" onclick="fieldCoach(this,'plan-3','Change Idea','Is this specific enough to test? Does it connect logically to the problem? Could someone implement it without additional guidance?')">Get feedback on this</button></div>
+              <div class="fc-result" id="fc-plan-3"></div>
+            </div>
+            <div class="pcard">
+              <div class="pcard-hdr"><span class="pcard-num">04</span><span class="pcard-lbl">Prediction</span></div>
+              <div class="pcard-hint">If this change runs as planned, what do you expect to happen for students and why? A good prediction names a mechanism, not just an outcome.</div>
+              <textarea id="plan-4" placeholder="e.g. We predict students who rarely speak in whole-group settings will engage more because the stakes are lower. We expect friction in weeks one and two and improved discourse quality by week three."></textarea>
+              <div class="fc-row"><button class="btn-fc" onclick="fieldCoach(this,'plan-4','Prediction','Does this name a mechanism, not just an expected outcome? Is it specific enough to be confirmed or contradicted by observation? Does it name any anticipated friction?')">Get feedback on this</button></div>
+              <div class="fc-result" id="fc-plan-4"></div>
+            </div>
+            <div class="pcard">
+              <div class="pcard-hdr"><span class="pcard-num">05</span><span class="pcard-lbl">Measures</span></div>
+              <div class="pcard-hint">Name an outcome measure tied to student learning, a process measure tracking implementation fidelity, and a balancing measure watching for unintended effects.</div>
+              <textarea id="plan-5" placeholder="e.g. Outcome: percent of students demonstrating peer explanation per session. Process: percent of sessions using the routine with fidelity. Balancing: lesson pacing should not reduce core instructional time by more than five minutes."></textarea>
+              <div class="fc-row"><button class="btn-fc" onclick="fieldCoach(this,'plan-5','Measures','Does this include an outcome measure, a process measure, and a balancing measure? Is the outcome measure tied to student learning, not just implementation activity?')">Get feedback on this</button></div>
+              <div class="fc-result" id="fc-plan-5"></div>
+            </div>
+          </div>
+          <div class="act-row">
+            <button class="btn-coach" id="btncoach-plan" onclick="phaseCoach('plan')"><span id="icon-plan">✦</span> Get Full Plan Coaching</button>
+            <button class="btn-fwd" onclick="switchPhase('do')">Move to Do</button>
+          </div>
+        </div>
+
+        <!-- DO -->
+        <div class="phase-pane" id="pane-do">
+          <div class="prior-box"><div class="prior-hdr" onclick="togglePrior('do')"><span class="prior-title"><span class="pbadge">P</span> Plan Summary</span><span class="pchev" id="pchev-do">▼</span></div><div class="prior-body" id="pbody-do"></div></div>
+          <div class="phase-hd"><h2>Do <span>/ Implementation and Observation</span></h2><p>Document what you carried out and what you noticed. Capture surprises, since they are data too.</p></div>
+          <div class="pcards">
+            <div class="pcard">
+              <div class="pcard-hdr"><span class="pcard-num">01</span><span class="pcard-lbl">What Was Implemented and When</span></div>
+              <div class="pcard-hint">Describe how the change was carried out. Which sessions, which groups, what it looked like in practice.</div>
+              <textarea class="tall" id="do-1" placeholder="e.g. The routine ran in three small group sessions per week across weeks one through three. In week one the team modeled it before the associate took it over."></textarea>
+              <div class="fc-row"><button class="btn-fc" onclick="fieldCoach(this,'do-1','Implementation Description','Is this specific enough to assess fidelity? Does it say who did what and when? Would someone reading this be able to tell whether the change idea was actually carried out?')">Get feedback on this</button></div>
+              <div class="fc-result" id="fc-do-1"></div>
+            </div>
+            <div class="pcard">
+              <div class="pcard-hdr"><span class="pcard-num">02</span><span class="pcard-lbl">What Did You Observe About Student Learning</span></div>
+              <div class="pcard-hint">What did students do, say, or produce? Focus on learning behavior, not on what adults did.</div>
+              <textarea id="do-2" placeholder="e.g. Week one: explanations were mostly procedural. Week two: two students pushed back on each other without prompting. Week three: six of nine students used math vocabulary during explanations."></textarea>
+              <div class="fc-row"><button class="btn-fc" onclick="fieldCoach(this,'do-2','Learning Observations','Are these observations about student behavior and learning, not just adult actions? Are they specific enough to compare against the prediction?')">Get feedback on this</button></div>
+              <div class="fc-result" id="fc-do-2"></div>
+            </div>
+            <div class="pcard">
+              <div class="pcard-hdr"><span class="pcard-num">03</span><span class="pcard-lbl">Data Collected</span></div>
+              <div class="pcard-hint">Report your measures. Partial data is still useful. Name what you tracked and what you did not.</div>
+              <textarea id="do-3" placeholder="e.g. Week one: 33 percent of students demonstrated peer explanation. Week two: 56 percent. Week three: 78 percent. Routine fidelity: eight of nine sessions."></textarea>
+              <div class="fc-row"><button class="btn-fc" onclick="fieldCoach(this,'do-3','Data Collected','Does this report on the outcome, process, and balancing measures named in the Plan? Is it clear what was measured and what was not?')">Get feedback on this</button></div>
+              <div class="fc-result" id="fc-do-3"></div>
+            </div>
+            <div class="pcard">
+              <div class="pcard-hdr"><span class="pcard-num">04</span><span class="pcard-lbl">Surprises and Deviations</span></div>
+              <div class="pcard-hint">What happened that you did not expect? Surprises in either direction are data. Name anything that deviated from the plan.</div>
+              <textarea id="do-4" placeholder="e.g. Two students who almost never participate in whole-group instruction engaged actively in the peer routine. One session was cut short by a fire drill and was not counted."></textarea>
+              <div class="fc-row"><button class="btn-fc" onclick="fieldCoach(this,'do-4','Surprises and Deviations','Are these genuine surprises relative to the prediction? Is there anything here that should change how the team interprets the data in Study?')">Get feedback on this</button></div>
+              <div class="fc-result" id="fc-do-4"></div>
+            </div>
+          </div>
+          <div class="act-row">
+            <button class="btn-coach" id="btncoach-do" onclick="phaseCoach('do')"><span id="icon-do">✦</span> Get Full Do Coaching</button>
+            <button class="btn-fwd" onclick="switchPhase('study')">Move to Study</button>
+          </div>
+        </div>
+
+        <!-- STUDY -->
+        <div class="phase-pane" id="pane-study">
+          <div class="prior-box"><div class="prior-hdr" onclick="togglePrior('study')"><span class="prior-title"><span class="pbadge">P + D</span> Plan and Do Summary</span><span class="pchev" id="pchev-study">▼</span></div><div class="prior-body" id="pbody-study"></div></div>
+          <div class="phase-hd"><h2>Study <span>/ Analysis and Learning</span></h2><p>Compare what you observed to what you predicted. Go beyond the numbers. What does the evidence reveal about how students learn in this context?</p></div>
+          <div class="pcards">
+            <div class="pcard">
+              <div class="pcard-hdr"><span class="pcard-num">01</span><span class="pcard-lbl">Prediction vs. Reality</span></div>
+              <div class="pcard-hint">Go back to your prediction. What matched it? What contradicted it? Name the specific evidence for each.</div>
+              <textarea class="tall" id="study-1" placeholder="e.g. We predicted friction early and improvement by week three. Both happened. We did not predict that quieter students would engage more than in whole-group settings."></textarea>
+              <div class="fc-row"><button class="btn-fc" onclick="fieldCoach(this,'study-1','Prediction vs. Reality','Does this directly address what was predicted in the Plan? Does it name specific evidence for what matched and what did not?')">Get feedback on this</button></div>
+              <div class="fc-result" id="fc-study-1"></div>
+            </div>
+            <div class="pcard">
+              <div class="pcard-hdr"><span class="pcard-num">02</span><span class="pcard-lbl">What the Data Says About Student Learning</span></div>
+              <div class="pcard-hint">Interpret your measures. What patterns do you see? What questions do the data raise that you cannot yet answer?</div>
+              <textarea id="study-2" placeholder="e.g. The increase in peer explanation matches an increase in math vocabulary. But we are measuring frequency, not quality. We do not yet know if deeper reasoning is developing."></textarea>
+              <div class="fc-row"><button class="btn-fc" onclick="fieldCoach(this,'study-2','Data Interpretation','Does this distinguish between what students did and what students learned? Does it name the limits of the evidence?')">Get feedback on this</button></div>
+              <div class="fc-result" id="fc-study-2"></div>
+            </div>
+            <div class="pcard">
+              <div class="pcard-hdr"><span class="pcard-num">03</span><span class="pcard-lbl">What You Learned About the Learning Environment</span></div>
+              <div class="pcard-hint">What does this cycle reveal about the conditions that support or constrain learning in your context? Look past the change idea to what it exposed about the system.</div>
+              <textarea id="study-3" placeholder="e.g. Students need a structured lower-stakes entry point to academic discourse. The peer routine reduced performance anxiety for at least two students who had not been engaging before. This is a design problem, not a student problem."></textarea>
+              <div class="fc-row"><button class="btn-fc" onclick="fieldCoach(this,'study-3','System Insight','Does this go beyond describing the change idea to say something about the learning environment? Does it connect what happened to conditions in the classroom or school?')">Get feedback on this</button></div>
+              <div class="fc-result" id="fc-study-3"></div>
+            </div>
+            <div class="pcard">
+              <div class="pcard-hdr"><span class="pcard-num">04</span><span class="pcard-lbl">Confidence Level</span></div>
+              <div class="pcard-hint">How confident are you in what you have learned? What would make your evidence stronger? Be honest about what you do not yet know.</div>
+              <textarea id="study-4" placeholder="e.g. Moderate confidence in the frequency finding. Low confidence that we are capturing quality. We need to check whether discourse quality is showing up in independent written work."></textarea>
+              <div class="fc-row"><button class="btn-fc" onclick="fieldCoach(this,'study-4','Confidence and Evidence Quality','Does this honestly name the limits of the evidence? Does it say what would increase confidence? Is it specific enough to guide the next cycle?')">Get feedback on this</button></div>
+              <div class="fc-result" id="fc-study-4"></div>
+            </div>
+          </div>
+          <div class="act-row">
+            <button class="btn-coach" id="btncoach-study" onclick="phaseCoach('study')"><span id="icon-study">✦</span> Get Full Study Coaching</button>
+            <button class="btn-fwd" onclick="switchPhase('act')">Move to Act</button>
+          </div>
+        </div>
+
+        <!-- ACT -->
+        <div class="phase-pane" id="pane-act">
+          <div class="prior-box"><div class="prior-hdr" onclick="togglePrior('act')"><span class="prior-title"><span class="pbadge">P + D + S</span> Full Cycle Summary</span><span class="pchev" id="pchev-act">▼</span></div><div class="prior-body" id="pbody-act"></div></div>
+          <div class="phase-hd"><h2>Act <span>/ Decision and Next Cycle</span></h2><p>Based on what you learned, decide what comes next. Every Act is a new Plan. Your next cycle hypothesis closes the loop.</p></div>
+          <div class="pcards">
+            <div class="pcard">
+              <div class="pcard-hdr"><span class="pcard-num">01</span><span class="pcard-lbl">Adopt, Adapt, or Abandon</span></div>
+              <div class="pcard-hint">State your decision and ground it in the Study evidence. Connect it to what you learned about student learning, not just whether implementation went smoothly.</div>
+              <textarea id="act-1" placeholder="e.g. Adapt. The routine is working but we are not measuring the right things yet. We will keep the structure and add a two-level explanation rubric. Not ready to adopt or spread."></textarea>
+              <div class="fc-row"><button class="btn-fc" onclick="fieldCoach(this,'act-1','Adopt/Adapt/Abandon Decision','Is this decision grounded in the Study evidence? Does it explain why this decision and not another? Is it connected to what was learned about student learning?')">Get feedback on this</button></div>
+              <div class="fc-result" id="fc-act-1"></div>
+            </div>
+            <div class="pcard">
+              <div class="pcard-hdr"><span class="pcard-num">02</span><span class="pcard-lbl">What Will Change in the Next Cycle</span></div>
+              <div class="pcard-hint">If adapting, name the specific modifications and the reasoning behind each one.</div>
+              <textarea id="act-2" placeholder="e.g. Add a student self-assessment prompt after each explanation. Collect one piece of written work per week. Keep the routine structure unchanged."></textarea>
+              <div class="fc-row"><button class="btn-fc" onclick="fieldCoach(this,'act-2','Changes for Next Cycle','Are these changes specific and connected to what was learned in Study? Is the reasoning for each change clear?')">Get feedback on this</button></div>
+              <div class="fc-result" id="fc-act-2"></div>
+            </div>
+            <div class="pcard">
+              <div class="pcard-hdr"><span class="pcard-num">03</span><span class="pcard-lbl">Next Cycle Hypothesis</span></div>
+              <div class="pcard-hint">Write a testable prediction for the next PDSA cycle. This becomes the Plan for the next cycle.</div>
+              <textarea id="act-3" placeholder="e.g. If students self-assess explanation type and we collect weekly work samples, we predict the proportion of conceptual explanations will increase from roughly 20 percent to 40 percent by week three."></textarea>
+              <div class="fc-row"><button class="btn-fc" onclick="fieldCoach(this,'act-3','Next Cycle Hypothesis','Is this testable and specific? Does it address the evidence gaps named in Study? Is it narrow enough to actually test in one cycle?')">Get feedback on this</button></div>
+              <div class="fc-result" id="fc-act-3"></div>
+            </div>
+            <div class="pcard">
+              <div class="pcard-hdr"><span class="pcard-num">04</span><span class="pcard-lbl">Spread and Scale Readiness</span></div>
+              <div class="pcard-hint">Is this change ready to spread to other teams or contexts? What conditions would need to be true for it to work elsewhere?</div>
+              <textarea id="act-4" placeholder="e.g. Not ready for spread. Still adapting the core routine. One other team expressed interest. They should observe our next cycle first. Key conditions: small group structure, weekly team meeting, at least two team members available during small group time."></textarea>
+              <div class="fc-row"><button class="btn-fc" onclick="fieldCoach(this,'act-4','Spread Readiness','Is this assessment grounded in evidence or just caution? Does it name specific conditions that would need to hold elsewhere?')">Get feedback on this</button></div>
+              <div class="fc-result" id="fc-act-4"></div>
+            </div>
+            <div class="pcard">
+              <div class="pcard-hdr"><span class="pcard-num">05</span><span class="pcard-lbl">What the System Needs to Do</span></div>
+              <div class="pcard-hint">Name what you cannot solve at the team level. What does school or district leadership need to do to make the next cycle possible?</div>
+              <textarea id="act-5" placeholder="e.g. We need 30 minutes at the next all-team PL session to share what we are learning, not just what we are doing. We also need access to prior assessment data."></textarea>
+              <div class="fc-row"><button class="btn-fc" onclick="fieldCoach(this,'act-5','System Support Needed','Is this specific about what leadership needs to do and why? Is it asking for something that would actually enable the next cycle?')">Get feedback on this</button></div>
+              <div class="fc-result" id="fc-act-5"></div>
+            </div>
+          </div>
+          <div class="act-row">
+            <button class="btn-coach" id="btncoach-act" onclick="phaseCoach('act')"><span id="icon-act">✦</span> Get Full Act Coaching</button>
+            <button class="btn-fwd" onclick="exportText()" style="border-color:#FFC627;color:#92400E;font-weight:700;">Export Full Summary</button>
+          </div>
+        </div>
+
+        <!-- RESTORE -->
+        <div class="phase-pane" id="pane-restore">
+          <div class="restore-pane">
+            <h2>Restore a Previous Session</h2>
+            <p>Paste the session text you saved from a prior meeting. All fields will reload instantly.</p>
+            <textarea id="restorePaste" placeholder='Paste your saved session text here. It starts with { "version": ...'></textarea>
+            <br>
+            <button class="btn-restore" onclick="loadSession()">Restore Session</button>
+            <div class="restore-tip"><strong>How to save and restore between meetings:</strong> Click Save Session at the top of the tool at the end of any meeting. Copy all the text from the popup and paste it into your team's shared Google Doc or Notes app. When you meet again, come to this tab, paste the text, and click Restore.</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- COACH PANEL -->
+    <div class="coach-panel">
+      <div class="coach-hdr">
+        <div class="coach-orb" id="coachOrb"></div>
+        <span class="coach-title">Improvement Coach</span>
+        <span class="coach-tag" id="coachTag">PLAN</span>
+      </div>
+      <div class="coach-body" id="coachBody">
+        <div class="coach-empty" id="coachEmpty">
+          <div class="coach-empty-icon">◎</div>
+          <div class="coach-empty-text">Fill in your team's responses and request coaching on individual fields or the full phase.</div>
+        </div>
+        <div class="coach-out" id="coachOut"></div>
+      </div>
+      <div class="coach-footer">
+        <div style="display:flex;gap:6px;">
+          <div class="cpip active" onclick="switchPhase('plan')" title="Plan"></div>
+          <div class="cpip" onclick="switchPhase('do')" title="Do"></div>
+          <div class="cpip" onclick="switchPhase('study')" title="Study"></div>
+          <div class="cpip" onclick="switchPhase('act')" title="Act"></div>
+        </div>
+        <span class="cpip-lbl" id="cpipLbl">PLAN / 0 of 4 analyzed</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<div class="modal-bg" id="modalBg">
+  <div class="modal-box">
+    <div class="modal-title" id="modalTitle"></div>
+    <div class="modal-note" id="modalNote"></div>
+    <textarea class="modal-ta" id="modalTa" readonly></textarea>
+    <div class="modal-foot">
+      <button class="mmbtn mmbtn-cancel" onclick="closeModal()">Close</button>
+      <button class="mmbtn mmbtn-copy" id="modalCopyBtn" onclick="copyModal()">Copy All</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const PHASES = ['plan','do','study','act'];
+const LABELS = {
+  plan:  ['Problem of Practice','Aim Statement','Change Idea','Prediction','Measures'],
+  do:    ['What Was Implemented and When','Observations of Student Learning','Data Collected','Surprises and Deviations'],
+  study: ['Prediction vs. Reality','What the Data Says About Student Learning','What You Learned About the Learning Environment','Confidence Level'],
+  act:   ['Adopt/Adapt/Abandon Decision','Changes for Next Cycle','Next Cycle Hypothesis','Spread and Scale Readiness','What the System Needs to Do'],
+};
+
+const API = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+  ? 'http://localhost:8888/.netlify/functions/claude-proxy'
+  : '/.netlify/functions/claude-proxy';
+
+let analyzed = {plan:false,do:false,study:false,act:false};
+let coachCache = {};
+let activePhase = 'plan';
+
+function goPage(p) {
+  document.querySelectorAll('.page').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
+  document.getElementById('page-' + p).classList.add('active');
+  document.querySelector('[data-page="' + p + '"]').classList.add('active');
+  if (p === 'tool') updatePips();
+}
+
+function switchPhase(ph) {
+  activePhase = ph;
+  document.querySelectorAll('.ttab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.phase-pane').forEach(t => t.classList.remove('active'));
+  document.querySelector('[data-ttab="' + ph + '"]').classList.add('active');
+  document.getElementById('pane-' + ph).classList.add('active');
+  const tags = {plan:'PLAN',do:'DO',study:'STUDY',act:'ACT',restore:'RESTORE'};
+  document.getElementById('coachTag').textContent = tags[ph] || ph.toUpperCase();
+  if (coachCache[ph]) {
+    document.getElementById('coachEmpty').style.display = 'none';
+    const out = document.getElementById('coachOut');
+    out.classList.add('show'); out.innerHTML = coachCache[ph];
+  } else {
+    document.getElementById('coachEmpty').style.display = 'flex';
+    document.getElementById('coachOut').classList.remove('show');
+  }
+  if (ph === 'do') buildPrior('do', ['plan']);
+  if (ph === 'study') buildPrior('study', ['plan','do']);
+  if (ph === 'act') buildPrior('act', ['plan','do','study']);
+  updatePips();
+}
+
+function togglePrior(ph) {
+  document.getElementById('pbody-' + ph).classList.toggle('open');
+  document.getElementById('pchev-' + ph).classList.toggle('open');
+}
+
+function buildPrior(ph, priors) {
+  const body = document.getElementById('pbody-' + ph);
+  const rows = [];
+  priors.forEach(p => {
+    LABELS[p].forEach((lbl, i) => {
+      const el = document.getElementById(p + '-' + (i+1));
+      if (el && el.value.trim()) rows.push({phase: p.toUpperCase(), label: lbl, val: el.value.trim()});
+    });
+  });
+  if (!rows.length) { body.innerHTML = '<p class="pf-empty">No responses entered yet for prior phases.</p>'; return; }
+  body.innerHTML = rows.map(r => `<div class="pf"><div class="pf-lbl">${r.phase} / ${r.label}</div><div class="pf-val">${esc(r.val)}</div></div>`).join('');
+}
+
+function esc(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>'); }
+function esc2(t) { return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/\*(.+?)\*/g,'<em>$1</em>').replace(/\n/g,'<br>'); }
+
+const SCENARIOS = {
+  1: { cycleLabel: 'Cycle 1 / Fall 2025', teamName: '3rd Grade Math Team', fields: {
+    'plan-1':'During small group math blocks, students work side by side but rarely talk to each other about the math. When a student gets stuck, they wait for an adult. Misconceptions do not surface until the lead teacher or associate circulates and catches them one at a time.',
+    'plan-2':'By the end of this 6-week cycle, 75 percent of students will demonstrate at least one instance of peer mathematical explanation per observed small group session, as documented in weekly team observation notes.',
+    'plan-3':'Introduce an explain-and-challenge routine at the start of each small group. One student explains their approach to a problem. One peer asks one clarifying question before the group moves on. The associate runs this routine so the lead teacher can observe and take notes.',
+    'plan-4':'If the routine runs consistently, students who rarely speak in whole-group settings will engage more because the stakes are lower. We expect the first two weeks to feel slow. By week three we predict discourse quality will improve. We also predict the associate will need support with facilitation in the first week.',
+    'plan-5':'Outcome: percent of students demonstrating peer explanation per session. Process: percent of sessions where the routine was used with fidelity. Balancing: lesson pacing, since the routine should not consistently cut into core instructional time by more than five minutes.',
+    'do-1':'The routine ran in three small group sessions per week across weeks one through three. In week one the lead teacher modeled it with a think-aloud before the associate took it over. By week two the associate launched it independently at the start of each session.',
+    'do-2':'Week one: most explanations were procedural. Students described steps but not reasoning. The clarifying question step mostly produced silence. Week two: two students began pushing back on each other without being prompted. Week three: six of nine students used math vocabulary during explanations.',
+    'do-3':'Week one: three of nine students demonstrated peer explanation (33 percent). Week two: five of nine (56 percent). Week three: seven of nine (78 percent). Routine fidelity: eight of nine sessions. Two sessions ran six minutes over the five-minute threshold.',
+    'do-4':'Two students who almost never participate in whole-group instruction engaged actively in the peer routine. This was not expected. One session was cut short because of a fire drill and was not counted.',
+    'study-1':'We predicted early friction and improvement by week three. Both happened. We did not predict that quieter students would engage more than in whole-group settings. We hit 78 percent peer explanation by week three, ahead of the 75 percent target set for week six.',
+    'study-2':'The increase in peer explanation matches an increase in math vocabulary in observation notes. But we are measuring frequency, not quality. We do not yet know if deeper reasoning is developing or if students are meeting the form of the routine without the substance.',
+    'study-3':'Students need a structured lower-stakes entry point to academic discourse. Whole-group discussion was not creating it. The peer routine reduced performance anxiety for at least two students. This is a design problem, not a student problem.',
+    'study-4':'Moderate confidence in the frequency finding. Low confidence that we are capturing quality. We need a way to distinguish procedural explanation from conceptual explanation, and to check whether discourse quality is showing up in independent written work.',
+    'act-1':'Adapt. The routine is working but we are not measuring the right things yet. We will keep the structure and add a two-level explanation rubric. Not ready to adopt or spread.',
+    'act-2':'Add a student self-assessment prompt after each explanation: was that a steps explanation or a reasons explanation? Collect one piece of written work per week. Keep the routine structure unchanged.',
+    'act-3':'If students self-assess explanation type and we collect weekly work samples, we predict the proportion of conceptual explanations will increase from roughly 20 percent to 40 percent by week three of the next cycle.',
+    'act-4':'Not ready for spread. Still adapting the core routine. One other team has expressed interest. They should observe our next cycle before piloting independently.',
+    'act-5':'We need 30 minutes at the next all-team PL session to share what we are learning, not just what we are doing. We also need access to prior assessment data to check whether discourse gains are connecting to formal assessment results.'
+  }},
+  2: { cycleLabel: 'Cycle 1 / Spring 2025', teamName: 'Middle School Team / Coach Cycle', fields: {
+    'plan-1':'This team\'s weekly planning meetings do not produce instructional decisions. People show up, the lead teacher runs through what is coming, and everyone leaves with tasks but not shared agreements. There is no shared look at student evidence. Associates and the specialist are not shaping the plan.',
+    'plan-2':'By the end of this 4-week cycle, at least 75 percent of planning meetings will open with a structured 10-minute student evidence review, and at least two team members other than the lead teacher will contribute an instructional decision per meeting, as logged by the coach.',
+    'plan-3':'Introduce an evidence protocol at the start of each planning meeting. The coach selects two or three student work samples before the meeting. The team spends 10 minutes describing what they see before any planning begins. The lead teacher does not speak first.',
+    'plan-4':'If the protocol runs consistently, associates and the specialist will begin offering instructional suggestions because the conversation will start with shared evidence rather than the lead teacher\'s agenda. We predict early awkwardness, especially for the lead teacher. We expect the specialist to engage most readily.',
+    'plan-5':'Outcome: number of instructional decisions per meeting contributed by team members other than the lead teacher. Process: percent of meetings that used the evidence protocol for the full 10 minutes. Balancing: lead teacher\'s sense of meeting effectiveness, tracked through a brief weekly check-in.',
+    'do-1':'The evidence protocol ran at the start of four consecutive weekly planning meetings. The coach selected work samples in advance. The lead teacher was briefed the day before each meeting. The coach observed and logged each meeting but did not facilitate the protocol.',
+    'do-2':'Meeting one: the team described the work samples but defaulted to the lead teacher to interpret them. No one offered an instructional suggestion unprompted. Meeting two: the specialist named a pattern and suggested a grouping change. Meeting three: one associate asked a question that led to a conversation about differentiation. Meeting four: the team debated two approaches to a reteach.',
+    'do-3':'Protocol fidelity: four of four meetings. Instructional decisions from non-lead members: meeting one zero, meeting two one, meeting three two, meeting four three. Lead teacher check-in scores: 6, 5, 7, 8 out of 10.',
+    'do-4':'The specialist engaged faster than expected, which matched the prediction. The lead teacher\'s check-in score dropped in week two. In a brief conversation she said she felt less like the expert. The feeling shifted by week three as she saw the team\'s contributions improving the plan.',
+    'study-1':'We predicted early awkwardness and specialist engagement. Both happened. We did not predict the lead teacher\'s week two dip or that it would resolve on its own. Growth in non-lead contributions was faster than expected.',
+    'study-2':'The protocol changed who speaks and when, and that changed what gets decided. But we are measuring contributions, not quality of contributions. We do not yet know if the decisions made collaboratively are better than what the lead teacher would have made alone.',
+    'study-3':'The team had capacity the old meeting format was not activating. Associates and the specialist have useful knowledge about students that was not entering the instructional plan. The protocol created a structured opening for that knowledge. This is a design problem, not a people problem.',
+    'study-4':'Moderate confidence in the meeting functioning data. Low confidence that improved team decisions are reaching students. We need to connect what happens in planning meetings to what happens in instruction, and then to student outcomes.',
+    'act-1':'Adopt the protocol structure and adapt the evidence selection process. The coach is currently selecting work samples, which is not sustainable. In the next cycle the team will rotate who selects evidence.',
+    'act-2':'Rotate evidence selection responsibility across all four team members on a weekly schedule. Add one brief reflection question at the end of each meeting: did the evidence we looked at change what we planned?',
+    'act-3':'If team members rotate evidence selection, we predict the quality of evidence brought to meetings will vary but the sense of shared ownership will increase. We predict at least one meeting where the evidence selection itself becomes a learning moment.',
+    'act-4':'Not ready for spread. The coach needs to step further back first. Once the team runs the protocol independently for four weeks, it may be worth sharing the structure with one other team to observe.',
+    'act-5':'The principal needs to know this is happening and why. If the coach is asking teams to practice distributed leadership in planning meetings, the school needs to name that as a value. Right now it is a quiet experiment that puts the lead teacher in an ambiguous position.'
+  }}
+};
+
+function loadScenario(n) {
+  const s = SCENARIOS[n];
+  document.getElementById('cycleLabel').value = s.cycleLabel;
+  document.getElementById('teamName').value = s.teamName;
+  Object.entries(s.fields).forEach(([id, val]) => { const el = document.getElementById(id); if (el) el.value = val; });
+  goPage('tool'); switchPhase('plan');
+  toast('Scenario ' + n + ' loaded into the tool');
+}
+
+async function fieldCoach(btn, fieldId, fieldName, criteria) {
+  const val = document.getElementById(fieldId).value.trim();
+  if (!val) { toast('Fill in this field before requesting feedback'); return; }
+  const resultEl = document.getElementById('fc-' + fieldId);
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spin">↻</span> Checking...';
+  resultEl.className = 'fc-result show';
+  resultEl.textContent = 'Reading your response...';
+  const cycle = document.getElementById('cycleLabel').value || 'this cycle';
+  const team  = document.getElementById('teamName').value || 'this team';
+  const prompt = `You are an improvement science coach giving focused feedback on one field of a PDSA cycle form.
+
+Team: ${team}, ${cycle}
+Field: ${fieldName}
+What the team wrote: ${val}
+
+Evaluation criteria for this field: ${criteria}
+
+Give 2 to 3 sentences of direct, specific feedback. Name one thing that is working and one thing to sharpen or add. Write in plain language. Do not use em dashes. Do not use filler phrases. Just say what you see and what would make it stronger. If the response is genuinely strong, say so and name specifically why.`;
+  try {
+    const res = await fetch(API, { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({messages:[{role:'user',content:prompt}]}) });
+    if (!res.ok) throw new Error('Server error ' + res.status);
+    const data = await res.json();
+    if (data.error) throw new Error(data.error.message || data.error);
+    resultEl.className = 'fc-result show';
+    resultEl.innerHTML = esc2(data.content?.[0]?.text || '');
+  } catch (err) {
+    resultEl.className = 'fc-result err show';
+    resultEl.textContent = 'Error: ' + err.message;
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = 'Get feedback on this';
+  }
+}
+
+async function phaseCoach(ph) {
+  const data = collectPhase(ph);
+  if (!Object.keys(data).length) { toast('Fill in at least one field before requesting coaching'); return; }
+  const btn = document.getElementById('btncoach-' + ph);
+  const icon = document.getElementById('icon-' + ph);
+  const orb = document.getElementById('coachOrb');
+  btn.disabled = true; icon.classList.add('spin'); icon.textContent = '↻';
+  orb.className = 'coach-orb thinking';
+  document.getElementById('coachEmpty').style.display = 'none';
+  const out = document.getElementById('coachOut');
+  out.classList.add('show');
+  out.innerHTML = '<div class="cs"><div class="cs-text">Reading your team\'s responses...</div></div>';
+  const cycle = document.getElementById('cycleLabel').value || 'this cycle';
+  const team  = document.getElementById('teamName').value || 'this team';
+  const responses = Object.entries(data).map(([k,v]) => k + ':\n' + v).join('\n\n');
+  const prompts = {
+    plan: `You are an improvement science coach. An educator team (${team}, ${cycle}) has completed the Plan phase.\n\nTheir responses:\n${responses}\n\nGive focused coaching using these exact bold headers on their own lines:\n\n**Theory of Improvement Check**\nIs the aim statement student-centered and measurable? Does the change idea connect logically to the problem? Is the prediction a testable hypothesis or just an optimistic expectation?\n\n**Strengths**\nTwo or three specific things the team did well. Reference their actual words.\n\n**What to Sharpen**\nOne or two gaps or logical leaps that could undermine the cycle. Be direct and specific.\n\n**One Question for the Team**\nOne question the team should wrestle with before they start implementing.\n\n**Watch for in Do**\nOne specific thing to observe closely during implementation.\n\nWrite in plain, direct language. No em dashes. No filler phrases. Under 380 words.`,
+    do: `You are an improvement science coach. Team: ${team}, ${cycle}. Do phase.\n\nTheir responses:\n${responses}\n\nUse these exact bold headers on their own lines:\n\n**Fidelity Check**\nHow consistently was the change implemented? What is clear and what is uncertain?\n\n**Quality of Evidence**\nAre they capturing meaningful evidence of student learning, not just activity? What is strong and what is missing?\n\n**What Stands Out**\nWhat is most notable from their observations? Connect anything surprising to their theory of improvement.\n\n**Two Questions for Study**\nTwo specific questions rooted in the gap between their prediction and what they observed.\n\n**Coaching Note**\nOne direct piece of advice for how to approach Study.\n\nPlain language. No em dashes. Under 360 words.`,
+    study: `You are an improvement science coach. Team: ${team}, ${cycle}. Study phase.\n\nTheir responses:\n${responses}\n\nUse these exact bold headers on their own lines:\n\n**Quality of Analysis**\nAre they distinguishing between what students did and what students learned? Are they being honest about the limits of their evidence?\n\n**Theory of Improvement: Does It Hold**\nBased on the evidence, does their theory appear to hold? Where is it strained?\n\n**What They Are Not Yet Seeing**\nWhat are they missing about the learning environment or system conditions?\n\n**Evidence Gaps**\nWhat evidence would significantly change their interpretation if they had it?\n\n**The Question for Act**\nName the core decision they need to make in Act based on what they have actually learned.\n\nPlain language. No em dashes. Under 360 words.`,
+    act: `You are an improvement science coach. Team: ${team}, ${cycle}. Act phase.\n\nTheir responses:\n${responses}\n\nUse these exact bold headers on their own lines:\n\n**Decision Quality**\nIs the adopt/adapt/abandon decision grounded in the Study evidence? Is it appropriately calibrated?\n\n**Next Cycle Hypothesis**\nIs it testable and specific? Does it address the evidence gaps from Study?\n\n**Spread Readiness**\nHonest assessment. What conditions need to hold for this to work in another team's context?\n\n**For Leadership**\nOne concrete action school or district leadership should take based on the system support needs named here.\n\n**Closing Thought**\nTwo to three sentences on what this team has demonstrated about their improvement capacity and what the main growth edge is heading into the next cycle.\n\nPlain language. No em dashes. Under 380 words.`
+  };
+  try {
+    const res = await fetch(API, { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({messages:[{role:'user',content:prompts[ph]}]}) });
+    if (!res.ok) throw new Error('Server error ' + res.status);
+    const result = await res.json();
+    if (result.error) throw new Error(result.error.message || result.error);
+    const text = result.content?.[0]?.text || '';
+    const html = renderSections(text);
+    coachCache[ph] = html; out.innerHTML = html;
+    analyzed[ph] = true;
+    document.querySelector('[data-ttab="' + ph + '"]').classList.add('done');
+    orb.className = 'coach-orb done';
+    updatePips();
+  } catch (err) {
+    out.innerHTML = '<div class="cs"><div class="cs-text" style="color:#991B1B">Error: ' + err.message + '</div></div>';
+    orb.className = 'coach-orb';
+  } finally {
+    btn.disabled = false; icon.classList.remove('spin'); icon.textContent = '✦';
+  }
+}
+
+function collectPhase(ph) {
+  const data = {};
+  LABELS[ph].forEach((lbl, i) => { const el = document.getElementById(ph + '-' + (i+1)); if (el && el.value.trim()) data[lbl] = el.value.trim(); });
+  return data;
+}
+
+function renderSections(text) {
+  const sections = []; let cur = null, buf = [];
+  text.split('\n').forEach(line => {
+    const m = line.match(/^\*\*(.+?)\*\*\s*$/);
+    if (m) { if (cur !== null) sections.push({label:cur, text:buf.join('\n').trim()}); cur = m[1]; buf = []; }
+    else if (cur !== null) buf.push(line);
+  });
+  if (cur !== null) sections.push({label:cur, text:buf.join('\n').trim()});
+  if (!sections.length) return '<div class="cs"><div class="cs-text">' + esc2(text) + '</div></div>';
+  return sections.map(s => '<div class="cs"><div class="cs-lbl">' + s.label + '</div><div class="cs-text">' + esc2(s.text) + '</div></div>').join('');
+}
+
+function updatePips() {
+  const pips = document.querySelectorAll('.cpip');
+  const count = Object.values(analyzed).filter(Boolean).length;
+  PHASES.forEach((p,i) => { pips[i].className = 'cpip'; if (analyzed[p]) pips[i].classList.add('done'); if (p === activePhase) pips[i].classList.add('active'); });
+  document.getElementById('cpipLbl').textContent = activePhase.toUpperCase() + ' / ' + count + ' of 4 analyzed';
+}
+
+function saveSession() {
+  const s = {version:2, savedAt:new Date().toISOString(), cycleLabel:document.getElementById('cycleLabel').value, teamName:document.getElementById('teamName').value, fields:{}};
+  PHASES.forEach(ph => { LABELS[ph].forEach((_,i) => { const el = document.getElementById(ph+'-'+(i+1)); if (el) s.fields[ph+'-'+(i+1)] = el.value; }); });
+  showModal('Save Session', 'Copy all this text and paste it into your team shared Google Doc or Notes. To reload it, go to the Restore tab and paste it back in.', JSON.stringify(s, null, 2));
+}
+
+function loadSession() {
+  const raw = document.getElementById('restorePaste').value.trim();
+  if (!raw) { toast('Paste your session text first'); return; }
+  try {
+    const s = JSON.parse(raw);
+    if (!s.version || !s.fields) throw new Error();
+    document.getElementById('cycleLabel').value = s.cycleLabel || '';
+    document.getElementById('teamName').value = s.teamName || '';
+    Object.entries(s.fields).forEach(([id, val]) => { const el = document.getElementById(id); if (el) el.value = val || ''; });
+    toast('Session restored'); switchPhase('plan');
+  } catch { toast('Could not read session. Paste the full saved text.'); }
+}
+
+function exportText() {
+  const cycle = document.getElementById('cycleLabel').value || 'PDSA Cycle';
+  const team  = document.getElementById('teamName').value || '';
+  const date  = new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});
+  let out = 'PDSA CYCLE SUMMARY\n' + cycle + (team ? ' / ' + team : '') + '\nExported: ' + date + '\n' + '='.repeat(56) + '\n\n';
+  PHASES.forEach(ph => {
+    out += ph.toUpperCase() + ' PHASE\n' + '-'.repeat(40) + '\n';
+    LABELS[ph].forEach((lbl,i) => { const el = document.getElementById(ph+'-'+(i+1)); if (el && el.value.trim()) out += '\n' + lbl + ':\n' + el.value.trim() + '\n'; });
+    out += '\n';
+  });
+  showModal('Export Summary', 'Copy this text and paste it into a Word doc or Google Doc for your cycle documentation.', out);
+}
+
+function showModal(title, note, content) {
+  document.getElementById('modalTitle').textContent = title;
+  document.getElementById('modalNote').textContent = note;
+  document.getElementById('modalTa').value = content;
+  document.getElementById('modalBg').classList.add('open');
+  setTimeout(() => document.getElementById('modalTa').select(), 60);
+}
+function closeModal() { document.getElementById('modalBg').classList.remove('open'); }
+function copyModal() {
+  const ta = document.getElementById('modalTa');
+  ta.select(); ta.setSelectionRange(0, 99999);
+  try { document.execCommand('copy'); document.getElementById('modalCopyBtn').textContent = 'Copied!'; setTimeout(() => document.getElementById('modalCopyBtn').textContent = 'Copy All', 2000); }
+  catch { toast('Select all and use Ctrl+C or Cmd+C'); }
+}
+
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+updatePips();
+</script>
+</body>
+</html>
