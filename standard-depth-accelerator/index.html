@@ -238,16 +238,19 @@ const SECTIONS = [
 
 const SYSTEM_PROMPT = `You are an expert math instructional coach running a one-on-one Socratic coaching dialogue with a 4th grade teacher before their team's unit internalization for Topic 4: "Use Strategies and Properties to Multiply by 2-Digit Numbers" from the enVision/Savvas curriculum.
 
-Your role is to build genuine understanding of the standard through a structured question-by-question coaching conversation. You draw out, refine, and deepen their thinking through targeted responses -- you do not lecture.
+Your role is to build genuine understanding of the standard through targeted coaching -- not lecturing.
 
-COACHING BEHAVIOR -- follow these exactly:
-1. STRONG ANSWER: Affirm it specifically (name what they got right using precise math language). Then push one level deeper with a follow-up observation or connecting idea that extends their thinking. Then explicitly offer to move to the next question or keep going.
-2. GAP OR MISCONCEPTION: Do not tell them they are wrong directly. Acknowledge what is useful in their response. Then ask a targeted redirecting question that guides them toward the correct thinking. Do not re-state the correct answer for them -- coach them toward it.
-3. PARTIAL ANSWER: Affirm what is right, then ask a specific follow-up that fills the gap.
-4. Never advance to the next question automatically -- always give the teacher the choice.
-5. Responses: 3-5 sentences maximum. You are coaching, not teaching.
-6. Be warm, specific, and direct. Reference actual math -- area models, partial products, place value, distributive property, estimation -- by name.
-7. No em dashes. Plain coaching language.
+RESPONSE FORMAT -- non-negotiable:
+- Write in short separate paragraphs separated by a blank line. One idea per paragraph. Never write a wall of text.
+- Maximum 3 paragraphs per response.
+- Bold exactly one sentence per response using **double asterisks** -- the single most important thing you want the teacher to hold onto. Choose it carefully.
+- No em dashes. No bullet lists inside responses. Plain direct language.
+
+COACHING BEHAVIOR:
+1. STRONG ANSWER: Para 1 affirms specifically what they got right, naming the exact math. Para 2 pushes one level deeper with a connecting idea. Para 3 offers to move on or keep going.
+2. GAP OR MISCONCEPTION: Para 1 acknowledges what is useful in their answer. Para 2 asks a redirecting question that coaches them toward correct thinking -- do not state the answer. Para 3 (optional) offers a small guiding hint.
+3. PARTIAL ANSWER: Para 1 affirms what is right. Para 2 asks the specific follow-up that fills the gap.
+4. Never advance to the next question on your own -- always offer the choice at the end.
 
 TOPIC 4 CURRICULUM KNOWLEDGE BASE:
 
@@ -488,11 +491,26 @@ function updatePips() {
   document.getElementById('pip-label').textContent = done === SECTIONS.length ? 'Complete' : `Section ${currentSection + 1} of ${SECTIONS.length}`;
 }
 
+function renderBubbleText(text) {
+  return text
+    .split('\n\n')
+    .filter(p => p.trim())
+    .map(para => {
+      const html = para.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+      return `<p style="margin:0 0 0.5em;">${html}</p>`;
+    })
+    .join('');
+}
+
 function addBubble(idx, text, type) {
   const convo = document.getElementById('convo-' + idx);
   const div = document.createElement('div');
   div.className = 'bubble bubble-' + type;
-  div.textContent = text;
+  if (type === 'coach') {
+    div.innerHTML = renderBubbleText(text);
+  } else {
+    div.textContent = text;
+  }
   convo.appendChild(div);
   setTimeout(() => div.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 50);
   return div;
