@@ -165,7 +165,7 @@ body { font-family: var(--font-body); background: var(--surface); color: var(--i
     <div class="complete-actions">
       <button class="btn-gold" onclick="downloadJSON()">Download my responses</button>
     </div>
-    <p class="submit-status" id="submit-status"></p>
+
   </div>
 
 </main>
@@ -240,17 +240,17 @@ const SYSTEM_PROMPT = `You are an expert math instructional coach running a one-
 
 Your role is to build genuine understanding of the standard through targeted coaching -- not lecturing.
 
-RESPONSE FORMAT -- non-negotiable:
-- Write in short separate paragraphs separated by a blank line. One idea per paragraph. Never write a wall of text.
-- Maximum 3 paragraphs per response.
-- Bold exactly one sentence per response using **double asterisks** -- the single most important thing you want the teacher to hold onto. Choose it carefully.
-- No em dashes. No bullet lists inside responses. Plain direct language.
+RESPONSE FORMAT -- non-negotiable, every single response:
+- Maximum 2 short paragraphs. Each paragraph is 1-2 sentences only. Never more.
+- Separate paragraphs with a blank line.
+- Bold exactly one sentence per response using **double asterisks** -- the single most important idea. Only one. Never bold more than one sentence.
+- No em dashes. No lists. No long explanations. If you feel the urge to write a third paragraph, cut it.
 
 COACHING BEHAVIOR:
-1. STRONG ANSWER: Para 1 affirms specifically what they got right, naming the exact math. Para 2 pushes one level deeper with a connecting idea. Para 3 offers to move on or keep going.
-2. GAP OR MISCONCEPTION: Para 1 acknowledges what is useful in their answer. Para 2 asks a redirecting question that coaches them toward correct thinking -- do not state the answer. Para 3 (optional) offers a small guiding hint.
-3. PARTIAL ANSWER: Para 1 affirms what is right. Para 2 asks the specific follow-up that fills the gap.
-4. Never advance to the next question on your own -- always offer the choice at the end.
+1. STRONG ANSWER: Para 1 = one sentence affirming what they got right, naming the specific math. Para 2 = one sentence pushing deeper OR offering to move on.
+2. GAP OR MISCONCEPTION: Para 1 = one sentence acknowledging what is useful. Para 2 = one redirecting question. Do not explain the correct answer.
+3. PARTIAL ANSWER: Para 1 = one sentence affirming what is right. Para 2 = one follow-up question filling the gap.
+4. Never advance to the next question on your own -- always offer the choice, but keep that offer to five words or fewer.
 
 TOPIC 4 CURRICULUM KNOWLEDGE BASE:
 
@@ -380,7 +380,7 @@ async function handleSubmit(idx) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         model: 'claude-sonnet-4-5',
-        max_tokens: 500,
+        max_tokens: 200,
         system: `${SYSTEM_PROMPT}\n\nSection context: ${sec.coachContext}\n\nCurrent section: "${sec.title}" (${idx + 1} of ${SECTIONS.length})\nCurrent question (${currentQuestion + 1} of ${sec.questions.length}): "${sec.questions[currentQuestion]}"\nTeacher name: ${teacherName}\n${contextNote}`,
         messages: sectionHistories[idx]
       })
@@ -443,6 +443,7 @@ function renderAdvanceOptions(idx, isLastQ, isLastSec) {
 
 function advanceSection(idx) {
   markComplete(idx);
+  submitSection(idx);
   const next = idx + 1;
   const nextBlock = document.getElementById('section-' + next);
   nextBlock.classList.remove('locked');
@@ -458,11 +459,37 @@ function advanceSection(idx) {
 
 function finishSession(idx) {
   markComplete(idx);
+  submitSection(idx);
   updatePips();
   const banner = document.getElementById('complete-card');
   banner.classList.add('visible');
   setTimeout(() => banner.scrollIntoView({ behavior: 'smooth', block: 'start' }), 300);
-  submitToSheets();
+}
+
+async function submitSection(idx) {
+  const sec = SECTIONS[idx];
+  const exchanges = sessionData.sections[sec.id]?.exchanges || [];
+  if (!exchanges.length) return;
+
+  const rows = exchanges.map(ex => ({
+    timestamp: sessionData.timestamp,
+    name: teacherName,
+    school: teacherSchool,
+    section: sec.title,
+    question_num: ex.question_num,
+    question: ex.question,
+    answer: ex.answer
+  }));
+
+  try {
+    await fetch(SHEETS_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ rows })
+    });
+  } catch (err) {
+    console.warn('Section submit failed:', err);
+  }
 }
 
 function markComplete(idx) {
@@ -528,36 +555,7 @@ function downloadJSON() {
   URL.revokeObjectURL(url);
 }
 
-async function submitToSheets() {
-  const status = document.getElementById('submit-status');
-  status.textContent = 'Sending your responses to your coach...';
 
-  const rows = [];
-  SECTIONS.forEach(sec => {
-    (sessionData.sections[sec.id]?.exchanges || []).forEach(ex => {
-      rows.push({
-        timestamp: sessionData.timestamp,
-        name: teacherName,
-        school: teacherSchool,
-        section: sec.title,
-        question_num: ex.question_num,
-        question: ex.question,
-        answer: ex.answer
-      });
-    });
-  });
-
-  try {
-    await fetch(SHEETS_ENDPOINT, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ rows })
-    });
-    status.textContent = 'Sent. Your coach will receive your responses.';
-  } catch (err) {
-    status.textContent = 'Could not send automatically -- please use "Download my responses."';
-  }
-}
 </script>
 </body>
 </html>
