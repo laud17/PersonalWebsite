@@ -22,10 +22,12 @@
     }
     * { box-sizing: border-box; }
     body { margin: 0; color: var(--ink); background: var(--wash); font: 16px/1.45 Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
-    button, select { font: inherit; }
-    .topbar { background: var(--brand); color: #fff; padding: 20px clamp(18px, 4vw, 48px); border-bottom: 5px solid #f2b54b; }
+    button, select, input { font: inherit; }
+    .topbar { background: var(--brand); color: #fff; padding: 20px clamp(18px, 4vw, 48px); border-bottom: 5px solid #f2b54b; display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between; }
     .topbar h1 { margin: 0; font-size: clamp(1.45rem, 3vw, 2.15rem); letter-spacing: -.025em; }
     .topbar p { margin: 4px 0 0; color: #f7dfe7; font-size: .95rem; }
+    .home-link { background: rgba(255,255,255,.14); border: 1px solid rgba(255,255,255,.35); color: #fff; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: .85rem; white-space: nowrap; }
+    .home-link:hover { background: rgba(255,255,255,.24); }
     main { max-width: 1440px; margin: 0 auto; padding: 24px clamp(16px, 3vw, 40px) 48px; }
     .toolbar { display: flex; flex-wrap: wrap; gap: 14px; align-items: end; justify-content: space-between; margin-bottom: 18px; }
     .filter-group { display: flex; flex-wrap: wrap; align-items: end; gap: 12px; }
@@ -42,7 +44,7 @@
     .stat { background: var(--paper); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; box-shadow: 0 3px 12px rgba(25,34,52,.035); }
     .stat .kicker { color: var(--muted); font-size: .74rem; text-transform: uppercase; letter-spacing: .06em; font-weight: 800; }
     .stat strong { display: block; margin-top: 5px; font-size: 1.5rem; line-height: 1.1; letter-spacing: -.02em; }
-    .panel { background: var(--paper); border: 1px solid var(--line); border-radius: 12px; box-shadow: var(--shadow); overflow: hidden; }
+    .panel { background: var(--paper); border: 1px solid var(--line); border-radius: 12px; box-shadow: var(--shadow); overflow: hidden; margin-bottom: 18px; }
     .panel-head { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between; padding: 17px 18px; border-bottom: 1px solid var(--line); }
     .panel-head h2 { margin: 0; font-size: 1.15rem; }
     .panel-head p { margin: 2px 0 0; color: var(--muted); font-size: .88rem; }
@@ -66,7 +68,7 @@
     .tooltip.visible { opacity: 1; transform: translateY(0); }
     .tooltip strong { display: block; margin-bottom: 3px; }
     .tooltip small { display: block; color: #cbd5e1; line-height: 1.4; }
-    .details { display: grid; grid-template-columns: 1.2fr .8fr; gap: 18px; margin-top: 18px; }
+    .details { display: grid; grid-template-columns: 1.2fr .8fr; gap: 18px; margin-top: 18px; margin-bottom: 18px; }
     .detail-card { background: #fff; border: 1px solid var(--line); border-radius: 10px; padding: 17px 18px; }
     .detail-card h3 { margin: 0 0 10px; font-size: 1rem; }
     .bar-row { display: grid; grid-template-columns: 145px 1fr 34px; gap: 10px; align-items: center; margin: 9px 0; font-size: .83rem; }
@@ -74,20 +76,26 @@
     .bar-fill { height: 100%; background: linear-gradient(90deg, #f0b94e, #24735a); border-radius: inherit; }
     .source-note { margin: 14px 2px 0; color: var(--muted); font-size: .78rem; }
     .empty { padding: 50px 20px; text-align: center; color: var(--muted); }
-    .ask-panel { margin-top: 18px; }
-    .ask-panel .panel-head p { max-width: 640px; }
-    .ask-body { padding: 17px 18px; }
-    .ask-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
-    .ask-chip { border: 1px solid var(--line); background: var(--wash); color: var(--ink); border-radius: 99px; padding: 7px 13px; font-size: .8rem; cursor: pointer; }
-    .ask-chip:hover { border-color: var(--brand); color: var(--brand); }
-    .ask-form { display: flex; gap: 10px; }
-    .ask-form input { flex: 1; padding: 12px 14px; border: 1px solid #bbc3cf; border-radius: 8px; font-size: .92rem; color: var(--ink); }
-    .ask-form button { background: var(--brand); color: #fff; border: 0; border-radius: 8px; padding: 0 20px; font-weight: 700; cursor: pointer; }
-    .ask-form button:disabled { background: #c3aab5; cursor: default; }
-    .ask-answer { margin-top: 14px; padding: 14px 16px; background: var(--wash); border: 1px solid var(--line); border-radius: 10px; font-size: .9rem; line-height: 1.55; white-space: pre-wrap; }
-    .ask-answer.loading { color: var(--muted); font-style: italic; }
-    .ask-answer.error { background: #fdf1f1; border-color: #f0c6c6; color: #9a2f2f; }
-    .ask-note { margin: 10px 2px 0; color: var(--muted); font-size: .76rem; }
+    .hidden { display: none !important; }
+    .center-wrap { max-width: 640px; margin: 40px auto; padding: 0 16px; }
+    .home-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    @media (max-width: 640px) { .home-grid { grid-template-columns: 1fr; } }
+    .home-card { background: var(--paper); border: 1px solid var(--line); border-radius: 14px; box-shadow: var(--shadow); padding: 28px 24px; text-align: left; cursor: pointer; }
+    .home-card h2 { margin: 0 0 8px; font-size: 1.2rem; color: var(--brand); }
+    .home-card p { margin: 0; color: var(--muted); font-size: .9rem; }
+    .home-card button { margin-top: 16px; background: var(--brand); color: #fff; border: 0; border-radius: 8px; padding: 10px 18px; font-weight: 700; cursor: pointer; }
+    .home-card button:hover { background: var(--brand-dark); }
+    .gate-card { background: var(--paper); border: 1px solid var(--line); border-radius: 14px; box-shadow: var(--shadow); padding: 28px 26px; }
+    .gate-card h2 { margin: 0 0 6px; }
+    .gate-card p { margin: 0 0 18px; color: var(--muted); font-size: .9rem; }
+    .gate-card label { margin-bottom: 14px; }
+    .gate-card input[type="password"], .gate-card select { width: 100%; padding: 11px 12px; border: 1px solid #bbc3cf; border-radius: 8px; }
+    .gate-card button[type="submit"] { width: 100%; background: var(--brand); color: #fff; border: 0; border-radius: 8px; padding: 12px; font-weight: 700; cursor: pointer; margin-top: 4px; }
+    .gate-card button[type="submit"]:hover { background: var(--brand-dark); }
+    .gate-error { color: #9a2f2f; font-size: .85rem; margin-top: 10px; min-height: 1.2em; }
+    .back-link { display: inline-block; margin-bottom: 16px; color: var(--brand); font-weight: 700; font-size: .88rem; cursor: pointer; text-decoration: none; }
+    .back-link:hover { text-decoration: underline; }
+    .tier-heading { font-size: .82rem; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); font-weight: 800; margin: 0 0 8px; }
     @media (max-width: 850px) { .summary { grid-template-columns: repeat(2, 1fr); } .details { grid-template-columns: 1fr; } .toolbar { align-items: stretch; } }
     @media (max-width: 520px) { .summary { grid-template-columns: 1fr 1fr; } select { min-width: 100%; } .filter-group { display: grid; width: 100%; } .stat strong { font-size: 1.25rem; } }
     @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
@@ -95,65 +103,159 @@
 </head>
 <body>
   <header class="topbar">
-    <h1>Albuquerque Public Schools Teaming Dashboard</h1>
-    <p>Beginning-of-year team-based staffing implementation across team elements</p>
+    <div>
+      <h1>Albuquerque Public Schools Teaming Dashboard</h1>
+      <p>Beginning-of-year team-based staffing implementation across team elements</p>
+    </div>
+    <button class="home-link hidden" id="homeLinkBtn" type="button">&larr; Home</button>
   </header>
 
   <main>
-    <section class="toolbar" aria-label="Heat map controls">
-      <div class="filter-group">
-        <label for="schoolSelect">School view
-          <select id="schoolSelect"></select>
-        </label>
-        <div class="segmented" aria-label="Display detail">
-          <button id="labelsOn" type="button" aria-pressed="true">Stages + scores</button>
-          <button id="labelsOff" type="button" aria-pressed="false">Density (color only)</button>
-        </div>
-      </div>
-      <div class="legend" id="legend" aria-label="Implementation scale">
-        <span><i class="swatch" style="background:var(--none)"></i>Not yet evident</span>
-        <span><i class="swatch" style="background:var(--beginning)"></i>Beginning</span>
-        <span><i class="swatch" style="background:var(--demonstrating)"></i>Demonstrating</span>
-        <span><i class="swatch" style="background:var(--deepening)"></i>Deepening</span>
+    <!-- SCREEN: HOME -->
+    <section id="screenHome" class="center-wrap">
+      <div class="home-grid">
+        <article class="home-card">
+          <h2>District system overview</h2>
+          <p>Password-protected. See the full heat map across all schools, filterable by middle schools, high schools, or both.</p>
+          <button type="button" id="goOverview">Enter overview</button>
+        </article>
+        <article class="home-card">
+          <h2>Individual school</h2>
+          <p>Password-protected per school. See your teams, your school's rollup, and how it compares to the system.</p>
+          <button type="button" id="goSchool">Enter school view</button>
+        </article>
       </div>
     </section>
 
-    <section class="summary" id="summary"></section>
-
-    <section class="panel">
-      <div class="panel-head">
-        <div>
-          <h2 id="viewTitle">District overview</h2>
-          <p id="viewSubtitle">Hover or focus on a cell for detail.</p>
-        </div>
-      </div>
-      <div class="table-wrap">
-        <table aria-describedby="viewSubtitle">
-          <thead><tr id="headers"></tr></thead>
-          <tbody id="heatBody"></tbody>
-        </table>
-      </div>
-    </section>
-
-    <section class="details" id="details"></section>
-    <p class="source-note" id="sourceNote"></p>
-
-    <section class="panel ask-panel">
-      <div class="panel-head">
-        <div>
-          <h2>Ask about the data</h2>
-          <p>Ask a question about implementation progress and get an answer grounded in this dashboard's data.</p>
-        </div>
-      </div>
-      <div class="ask-body">
-        <div class="ask-chips" id="askChips"></div>
-        <form class="ask-form" id="askForm">
-          <input type="text" id="askInput" placeholder="e.g. Which schools are furthest along in Dynamic team teaching?" autocomplete="off" />
-          <button type="submit" id="askSubmit">Ask</button>
+    <!-- SCREEN: OVERVIEW PASSWORD GATE -->
+    <section id="screenOverviewGate" class="center-wrap hidden">
+      <a class="back-link" id="backFromOverviewGate">&larr; Back</a>
+      <div class="gate-card">
+        <h2>District system overview</h2>
+        <p>Enter the district password to continue.</p>
+        <form id="overviewGateForm">
+          <label>Password
+            <input type="password" id="overviewPassword" autocomplete="off" />
+          </label>
+          <button type="submit">Continue</button>
+          <div class="gate-error" id="overviewGateError"></div>
         </form>
-        <div id="askAnswer"></div>
-        <p class="ask-note">Answers are generated by Claude based only on the data shown above and may be imperfect — verify anything important.</p>
       </div>
+    </section>
+
+    <!-- SCREEN: OVERVIEW (protected) -->
+    <section id="screenOverview" class="hidden">
+      <a class="back-link" id="backFromOverview">&larr; Back to home</a>
+
+      <section class="toolbar" aria-label="Heat map controls">
+        <div class="filter-group">
+          <label>School type
+            <div class="segmented" id="typeFilterGroup" aria-label="Filter by school type">
+              <button type="button" data-type="all" aria-pressed="true">Both</button>
+              <button type="button" data-type="middle" aria-pressed="false">Middle schools</button>
+              <button type="button" data-type="high" aria-pressed="false">High schools</button>
+            </div>
+          </label>
+          <label for="schoolSelect">School view
+            <select id="schoolSelect"></select>
+          </label>
+          <div class="segmented" aria-label="Display detail">
+            <button id="labelsOn" type="button" aria-pressed="true">Stages + scores</button>
+            <button id="labelsOff" type="button" aria-pressed="false">Density (color only)</button>
+          </div>
+        </div>
+        <div class="legend" id="legend" aria-label="Implementation scale">
+          <span><i class="swatch" style="background:var(--none)"></i>Not yet evident</span>
+          <span><i class="swatch" style="background:var(--beginning)"></i>Beginning</span>
+          <span><i class="swatch" style="background:var(--demonstrating)"></i>Demonstrating</span>
+          <span><i class="swatch" style="background:var(--deepening)"></i>Deepening</span>
+        </div>
+      </section>
+
+      <section class="summary" id="summary"></section>
+
+      <section class="panel">
+        <div class="panel-head">
+          <div>
+            <h2 id="viewTitle">District overview</h2>
+            <p id="viewSubtitle">Hover or focus on a cell for detail.</p>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table aria-describedby="viewSubtitle">
+            <thead><tr id="headers"></tr></thead>
+            <tbody id="heatBody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="details" id="details"></section>
+      <p class="source-note" id="sourceNote"></p>
+    </section>
+
+    <!-- SCREEN: SCHOOL PASSWORD GATE -->
+    <section id="screenSchoolGate" class="center-wrap hidden">
+      <a class="back-link" id="backFromSchoolGate">&larr; Back</a>
+      <div class="gate-card">
+        <h2>Individual school</h2>
+        <p>Pick your school and enter its password.</p>
+        <form id="schoolGateForm">
+          <label>School
+            <select id="schoolGateSelect"></select>
+          </label>
+          <label>Password
+            <input type="password" id="schoolGatePassword" autocomplete="off" />
+          </label>
+          <button type="submit">Continue</button>
+          <div class="gate-error" id="schoolGateError"></div>
+        </form>
+      </div>
+    </section>
+
+    <!-- SCREEN: SCHOOL VIEW (protected) -->
+    <section id="screenSchool" class="hidden">
+      <a class="back-link" id="backFromSchool">&larr; Back to home</a>
+      <section class="panel" id="schoolIntroPanel">
+        <div class="panel-head">
+          <div>
+            <h2 id="schoolViewTitle"></h2>
+            <p id="schoolViewSubtitle"></p>
+          </div>
+        </div>
+      </section>
+
+      <p class="tier-heading">Your teams</p>
+      <section class="panel">
+        <div class="table-wrap">
+          <table>
+            <thead><tr id="schoolTeamHeaders"></tr></thead>
+            <tbody id="schoolTeamBody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <p class="tier-heading">School rollup</p>
+      <section class="panel">
+        <div class="table-wrap">
+          <table>
+            <thead><tr id="schoolRollupHeaders"></tr></thead>
+            <tbody id="schoolRollupBody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <p class="tier-heading">System-level rollup (all APS schools, for comparison)</p>
+      <section class="panel">
+        <div class="table-wrap">
+          <table>
+            <thead><tr id="systemRollupHeaders"></tr></thead>
+            <tbody id="systemRollupBody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="details" id="schoolDetails"></section>
+      <p class="source-note" id="schoolSourceNote"></p>
     </section>
   </main>
   <div class="tooltip" id="tooltip" role="tooltip"></div>
@@ -260,20 +362,22 @@
     ];
     const levels = ["Not yet evident", "Beginning", "Demonstrating", "Deepening"];
     const MAX_SCORE = 3;
-    const descriptions = [
-      "The element was not yet visible in current practice.",
-      "Initial structures or practices are emerging.",
-      "The element is visible and consistently demonstrated in current practice.",
-      "The element is deeply embedded in team practice."
-    ];
     let showLabels = true;
     let selected = "district";
+    let typeFilter = "all"; // all | middle | high
+
+    // Derived per-school metadata: type (Middle/High) and a simple password (first word of the name, lowercase).
+    const schoolMeta = schools.map(s => ({
+      type: /High School$/i.test(s.name) ? "high" : "middle",
+      password: s.name.split(" ")[0].toLowerCase()
+    }));
+
+    const OVERVIEW_PASSWORD = "aps";
 
     const average = values => values.length ? values.reduce((a,b) => a+b, 0) / values.length : 0;
-    const allTeams = () => schools.flatMap(s => s.teams.map(t => ({...t, school:s.name})));
-    const elementAverages = teams => elements.map((_, i) => average(teams.map(t => t.scores[i])));
     const stageFor = score => levels[Math.max(0, Math.min(MAX_SCORE, Math.round(score)))];
     const pct = score => `${Math.round((score / MAX_SCORE) * 100)}%`;
+    const elementAverages = teams => elements.map((_, i) => average(teams.map(t => t.scores[i])));
     const distributionFor = (teams, elementIndex) => levels.map((_, level) => teams.filter(t => t.scores[elementIndex] === level).length);
     const densityStyle = score => {
       if (showLabels) return "";
@@ -281,37 +385,6 @@
       const lightness = 94 - (score / MAX_SCORE) * 52;
       return `background:hsl(43 92% ${lightness}%);color:#352500`;
     };
-
-    function renderLegend() {
-      document.getElementById("legend").innerHTML = showLabels
-        ? levels.map((level, i) => `<span><i class="swatch level-${i}"></i>${level}</span>`).join("")
-        : `<span>Lower density</span><i class="gradient-swatch" aria-hidden="true"></i><span>Higher density</span>`;
-    }
-
-    function buildSelect() {
-      const select = document.getElementById("schoolSelect");
-      select.innerHTML = `<option value="district">All district (${schools.length} school${schools.length === 1 ? "" : "s"})</option>` +
-        schools.map((s,i) => `<option value="${i}">${s.name}</option>`).join("");
-      select.addEventListener("change", e => { selected = e.target.value; render(); });
-    }
-
-    function selectedTeams() {
-      return selected === "district" ? allTeams() : schools[Number(selected)].teams.map(t => ({...t, school:schools[Number(selected)].name}));
-    }
-
-    function renderSummary(teams) {
-      const scores = teams.flatMap(t => t.scores);
-      const overall = average(scores);
-      const avgs = elementAverages(teams);
-      const high = Math.max(...avgs);
-      const low = Math.min(...avgs);
-      document.getElementById("summary").innerHTML = [
-        ["Overall implementation", `${overall.toFixed(2)} / 3`],
-        ["Current stage", stageFor(overall)],
-        ["Strongest element", elements[avgs.indexOf(high)]],
-        ["Growth priority", elements[avgs.indexOf(low)]]
-      ].map(([k,v]) => `<article class="stat"><span class="kicker">${k}</span><strong>${v}</strong></article>`).join("");
-    }
 
     function heatCell(score, context, element, counts) {
       const rounded = Math.round(score);
@@ -321,29 +394,6 @@
       return `<td class="heat level-${rounded}" style="${densityStyle(score)}" tabindex="0" data-context="${context}" data-element="${element}" data-score="${label}" data-stage="${stage}" data-counts="${counts.join(",")}" data-density="${density}" aria-label="${context}, ${element}: ${stage}, ${label} out of 3; ${density}% implementation density">
         <span class="stage">${showLabels ? stage : ""}</span><span class="score">${showLabels ? label + " / 3" : ""}</span>
       </td>`;
-    }
-
-    function renderTable(teams) {
-      document.getElementById("headers").innerHTML = `<th scope="col">School / team</th>` + elements.map(e => `<th scope="col">${e}</th>`).join("");
-      const body = document.getElementById("heatBody");
-      const aggregate = elementAverages(teams);
-      let rows = `<tr class="aggregate"><th scope="row">${selected === "district" ? "District aggregate" : "School aggregate"}</th>${aggregate.map((v,i) => heatCell(v, selected === "district" ? "District aggregate" : schools[Number(selected)].name + " aggregate", elements[i], distributionFor(teams, i))).join("")}</tr>`;
-      const displayRows = selected === "district"
-        ? schools.map(s => ({ name: s.name, school: s.name, scores: elementAverages(s.teams), sourceTeams: s.teams, aggregate: true }))
-        : teams.map(t => ({ ...t, sourceTeams: [t] }));
-      rows += displayRows.map(t => `<tr><th scope="row">${selected === "district" ? `<strong>${t.school}</strong><br><span style="color:var(--muted);font-weight:500">${t.sourceTeams.length} team${t.sourceTeams.length === 1 ? "" : "s"}</span>` : t.name}</th>${t.scores.map((v,i) => heatCell(v, selected === "district" ? `${t.school} aggregate` : `${t.school} — ${t.name}`, elements[i], distributionFor(t.sourceTeams, i))).join("")}</tr>`).join("");
-      body.innerHTML = rows;
-      bindTooltips();
-    }
-
-    function renderDetails(teams) {
-      const avgs = elementAverages(teams);
-      const counts = [0,0,0,0];
-      teams.flatMap(t => t.scores).forEach(v => counts[Math.round(v)]++);
-      const total = counts.reduce((a,b) => a+b, 0);
-      document.getElementById("details").innerHTML = `
-        <article class="detail-card"><h3>Element averages</h3>${elements.map((e,i) => `<div class="bar-row"><span>${e}</span><div class="bar-track"><div class="bar-fill" style="width:${pct(avgs[i])}"></div></div><strong>${avgs[i].toFixed(2)}</strong></div>`).join("")}</article>
-        <article class="detail-card"><h3>Rating distribution</h3>${levels.map((l,i) => `<div class="bar-row"><span>${l}</span><div class="bar-track"><div class="bar-fill" style="width:${total ? counts[i]/total*100 : 0}%"></div></div><strong>${counts[i]}</strong></div>`).join("")}</article>`;
     }
 
     function bindTooltips() {
@@ -367,72 +417,190 @@
       });
     }
 
-    function render() {
-      const teams = selectedTeams();
-      const district = selected === "district";
-      document.getElementById("viewTitle").textContent = district ? "District overview" : schools[Number(selected)].name;
-      document.getElementById("viewSubtitle").textContent = district ? `${schools.length} schools and ${teams.length} teams included · District results weight each team equally.` : `${teams.length} team${teams.length === 1 ? "" : "s"} included · Hover or focus on any cell for detail.`;
-      document.getElementById("sourceNote").textContent = `Source: Teaming Progress Tool Heat Maps — BOY. The district file contains ${schools.length} schools and ${allTeams().length} teams. Scores use a 0–3 scale: Not yet evident (0), Beginning (1), Demonstrating (2), Deepening (3). No BOY ratings were at Deepening.`;
-      renderLegend(); renderSummary(teams); renderTable(teams); renderDetails(teams);
+    function renderDetailsInto(containerId, teams) {
+      const avgs = elementAverages(teams);
+      const counts = [0,0,0,0];
+      teams.flatMap(t => t.scores).forEach(v => counts[Math.round(v)]++);
+      const total = counts.reduce((a,b) => a+b, 0);
+      document.getElementById(containerId).innerHTML = `
+        <article class="detail-card"><h3>Element averages</h3>${elements.map((e,i) => `<div class="bar-row"><span>${e}</span><div class="bar-track"><div class="bar-fill" style="width:${pct(avgs[i])}"></div></div><strong>${avgs[i].toFixed(2)}</strong></div>`).join("")}</article>
+        <article class="detail-card"><h3>Rating distribution</h3>${levels.map((l,i) => `<div class="bar-row"><span>${l}</span><div class="bar-track"><div class="bar-fill" style="width:${total ? counts[i]/total*100 : 0}%"></div></div><strong>${counts[i]}</strong></div>`).join("")}</article>`;
     }
 
-    document.getElementById("labelsOn").addEventListener("click", () => { showLabels = true; document.getElementById("labelsOn").setAttribute("aria-pressed","true"); document.getElementById("labelsOff").setAttribute("aria-pressed","false"); render(); });
-    document.getElementById("labelsOff").addEventListener("click", () => { showLabels = false; document.getElementById("labelsOn").setAttribute("aria-pressed","false"); document.getElementById("labelsOff").setAttribute("aria-pressed","true"); render(); });
-    buildSelect(); render();
-
-    // ---- Ask about the data (AI feature) ----
-    const ASK_ENDPOINT = "/.netlify/functions/claude-proxy-aps-teaming-dashboard";
-    const suggestedQuestions = [
-      "Which schools are furthest along overall?",
-      "Where is Dynamic team teaching weakest district-wide?",
-      "What should we prioritize next at Hayes Middle School?",
-      "Summarize the district's biggest growth priority."
-    ];
-
-    function renderChips() {
-      document.getElementById("askChips").innerHTML = suggestedQuestions
-        .map(q => `<button type="button" class="ask-chip">${q}</button>`).join("");
-      document.querySelectorAll(".ask-chip").forEach(chip => {
-        chip.addEventListener("click", () => {
-          document.getElementById("askInput").value = chip.textContent;
-          document.getElementById("askForm").dispatchEvent(new Event("submit"));
-        });
-      });
+    // ============ SCREEN NAVIGATION ============
+    const screens = ["screenHome", "screenOverviewGate", "screenOverview", "screenSchoolGate", "screenSchool"];
+    function showScreen(id) {
+      screens.forEach(s => document.getElementById(s).classList.toggle("hidden", s !== id));
+      document.getElementById("homeLinkBtn").classList.toggle("hidden", id === "screenHome");
     }
-
-    async function askQuestion(question) {
-      const answerEl = document.getElementById("askAnswer");
-      const submitBtn = document.getElementById("askSubmit");
-      submitBtn.disabled = true;
-      answerEl.className = "ask-answer loading";
-      answerEl.textContent = "Thinking through the data…";
-      try {
-        const res = await fetch(ASK_ENDPOINT, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ question, context: { schools, elements, levels } })
-        });
-        const data = await res.json();
-        if (!res.ok || data.error) throw new Error(data.error || `Request failed (${res.status})`);
-        answerEl.className = "ask-answer";
-        answerEl.textContent = data.answer;
-      } catch (err) {
-        answerEl.className = "ask-answer error";
-        answerEl.textContent = `Couldn't get an answer: ${err.message}. Make sure the claude-proxy-aps-teaming-dashboard function is deployed with an ANTHROPIC_API_KEY set.`;
-      } finally {
-        submitBtn.disabled = false;
-      }
+    function goHome() {
+      document.getElementById("overviewPassword").value = "";
+      document.getElementById("overviewGateError").textContent = "";
+      document.getElementById("schoolGatePassword").value = "";
+      document.getElementById("schoolGateError").textContent = "";
+      showScreen("screenHome");
     }
+    document.getElementById("homeLinkBtn").addEventListener("click", goHome);
+    document.getElementById("goOverview").addEventListener("click", () => showScreen("screenOverviewGate"));
+    document.getElementById("backFromOverviewGate").addEventListener("click", goHome);
+    document.getElementById("backFromOverview").addEventListener("click", goHome);
+    document.getElementById("goSchool").addEventListener("click", () => showScreen("screenSchoolGate"));
+    document.getElementById("backFromSchoolGate").addEventListener("click", goHome);
+    document.getElementById("backFromSchool").addEventListener("click", goHome);
 
-    document.getElementById("askForm").addEventListener("submit", e => {
+    // ============ OVERVIEW GATE ============
+    document.getElementById("overviewGateForm").addEventListener("submit", e => {
       e.preventDefault();
-      const input = document.getElementById("askInput");
-      const question = input.value.trim();
-      if (!question) return;
-      askQuestion(question);
+      const val = document.getElementById("overviewPassword").value.trim().toLowerCase();
+      if (val === OVERVIEW_PASSWORD) {
+        document.getElementById("overviewGateError").textContent = "";
+        document.getElementById("overviewPassword").value = "";
+        initOverview();
+        showScreen("screenOverview");
+      } else {
+        document.getElementById("overviewGateError").textContent = "Incorrect password.";
+      }
     });
 
-    renderChips();
+    // ============ OVERVIEW SCREEN ============
+    function filteredSchoolIndexes() {
+      return schools.map((s,i) => i).filter(i => typeFilter === "all" || schoolMeta[i].type === typeFilter);
+    }
+    function filteredSchools() { return filteredSchoolIndexes().map(i => schools[i]); }
+    function allFilteredTeams() { return filteredSchools().flatMap(s => s.teams.map(t => ({...t, school:s.name}))); }
+
+    function renderLegend() {
+      document.getElementById("legend").innerHTML = showLabels
+        ? levels.map((level, i) => `<span><i class="swatch level-${i}"></i>${level}</span>`).join("")
+        : `<span>Lower density</span><i class="gradient-swatch" aria-hidden="true"></i><span>Higher density</span>`;
+    }
+
+    function buildSelect() {
+      const select = document.getElementById("schoolSelect");
+      const idxs = filteredSchoolIndexes();
+      select.innerHTML = `<option value="district">All selected (${idxs.length} school${idxs.length === 1 ? "" : "s"})</option>` +
+        idxs.map(i => `<option value="${i}">${schools[i].name}</option>`).join("");
+      selected = "district";
+      select.value = "district";
+    }
+
+    function selectedTeams() {
+      return selected === "district" ? allFilteredTeams() : schools[Number(selected)].teams.map(t => ({...t, school:schools[Number(selected)].name}));
+    }
+
+    function renderSummary(teams) {
+      const scores = teams.flatMap(t => t.scores);
+      const overall = average(scores);
+      const avgs = elementAverages(teams);
+      const high = Math.max(...avgs);
+      const low = Math.min(...avgs);
+      document.getElementById("summary").innerHTML = [
+        ["Overall implementation", `${overall.toFixed(2)} / 3`],
+        ["Current stage", stageFor(overall)],
+        ["Strongest element", elements[avgs.indexOf(high)]],
+        ["Growth priority", elements[avgs.indexOf(low)]]
+      ].map(([k,v]) => `<article class="stat"><span class="kicker">${k}</span><strong>${v}</strong></article>`).join("");
+    }
+
+    function renderTable(teams) {
+      document.getElementById("headers").innerHTML = `<th scope="col">School / team</th>` + elements.map(e => `<th scope="col">${e}</th>`).join("");
+      const body = document.getElementById("heatBody");
+      const aggregate = elementAverages(teams);
+      let rows = `<tr class="aggregate"><th scope="row">${selected === "district" ? "Selected aggregate" : "School aggregate"}</th>${aggregate.map((v,i) => heatCell(v, selected === "district" ? "Selected aggregate" : schools[Number(selected)].name + " aggregate", elements[i], distributionFor(teams, i))).join("")}</tr>`;
+      const displayRows = selected === "district"
+        ? filteredSchools().map(s => ({ name: s.name, school: s.name, scores: elementAverages(s.teams), sourceTeams: s.teams, aggregate: true }))
+        : teams.map(t => ({ ...t, sourceTeams: [t] }));
+      rows += displayRows.map(t => `<tr><th scope="row">${selected === "district" ? `<strong>${t.school}</strong><br><span style="color:var(--muted);font-weight:500">${t.sourceTeams.length} team${t.sourceTeams.length === 1 ? "" : "s"}</span>` : t.name}</th>${t.scores.map((v,i) => heatCell(v, selected === "district" ? `${t.school} aggregate` : `${t.school} — ${t.name}`, elements[i], distributionFor(t.sourceTeams, i))).join("")}</tr>`).join("");
+      body.innerHTML = rows;
+      bindTooltips();
+    }
+
+    function renderOverview() {
+      const teams = selectedTeams();
+      const district = selected === "district";
+      const idxs = filteredSchoolIndexes();
+      document.getElementById("viewTitle").textContent = district ? "Overview" : schools[Number(selected)].name;
+      document.getElementById("viewSubtitle").textContent = district ? `${idxs.length} school${idxs.length === 1 ? "" : "s"} and ${teams.length} team${teams.length === 1 ? "" : "s"} included · Results weight each team equally.` : `${teams.length} team${teams.length === 1 ? "" : "s"} included · Hover or focus on any cell for detail.`;
+      document.getElementById("sourceNote").textContent = `Source: Teaming Progress Tool Heat Maps — BOY. Scores use a 0–3 scale: Not yet evident (0), Beginning (1), Demonstrating (2), Deepening (3). No BOY ratings were at Deepening.`;
+      renderLegend(); renderSummary(teams); renderTable(teams); renderDetailsInto("details", teams);
+    }
+
+    function initOverview() {
+      buildSelect();
+      renderOverview();
+    }
+
+    document.getElementById("typeFilterGroup").addEventListener("click", e => {
+      const btn = e.target.closest("button[data-type]");
+      if (!btn) return;
+      typeFilter = btn.dataset.type;
+      document.querySelectorAll("#typeFilterGroup button").forEach(b => b.setAttribute("aria-pressed", String(b === btn)));
+      buildSelect();
+      renderOverview();
+    });
+    document.getElementById("schoolSelect").addEventListener("change", e => { selected = e.target.value; renderOverview(); });
+    document.getElementById("labelsOn").addEventListener("click", () => { showLabels = true; document.getElementById("labelsOn").setAttribute("aria-pressed","true"); document.getElementById("labelsOff").setAttribute("aria-pressed","false"); renderOverview(); });
+    document.getElementById("labelsOff").addEventListener("click", () => { showLabels = false; document.getElementById("labelsOn").setAttribute("aria-pressed","false"); document.getElementById("labelsOff").setAttribute("aria-pressed","true"); renderOverview(); });
+
+    // ============ SCHOOL GATE ============
+    function buildSchoolGateSelect() {
+      const select = document.getElementById("schoolGateSelect");
+      select.innerHTML = schools.map((s,i) => `<option value="${i}">${s.name}</option>`).join("");
+    }
+    buildSchoolGateSelect();
+
+    document.getElementById("schoolGateForm").addEventListener("submit", e => {
+      e.preventDefault();
+      const idx = Number(document.getElementById("schoolGateSelect").value);
+      const val = document.getElementById("schoolGatePassword").value.trim().toLowerCase();
+      if (val === schoolMeta[idx].password) {
+        document.getElementById("schoolGateError").textContent = "";
+        document.getElementById("schoolGatePassword").value = "";
+        initSchoolView(idx);
+        showScreen("screenSchool");
+      } else {
+        document.getElementById("schoolGateError").textContent = "Incorrect password for that school.";
+      }
+    });
+
+    // ============ SCHOOL VIEW (Team / School / System) ============
+    function renderHeatTable(headerId, bodyId, rows) {
+      document.getElementById(headerId).innerHTML = `<th scope="col">&nbsp;</th>` + elements.map(e => `<th scope="col">${e}</th>`).join("");
+      document.getElementById(bodyId).innerHTML = rows.map(r =>
+        `<tr>${r.aggregate ? '' : ''}<th scope="row">${r.label}</th>${r.scores.map((v,i) => heatCell(v, r.context, elements[i], distributionFor(r.sourceTeams, i))).join("")}</tr>`
+      ).join("");
+      bindTooltips();
+    }
+
+    function initSchoolView(idx) {
+      const school = schools[idx];
+      const allTeams = schools.flatMap(s => s.teams.map(t => ({...t, school: s.name})));
+
+      document.getElementById("schoolViewTitle").textContent = school.name;
+      document.getElementById("schoolViewSubtitle").textContent = `${school.teams.length} team${school.teams.length === 1 ? "" : "s"} reporting · BOY`;
+
+      // Tier 1: Your teams
+      const teamRows = school.teams.map(t => ({ label: t.name, scores: t.scores, sourceTeams: [t], context: `${school.name} — ${t.name}` }));
+      renderHeatTable("schoolTeamHeaders", "schoolTeamBody", teamRows);
+
+      // Tier 2: School rollup
+      const schoolAvg = elementAverages(school.teams);
+      renderHeatTable("schoolRollupHeaders", "schoolRollupBody", [
+        { label: school.name, scores: schoolAvg, sourceTeams: school.teams, context: `${school.name} aggregate` }
+      ]);
+
+      // Tier 3: System-level rollup
+      const systemAvg = elementAverages(allTeams);
+      renderHeatTable("systemRollupHeaders", "systemRollupBody", [
+        { label: "All APS schools", scores: systemAvg, sourceTeams: allTeams, context: "District aggregate" }
+      ]);
+
+      renderDetailsInto("schoolDetails", school.teams);
+      document.getElementById("schoolSourceNote").textContent = `Source: Teaming Progress Tool Heat Maps — BOY. Scores use a 0–3 scale: Not yet evident (0), Beginning (1), Demonstrating (2), Deepening (3).`;
+    }
+
+    // ============ INIT ============
+    showScreen("screenHome");
   </script>
 </body>
 </html>
