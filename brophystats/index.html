@@ -1,0 +1,653 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Sleep, Screens &amp; Scores</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: a lab notebook on graph paper. Sticky step tabs, one lesson part per screen, each interactive set off as a "bench" panel. */
+:root{
+  --bg:#eef2f6; --grid:rgba(22,35,59,.055); --surface:#ffffff; --surface-2:#f6f8fb;
+  --ink:#16233b; --muted:#56627a; --line:#d4dbe5;
+  --accent:#e2552b; --accent-soft:rgba(226,85,43,.12);
+  --teal:#0f7c72; --teal-soft:rgba(15,124,114,.12);
+  --gold:#b97f00; --gold-soft:rgba(185,127,0,.14);
+  --good:#2a7f45; --good-soft:rgba(42,127,69,.12);
+  --warn:#a8531b; --warn-soft:rgba(168,83,27,.12);
+  --display:"Bricolage Grotesque", "Avenir Next", "Segoe UI", system-ui, sans-serif;
+  --body:"Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif;
+  --mono:"JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0f141d; --grid:rgba(200,215,240,.045); --surface:#172030; --surface-2:#1c2738;
+  --ink:#e7ecf4; --muted:#9ba7bc; --line:#2b374b;
+  --accent:#ff7b52; --accent-soft:rgba(255,123,82,.16);
+  --teal:#3fc1b2; --teal-soft:rgba(63,193,178,.16);
+  --gold:#e9b43c; --gold-soft:rgba(233,180,60,.16);
+  --good:#5cc47c; --good-soft:rgba(92,196,124,.15);
+  --warn:#f09a5e; --warn-soft:rgba(240,154,94,.15);
+  color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0f141d; --grid:rgba(200,215,240,.045); --surface:#172030; --surface-2:#1c2738;
+  --ink:#e7ecf4; --muted:#9ba7bc; --line:#2b374b;
+  --accent:#ff7b52; --accent-soft:rgba(255,123,82,.16);
+  --teal:#3fc1b2; --teal-soft:rgba(63,193,178,.16);
+  --gold:#e9b43c; --gold-soft:rgba(233,180,60,.16);
+  --good:#5cc47c; --good-soft:rgba(92,196,124,.15);
+  --warn:#f09a5e; --warn-soft:rgba(240,154,94,.15);
+  color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.55;
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:24px 24px}
+.wrap{max-width:940px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3{font-family:var(--display);line-height:1.12;text-wrap:balance;margin:0}
+h2{font-size:clamp(1.75rem,4.2vw,2.5rem);font-weight:800;letter-spacing:-.01em}
+h3{font-size:1.25rem;font-weight:700}
+p{margin:0;max-width:66ch}
+code,.mono{font-family:var(--mono);font-size:.9em}
+a{color:var(--teal)}
+button{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px;border-radius:6px}
+
+/* header */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;gap:16px;padding-block:10px;flex-wrap:wrap}
+.brand{font-family:var(--display);font-weight:800;font-size:1.15rem;letter-spacing:-.01em;white-space:nowrap}
+.brand span{color:var(--accent)}
+.tabs{display:flex;gap:6px;overflow-x:auto;flex:1;min-width:0;scrollbar-width:none}
+.tab{display:flex;align-items:baseline;gap:6px;border:1px solid var(--line);background:var(--surface);padding:6px 12px;border-radius:999px;cursor:pointer;white-space:nowrap;font-size:.92rem}
+.tab b{font-family:var(--mono);font-size:.8rem;color:var(--muted)}
+.tab[aria-current="page"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.tab[aria-current="page"] b{color:var(--bg);opacity:.75}
+
+main{padding-block:28px 64px}
+.page{display:flex;flex-direction:column;gap:28px}
+.phead{display:flex;flex-direction:column;gap:10px}
+.eyebrow{font-family:var(--mono);font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+.lede{font-size:1.12rem;color:var(--muted)}
+.block{display:flex;flex-direction:column;gap:14px}
+
+.bench{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:20px;display:flex;flex-direction:column;gap:14px;min-width:0}
+.bench-label{font-family:var(--mono);font-size:.74rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
+.cols>*{min-width:0}
+.def{border-top:3px solid var(--c,var(--ink));padding-top:10px;display:flex;flex-direction:column;gap:6px}
+.def h3{font-size:1.1rem}
+.def p{color:var(--muted);font-size:.98rem}
+.def .ex{font-family:var(--mono);font-size:.82rem;color:var(--ink)}
+
+.tablebox{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-family:var(--mono);font-size:.82rem;font-variant-numeric:tabular-nums}
+th,td{padding:7px 12px;text-align:left;white-space:nowrap;border-bottom:1px solid var(--line)}
+th{background:var(--surface-2);font-weight:600}
+td.more{color:var(--muted);font-style:italic;font-family:var(--body)}
+
+.btn{border:1px solid var(--line);background:var(--surface-2);padding:9px 16px;border-radius:10px;cursor:pointer;font-weight:700}
+.btn:hover{border-color:var(--ink)}
+.btn.primary{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.btn.accent{background:var(--accent);color:#fff;border-color:var(--accent)}
+.btnrow{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:10px;overflow:hidden;flex-wrap:wrap}
+.seg button{border:0;background:var(--surface);padding:8px 14px;cursor:pointer;font-size:.92rem}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+
+/* sort game */
+.sortcard{border:2px dashed var(--line);border-radius:12px;padding:18px;text-align:center;display:flex;flex-direction:column;gap:4px;background:var(--surface-2)}
+.sortcard .name{font-family:var(--mono);font-size:1.35rem;font-weight:600}
+.sortcard .desc{color:var(--muted)}
+.bins{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.fam{display:flex;flex-direction:column;gap:8px;min-width:0}
+.fam-title{font-family:var(--display);font-weight:700;font-size:1rem}
+.fam-sub{font-size:.85rem;color:var(--muted);margin-top:-6px}
+.bin{border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:10px 12px;text-align:left;cursor:pointer;display:flex;flex-direction:column;gap:2px}
+.bin b{font-size:1rem}
+.bin small{color:var(--muted);font-size:.82rem;line-height:1.3}
+.bin:hover{border-color:var(--ink)}
+.bin.right{border-color:var(--good);background:var(--good-soft)}
+.bin.wrong{border-color:var(--warn);background:var(--warn-soft)}
+.fb{border-radius:10px;padding:12px 14px;font-size:.98rem}
+.fb.ok{background:var(--good-soft);border-left:4px solid var(--good)}
+.fb.no{background:var(--warn-soft);border-left:4px solid var(--warn)}
+.progress{display:flex;justify-content:space-between;align-items:center;font-family:var(--mono);font-size:.85rem;color:var(--muted);gap:8px;flex-wrap:wrap}
+@media (max-width:520px){.bins{grid-template-columns:1fr}}
+
+.callout{border-left:4px solid var(--accent);background:var(--accent-soft);padding:14px 16px;border-radius:0 10px 10px 0;display:flex;flex-direction:column;gap:6px}
+.callout.teal{border-color:var(--teal);background:var(--teal-soft)}
+.callout b.k{font-family:var(--display)}
+
+/* charts */
+svg{display:block;width:100%;height:auto;max-width:100%;touch-action:none}
+.svgbox{overflow-x:auto}
+.ax{fill:var(--muted);font-family:var(--mono);font-size:12px}
+.axl{stroke:var(--line)}
+.lab{font-family:var(--body);font-size:13px;font-weight:700}
+.readout{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px}
+.stat{border:1px solid var(--line);border-radius:10px;padding:10px 12px;display:flex;flex-direction:column;gap:2px;background:var(--surface-2)}
+.stat span{font-size:.8rem;color:var(--muted);font-family:var(--mono);text-transform:uppercase;letter-spacing:.05em}
+.stat b{font-family:var(--mono);font-size:1.35rem;font-variant-numeric:tabular-nums}
+.sw{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;vertical-align:baseline}
+.hint{font-size:.9rem;color:var(--muted)}
+
+details{border:1px solid var(--line);border-radius:10px;background:var(--surface);padding:12px 16px}
+details summary{cursor:pointer;font-weight:700}
+details[open] summary{margin-bottom:8px}
+
+/* analysis sections */
+.tool{display:flex;flex-direction:column;gap:14px;padding-top:6px}
+.tool-q{font-family:var(--display);font-size:1.4rem;font-weight:700}
+.tool-tag{font-family:var(--mono);font-size:.78rem;text-transform:uppercase;letter-spacing:.08em;padding:3px 8px;border-radius:6px;align-self:flex-start}
+.verdict{border-radius:12px;padding:14px 16px;display:flex;flex-direction:column;gap:4px;border:2px solid var(--line)}
+.verdict b{font-family:var(--display);font-size:1.25rem}
+.verdict.real{border-color:var(--good);background:var(--good-soft)}
+.verdict.chance{border-color:var(--warn);background:var(--warn-soft)}
+.steps{display:flex;flex-direction:column;gap:10px;margin:0;padding:0;list-style:none;counter-reset:s}
+.steps li{counter-increment:s;display:grid;grid-template-columns:30px 1fr;gap:10px;align-items:start}
+.steps li::before{content:counter(s);font-family:var(--mono);font-weight:600;font-size:.85rem;width:26px;height:26px;border-radius:50%;background:var(--ink);color:var(--bg);display:grid;place-items:center;margin-top:1px}
+.steps li>div{min-width:0}
+.menu{font-family:var(--mono);font-size:.85rem;background:var(--surface-2);border:1px solid var(--line);border-radius:6px;padding:1px 6px;white-space:nowrap}
+
+.match{display:flex;flex-direction:column;gap:12px}
+.mq{display:flex;flex-direction:column;gap:8px;border-bottom:1px solid var(--line);padding-bottom:12px}
+.mq p{font-weight:700}
+.mq .seg button.right{background:var(--good);color:#fff}
+.mq .seg button.wrong{background:var(--warn);color:#fff}
+.mq .why{font-size:.92rem;color:var(--muted)}
+
+label.fld{display:flex;flex-direction:column;gap:6px;font-weight:700}
+textarea{font:inherit;font-weight:400;font-size:1rem;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--surface-2);color:var(--ink);min-height:74px;resize:vertical;width:100%}
+
+.pager{display:flex;justify-content:space-between;gap:10px;border-top:1px solid var(--line);padding-top:18px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+
+
+<header class="top">
+  <div class="wrap">
+    <div class="brand">Sleep, Screens <span>&amp;</span> Scores</div>
+    <nav class="tabs" aria-label="Lesson parts">
+      <button class="tab" data-go="0"><b>1</b>Variables</button>
+      <button class="tab" data-go="1"><b>2</b>The middle</button>
+      <button class="tab" data-go="2"><b>3</b>Analyses</button>
+      <button class="tab" data-go="3"><b>4</b>Try it in jamovi</button>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+
+<!-- ============ PAGE 1 ============ -->
+<section class="page" id="p1">
+  <div class="phead">
+    <div class="eyebrow">Part 1 · about 8 minutes</div>
+    <h2>What kind of variable is it?</h2>
+    <p class="lede">40 juniors and seniors answered a quick survey. (The data is made up, but realistic.) Every column in a dataset is a <b>variable</b>, and the first job in statistics is figuring out what kind each one is.</p>
+  </div>
+
+  <div class="block">
+    <div class="bench-label">Our dataset · first 6 of 40 rows</div>
+    <div class="tablebox"><table id="preview"></table></div>
+  </div>
+
+  <div class="block">
+    <h3>Two families, four types</h3>
+    <div class="cols">
+      <div class="def" style="--c:var(--teal)">
+        <h3>Categorical</h3>
+        <p>Puts people into groups or labels. You <b>count</b> them, but you can't average them.</p>
+        <p><b>Nominal:</b> groups with no order.<br><span class="ex">eye color, plays_sport</span></p>
+        <p><b>Ordinal:</b> groups with an order.<br><span class="ex">class rank, shirt size S/M/L</span></p>
+      </div>
+      <div class="def" style="--c:var(--accent)">
+        <h3>Numerical</h3>
+        <p>An actual amount. You can do math with it, like finding an average.</p>
+        <p><b>Discrete:</b> things you count in whole numbers.<br><span class="ex">siblings, texts sent</span></p>
+        <p><b>Continuous:</b> measurements on a smooth scale.<br><span class="ex">height, sleep_hours</span></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="bench" id="sortGame">
+    <div class="progress"><span class="bench-label">Sorting game</span><span id="sgScore">Score 0 / 0</span></div>
+    <div class="sortcard"><div class="name" id="sgName"></div><div class="desc" id="sgDesc"></div></div>
+    <div class="bins">
+      <div class="fam"><div class="fam-title" style="color:var(--teal)">Categorical</div>
+        <button class="bin" data-a="nominal"><b>Nominal</b><small>labels, no order</small></button>
+        <button class="bin" data-a="ordinal"><b>Ordinal</b><small>labels with an order</small></button>
+      </div>
+      <div class="fam"><div class="fam-title" style="color:var(--accent)">Numerical</div>
+        <button class="bin" data-a="discrete"><b>Discrete</b><small>whole-number counts</small></button>
+        <button class="bin" data-a="continuous"><b>Continuous</b><small>measurements</small></button>
+      </div>
+    </div>
+    <div id="sgFb" class="fb" hidden></div>
+    <div class="btnrow"><button class="btn primary" id="sgNext" hidden>Next variable</button></div>
+  </div>
+
+  <div class="callout teal">
+    <b class="k">Why this matters</b>
+    <p>The variable type decides what you're allowed to do with it. You can average <code>sleep_hours</code>, but the "average favorite class" is nonsense. In Part 3 you'll see that each kind of analysis needs certain variable types.</p>
+  </div>
+
+  <div class="pager"><span></span><button class="btn primary" data-go="1">Next: the middle →</button></div>
+</section>
+
+<!-- ============ PAGE 2 ============ -->
+<section class="page" id="p2" hidden>
+  <div class="phead">
+    <div class="eyebrow">Part 2 · about 8 minutes</div>
+    <h2>Where's the middle?</h2>
+    <p class="lede">If someone asks "how much do students in this class sleep?", you need one number that sums up the whole group. There are three common ways to pick it.</p>
+  </div>
+
+  <div class="cols">
+    <div class="def" style="--c:var(--accent)"><h3>Mean</h3><p>Add every value, divide by how many there are. The "average."</p><span class="ex">(6 + 7 + 8) ÷ 3 = 7</span></div>
+    <div class="def" style="--c:var(--teal)"><h3>Median</h3><p>Line the values up in order and take the one in the middle.</p><span class="ex">5, 6, <b>7</b>, 8, 12 → 7</span></div>
+    <div class="def" style="--c:var(--gold)"><h3>Mode</h3><p>The value that shows up most often. A group can have more than one.</p><span class="ex">6, 7, 7, 8 → 7</span></div>
+  </div>
+
+  <div class="bench">
+    <div class="bench-label">Drag the dots · sleep hours for 9 friends</div>
+    <div class="svgbox"><svg id="dotplot" viewBox="0 0 640 230" role="img" aria-label="Dot plot of sleep hours with mean, median and mode markers"></svg></div>
+    <div class="readout">
+      <div class="stat"><span><i class="sw" style="background:var(--accent)"></i>Mean</span><b id="dpMean"></b></div>
+      <div class="stat"><span><i class="sw" style="background:var(--teal)"></i>Median</span><b id="dpMed"></b></div>
+      <div class="stat"><span><i class="sw" style="background:var(--gold)"></i>Mode</span><b id="dpMode"></b></div>
+    </div>
+    <div class="btnrow">
+      <button class="btn accent" id="dpOut">Add a friend who slept 14.5 hours</button>
+      <button class="btn" id="dpReset">Reset</button>
+    </div>
+    <p class="hint" id="dpNote">Try it: add the outlier. Watch which marker moves a lot and which barely moves.</p>
+  </div>
+
+  <div class="callout">
+    <b class="k">The big idea</b>
+    <p>The <b>mean</b> gets pulled toward extreme values. The <b>median</b> stays put. When data has a few very large or very small values, the median usually describes a "typical" person better.</p>
+    <p>The <b>mode</b> is the only one that works for categorical variables. In our survey, the most common <code>favorite_class</code> is History (9 of 40).</p>
+  </div>
+
+  <div class="block">
+    <h3>Quick check</h3>
+    <details><summary>A news story reports the "typical" household income in a town where a few billionaires live. Should it use the mean or the median?</summary>
+      <p><b>Median.</b> A handful of billionaires would drag the mean far above what most families earn. The median shows what the household in the middle actually makes.</p></details>
+    <details><summary>Can you find the mean of <code>plays_sport</code>?</summary>
+      <p><b>No.</b> It's nominal (Yes/No). You can report the mode, or a count: 19 of 40 students play a sport.</p></details>
+  </div>
+
+  <div class="pager"><button class="btn" data-go="0">← Variables</button><button class="btn primary" data-go="2">Next: analyses →</button></div>
+</section>
+
+<!-- ============ PAGE 3 ============ -->
+<section class="page" id="p3" hidden>
+  <div class="phead">
+    <div class="eyebrow">Part 3 · about 10 minutes</div>
+    <h2>Three questions, three tools</h2>
+    <p class="lede">Each analysis answers a different kind of question. Pick the tool by asking: what am I trying to find out?</p>
+  </div>
+
+  <!-- Descriptives -->
+  <div class="tool">
+    <span class="tool-tag" style="background:var(--teal-soft);color:var(--teal)">Descriptives</span>
+    <div class="tool-q">"What does this group look like?"</div>
+    <p>Descriptive statistics summarize one variable: its middle (mean, median), its spread, and its lowest and highest values. <b>Standard deviation (SD)</b> is roughly how far a typical student sits from the mean.</p>
+    <div class="bench">
+      <div class="seg" id="descSeg" role="group" aria-label="Choose a variable">
+        <button data-v="sleep" aria-pressed="true">sleep_hours</button>
+        <button data-v="screen" aria-pressed="false">screen_time</button>
+        <button data-v="quiz" aria-pressed="false">quiz_score</button>
+      </div>
+      <div class="svgbox"><svg id="hist" viewBox="0 0 640 240" role="img" aria-label="Histogram of the chosen variable"></svg></div>
+      <div class="readout" id="descOut"></div>
+    </div>
+  </div>
+
+  <!-- t-test -->
+  <div class="tool">
+    <span class="tool-tag" style="background:var(--accent-soft);color:var(--accent)">t-test</span>
+    <div class="tool-q">"Are these two groups really different?"</div>
+    <p>A t-test compares the means of two groups. In our data, athletes average about 0.8 more hours of sleep than non-athletes. Is that a real difference, or just luck?</p>
+
+    <div class="callout teal">
+      <b class="k">The problem: luck always makes a gap</b>
+      <p>Split any 40 students into two random groups and their averages will never match exactly. Some gap always shows up by pure chance. So the question isn't "is there a gap?" It's <b>"is this gap bigger than luck usually makes?"</b></p>
+      <p><b>The test:</b> pretend the group labels mean nothing. Shuffle the labels randomly across the 40 students and measure the gap again. Do that hundreds of times. The pile of shuffled gaps shows what luck alone looks like. Then see where the real gap lands.</p>
+    </div>
+
+    <div class="bench">
+      <div class="seg" id="ttSeg" role="group" aria-label="Choose a comparison">
+        <button data-c="sport" aria-pressed="true">Athletes vs. non-athletes · sleep</button>
+        <button data-c="grade" aria-pressed="false">Seniors vs. juniors · quiz score</button>
+      </div>
+      <div class="bench-label" id="stripLabel">Real labels</div>
+      <div class="svgbox"><svg id="strips" viewBox="0 0 640 160" role="img" aria-label="Dot strips for the two groups with their means"></svg></div>
+      <div class="btnrow">
+        <button class="btn" id="sh1">Shuffle labels once</button>
+        <button class="btn accent" id="sh100">Shuffle 100 times</button>
+        <button class="btn" id="sh1000">Shuffle 1,000 times</button>
+        <button class="btn" id="shReal">Show real labels</button>
+        <button class="btn" id="shClear">Start over</button>
+      </div>
+      <div class="bench-label">Gaps produced by luck alone</div>
+      <div class="svgbox"><svg id="nulls" viewBox="0 0 640 220" role="img" aria-label="Histogram of shuffled gaps with the real gap marked"></svg></div>
+      <div class="verdict" id="verdict"><b>Shuffle at least 100 times</b><span>Then we can see whether luck makes gaps as big as the real one.</span></div>
+    </div>
+
+    <div class="cols">
+      <div class="def" style="--c:var(--good)"><h3>Likely a real difference</h3><p>Fewer than 5 in 100 shuffles made a gap this big. Luck is a poor explanation. Statisticians write this as <b>p &lt; .05</b>.</p></div>
+      <div class="def" style="--c:var(--warn)"><h3>Could be chance</h3><p>Luck makes gaps this big fairly often, so we can't rule it out. This doesn't prove the groups are identical. It means our data can't tell them apart.</p></div>
+    </div>
+    <div class="callout">
+      <b class="k">So what's a p-value?</b>
+      <p>It's the share of "luck-only" worlds that produce a gap at least as big as the one you found. A p-value of .03 means about 3 in 100. The 5% cutoff (1 in 20) is a convention, not a law of nature.</p>
+      <p>A t-test gets nearly the same answer with a formula instead of shuffling. And remember: "likely real" tells you there <i>is</i> a difference, not <i>why</i>. Athletes might sleep more because of early practices, or for some other reason.</p>
+    </div>
+  </div>
+
+  <!-- Regression -->
+  <div class="tool">
+    <span class="tool-tag" style="background:var(--gold-soft);color:var(--gold)">Regression</span>
+    <div class="tool-q">"Does one thing predict another?"</div>
+    <p>Regression fits a straight line through two numerical variables. The line's <b>slope</b> tells you how much Y changes, on average, for each 1-unit increase in X. Try to draw the best line yourself first.</p>
+    <div class="bench">
+      <div class="svgbox"><svg id="scatter" viewBox="0 0 640 340" role="img" aria-label="Scatter plot of screen time and quiz score with a guess line"></svg></div>
+      <div class="cols">
+        <label class="fld">Score at 0 hours of screen time: <span class="mono" id="b0v"></span><input type="range" id="b0" min="60" max="105" step="0.5" value="70"></label>
+        <label class="fld">Points per extra hour: <span class="mono" id="b1v"></span><input type="range" id="b1" min="-8" max="4" step="0.1" value="0"></label>
+      </div>
+      <div class="readout">
+        <div class="stat"><span><i class="sw" style="background:var(--accent)"></i>Your line misses by</span><b id="missG"></b></div>
+        <div class="stat"><span><i class="sw" style="background:var(--teal)"></i>Best line misses by</span><b id="missB">?</b></div>
+      </div>
+      <div class="btnrow"><button class="btn accent" id="reveal">Reveal the best-fit line</button></div>
+      <p class="hint" id="regNote">The thin lines show how far each student is from your line. A good line keeps them short. Average miss is in quiz points.</p>
+    </div>
+    <div class="callout teal" id="regTake" hidden>
+      <b class="k">Reading the result</b>
+      <p>The best line is <span class="mono">quiz = 88.2 − 3.1 × screen_time</span>. Each extra hour of daily screen time goes with about <b>3 fewer quiz points</b>, on average.</p>
+      <p><b>R² = .32</b>: screen time accounts for about a third of the differences in quiz scores. The rest comes from other things. The shuffle logic applies here too: p &lt; .001, so the pattern is very unlikely to be luck. It's still a pattern, not proof that screens <i>cause</i> lower scores.</p>
+    </div>
+  </div>
+
+  <!-- Matching -->
+  <div class="bench">
+    <div class="bench-label">Which tool fits? <span id="mScore"></span></div>
+    <div class="match" id="match"></div>
+  </div>
+
+  <div class="pager"><button class="btn" data-go="1">← The middle</button><button class="btn primary" data-go="3">Next: try it in jamovi →</button></div>
+</section>
+
+<!-- ============ PAGE 4 ============ -->
+<section class="page" id="p4" hidden>
+  <div class="phead">
+    <div class="eyebrow">Part 4 · about 12 minutes</div>
+    <h2>Your turn in jamovi</h2>
+    <p class="lede">jamovi is free statistics software that runs in your browser. You'll run all three analyses on the same 40-student survey and see if your numbers match what you saw in Part 3.</p>
+  </div>
+
+  <div class="bench">
+    <div class="bench-label">Set up · 3 minutes</div>
+    <ol class="steps">
+      <li><div><b>Save the data file.</b> <span id="dlWrap"><button class="btn primary" id="dlBtn">Save class_survey.csv</button></span>
+        <p class="hint" id="dlMsg">If the button doesn't work, get <code>class_survey.csv</code> from your teacher.</p></div></li>
+      <li><div><b>Open jamovi cloud</b> at <a href="https://cloud.jamovi.org" target="_blank" rel="noopener">cloud.jamovi.org</a>. Sign in or make a free account if it asks.</div></li>
+      <li><div><b>Open the file.</b> Click <span class="menu">☰</span> (top left) → <span class="menu">Open</span> → <span class="menu">Browse</span>, then pick <code>class_survey.csv</code>.</div></li>
+      <li><div><b>Fix one variable type.</b> Double-click the <code>grade_level</code> column header. Change <b>Measure type</b> to <span class="menu">Nominal</span>. jamovi saw 11 and 12 and assumed they were amounts. They're really group labels, just like you sorted in Part 1.</div></li>
+    </ol>
+  </div>
+
+  <div class="bench">
+    <span class="tool-tag" style="background:var(--teal-soft);color:var(--teal)">Task 1 · Descriptives</span>
+    <ol class="steps">
+      <li><div>Click the <span class="menu">Analyses</span> tab → <span class="menu">Exploration</span> → <span class="menu">Descriptives</span>.</div></li>
+      <li><div>Move <code>sleep_hours</code>, <code>screen_time</code>, and <code>quiz_score</code> into the <b>Variables</b> box.</div></li>
+      <li><div>Look at the results table on the right. For <code>quiz_score</code>, which is bigger: the mean or the median?</div></li>
+    </ol>
+    <label class="fld" for="n1">What did you find?<textarea id="n1" placeholder="The average quiz score was… The median was…"></textarea></label>
+    <details><summary>Check your numbers</summary><p>quiz_score: mean 74.7, median 73, SD 8.0. sleep_hours: mean 7.0. screen_time: mean 4.3. The quiz mean is a bit above the median, so a few high scores pull it up.</p></details>
+  </div>
+
+  <div class="bench">
+    <span class="tool-tag" style="background:var(--accent-soft);color:var(--accent)">Task 2 · t-test</span>
+    <ol class="steps">
+      <li><div><span class="menu">Analyses</span> → <span class="menu">T-Tests</span> → <span class="menu">Independent Samples T-Test</span>.</div></li>
+      <li><div>Move <code>sleep_hours</code> into <b>Dependent Variables</b>. Move <code>plays_sport</code> into <b>Grouping Variable</b>.</div></li>
+      <li><div>Under <b>Additional Statistics</b>, check <b>Mean difference</b> and <b>Descriptives</b>.</div></li>
+      <li><div>Find the <b>p</b> column. Is it under .05? Decide: likely a real difference, or could be chance?</div></li>
+      <li><div><b>Then swap:</b> replace <code>sleep_hours</code> with <code>quiz_score</code> and <code>plays_sport</code> with <code>grade_level</code>. What does p say now?</div></li>
+    </ol>
+    <label class="fld" for="n2">What did you find?<textarea id="n2" placeholder="Athletes vs. non-athletes: p = … so … / Seniors vs. juniors: p = … so …"></textarea></label>
+    <details><summary>Check your numbers</summary><p>Sleep by sport: the means are 7.44 (Yes) and 6.61 (No), t = −2.89, p = .006. Likely a real difference. (The minus sign only means jamovi subtracted in the order No − Yes.)</p><p>Quiz by grade: means 74.2 (11) and 75.1 (12), p = .717. Could be chance. Same as the shuffles showed in Part 3.</p></details>
+  </div>
+
+  <div class="bench">
+    <span class="tool-tag" style="background:var(--gold-soft);color:var(--gold)">Task 3 · Regression</span>
+    <ol class="steps">
+      <li><div><span class="menu">Analyses</span> → <span class="menu">Regression</span> → <span class="menu">Linear Regression</span>.</div></li>
+      <li><div>Move <code>quiz_score</code> into <b>Dependent Variable</b>. Move <code>screen_time</code> into <b>Covariates</b>.</div></li>
+      <li><div>In <b>Model Fit Measures</b>, find R². In <b>Model Coefficients</b>, find the <b>Estimate</b> for <code>screen_time</code>. That's the slope.</div></li>
+    </ol>
+    <label class="fld" for="n3">What did you find?<textarea id="n3" placeholder="For every extra hour of screen time, quiz scores… R² = …"></textarea></label>
+    <details><summary>Check your numbers</summary><p>R² = 0.32. Intercept 88.2. Slope for screen_time = −3.13, p &lt; .001. Each extra hour of screen time goes with about 3 fewer quiz points.</p></details>
+  </div>
+
+  <div class="bench">
+    <div class="bench-label">Exit ticket</div>
+    <label class="fld" for="n4">Finish all three sentences in your own words.<textarea id="n4" style="min-height:120px" placeholder="1. A variable type I learned today is…&#10;2. I'd use the median instead of the mean when…&#10;3. &quot;Could be chance&quot; means…"></textarea></label>
+    <p class="hint">Your notes stay in this browser only. Copy them somewhere if your teacher wants them turned in.</p>
+  </div>
+
+  <div class="pager"><button class="btn" data-go="2">← Analyses</button><span></span></div>
+</section>
+</main>
+
+<script>
+const ROWS = [[1,11,"Yes","Music",7.9,4.7,69],[2,12,"No","English",6.0,4.6,65],[3,12,"Yes","Biology",7.5,3.6,84],[4,11,"No","Spanish",6.9,5.6,65],[5,12,"Yes","Biology",7.6,6.1,67],[6,11,"Yes","English",8.1,5.1,73],[7,11,"Yes","Music",7.8,3.0,86],[8,12,"No","PE",6.4,5.8,67],[9,11,"Yes","Music",7.2,3.6,81],[10,12,"Yes","PE",8.1,6.1,70],[11,11,"Yes","Art",5.6,2.6,74],[12,11,"No","History",6.3,6.1,67],[13,11,"No","Math",6.6,4.5,68],[14,12,"No","History",5.6,2.3,82],[15,11,"No","History",7.0,3.9,70],[16,12,"No","English",6.0,4.6,66],[17,11,"Yes","Art",8.1,5.0,87],[18,12,"Yes","Art",7.5,2.7,83],[19,12,"No","Math",7.4,2.5,83],[20,12,"No","History",7.6,4.9,79],[21,11,"No","Spanish",7.0,3.7,76],[22,11,"No","Biology",5.8,4.9,71],[23,12,"No","PE",5.1,5.9,71],[24,12,"No","English",8.5,1.5,91],[25,12,"No","Biology",6.4,5.0,64],[26,11,"Yes","Biology",6.5,6.7,73],[27,11,"Yes","History",7.5,4.0,74],[28,11,"No","Biology",6.6,3.0,73],[29,11,"No","Spanish",7.2,5.9,64],[30,12,"No","PE",6.6,5.0,70],[31,12,"Yes","PE",7.2,6.1,83],[32,12,"No","History",6.0,3.9,68],[33,11,"Yes","Art",8.1,1.8,88],[34,12,"Yes","English",6.4,4.3,60],[35,12,"Yes","History",8.0,3.7,80],[36,11,"Yes","Math",8.6,5.9,80],[37,11,"No","History",5.2,4.8,70],[38,12,"Yes","Math",5.5,1.6,79],[39,12,"Yes","History",8.2,2.3,87],[40,12,"No","Music",8.7,6.1,78]]; // [student_id, grade_level, plays_sport, favorite_class, sleep_hours, screen_time, quiz_score]
+const D = ROWS.map(r=>({id:r[0],grade:r[1],sport:r[2],fav:r[3],sleep:r[4],screen:r[5],quiz:r[6]}));
+const COLS=["student_id","grade_level","plays_sport","favorite_class","sleep_hours","screen_time","quiz_score"];
+const CSV = COLS.join(",")+"\n"+ROWS.map(r=>r.join(",")).join("\n")+"\n";
+
+const mean=a=>a.reduce((s,x)=>s+x,0)/a.length;
+const median=a=>{const s=[...a].sort((x,y)=>x-y),n=s.length;return n%2?s[(n-1)/2]:(s[n/2-1]+s[n/2])/2};
+const sd=a=>{const m=mean(a);return Math.sqrt(a.reduce((s,x)=>s+(x-m)**2,0)/(a.length-1))};
+const NS="http://www.w3.org/2000/svg";
+function el(tag,attrs,parent){const e=document.createElementNS(NS,tag);for(const k in attrs)e.setAttribute(k,attrs[k]);if(parent)parent.appendChild(e);return e}
+function txt(parent,x,y,s,cls,anchor="middle",fill){const t=el("text",{x,y,class:cls,"text-anchor":anchor},parent);if(fill)t.setAttribute("style","fill:"+fill);t.textContent=s;return t}
+const $=id=>document.getElementById(id);
+
+/* ---------- navigation ---------- */
+const pages=[...document.querySelectorAll(".page")],tabs=[...document.querySelectorAll(".tab")];
+function go(i,scroll=true){pages.forEach((p,j)=>p.hidden=j!==i);tabs.forEach((t,j)=>t.setAttribute("aria-current",j===i?"page":"false"));
+  try{history.replaceState(null,"","#p"+(i+1))}catch(e){}
+  if(scroll)window.scrollTo({top:0,behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth"});}
+document.querySelectorAll("[data-go]").forEach(b=>b.addEventListener("click",()=>go(+b.dataset.go)));
+{const m=/^#p([1-4])$/.exec(location.hash);go(m?+m[1]-1:0,false)}
+
+/* ---------- page 1: preview + sort game ---------- */
+{const t=$("preview");let h="<tr>"+COLS.map(c=>"<th>"+c+"</th>").join("")+"</tr>";
+ ROWS.slice(0,6).forEach(r=>{h+="<tr>"+r.map(v=>"<td>"+v+"</td>").join("")+"</tr>"});
+ h+='<tr><td class="more" colspan="7">… 34 more students</td></tr>';t.innerHTML=h}
+
+const SORT=[
+ {v:"plays_sport",d:"Yes or No",a:"nominal",why:"Two labels with no order. “Yes” isn’t more than “No.”"},
+ {v:"sleep_hours",d:"e.g. 7.4 hours last night",a:"continuous",why:"A measurement. It can be any value, like 7.35 hours."},
+ {v:"Class rank",d:"1st, 2nd, 3rd …",a:"ordinal",why:"Labels with a clear order. But the gap between 1st and 2nd isn’t a fixed amount."},
+ {v:"Number of siblings",d:"0, 1, 2, 3 …",a:"discrete",why:"A count. Nobody has 2.5 siblings."},
+ {v:"favorite_class",d:"Art, Biology, Math …",a:"nominal",why:"Category names with no natural order."},
+ {v:"ZIP code",d:"e.g. 85281",a:"nominal",why:"Trick question! It’s made of digits, but it’s a label. The “average ZIP code” means nothing."},
+ {v:"screen_time",d:"hours per day, e.g. 4.6",a:"continuous",why:"A measurement on a smooth scale."},
+ {v:"T-shirt size",d:"S, M, L, XL",a:"ordinal",why:"Ordered categories. L is bigger than M, but there’s no exact unit between them."},
+ {v:"Texts sent today",d:"0, 1, 2 … 214",a:"discrete",why:"You count texts in whole numbers."},
+ {v:"grade_level",d:"11 or 12",a:"ordinal",why:"Juniors and seniors have an order. It’s written as a number but works as a group label. You’ll fix this in jamovi."}
+];
+const NAMES={nominal:"Nominal",ordinal:"Ordinal",discrete:"Discrete",continuous:"Continuous"};
+let sgI=0,sgRight=0,sgDone=false;const bins=[...document.querySelectorAll(".bin")];
+function sgShow(){const it=SORT[sgI];$("sgName").textContent=it.v;$("sgDesc").textContent=it.d;sgDone=false;
+  bins.forEach(b=>{b.classList.remove("right","wrong");b.disabled=false});$("sgFb").hidden=true;$("sgNext").hidden=true;
+  $("sgScore").textContent=`Score ${sgRight} / ${sgI}  ·  ${sgI+1} of ${SORT.length}`}
+bins.forEach(b=>b.addEventListener("click",()=>{if(sgDone)return;sgDone=true;const it=SORT[sgI],ok=b.dataset.a===it.a;
+  if(ok)sgRight++;b.classList.add(ok?"right":"wrong");bins.find(x=>x.dataset.a===it.a).classList.add("right");
+  const fb=$("sgFb");fb.hidden=false;fb.className="fb "+(ok?"ok":"no");
+  fb.innerHTML=(ok?"<b>Yes!</b> ":"<b>Not quite. It’s "+NAMES[it.a]+".</b> ")+it.why;
+  $("sgScore").textContent=`Score ${sgRight} / ${sgI+1}  ·  ${sgI+1} of ${SORT.length}`;
+  const n=$("sgNext");n.hidden=false;n.textContent=sgI<SORT.length-1?"Next variable":"See my score";n.focus()}));
+$("sgNext").addEventListener("click",()=>{if(sgI<SORT.length-1){sgI++;sgShow();return}
+  if($("sgNext").textContent==="Play again"){sgI=0;sgRight=0;sgShow();return}
+  $("sgName").textContent=`${sgRight} / ${SORT.length}`;$("sgDesc").textContent=sgRight>=8?"Nice sorting. You’re ready for Part 2.":"Look back at the two families above, then try again.";
+  bins.forEach(b=>{b.classList.remove("right","wrong");b.disabled=true});$("sgFb").hidden=true;$("sgNext").textContent="Play again"});
+sgShow();
+
+/* ---------- page 2: draggable dot plot ---------- */
+const DP0=[5.5,6,6.5,6.5,7,7,7,7.5,8];let dp=[...DP0],dpOut=false,drag=-1;
+const dpX=v=>40+(v-3)*(560/12);const dpV=x=>Math.round(((x-40)/(560/12)+3)*2)/2;
+function modes(a){const c={};a.forEach(v=>c[v]=(c[v]||0)+1);const mx=Math.max(...Object.values(c));if(mx===1)return[];return Object.keys(c).filter(k=>c[k]===mx).map(Number).sort((x,y)=>x-y)}
+function drawDots(){const s=$("dotplot");s.innerHTML="";const base=180;
+  el("line",{x1:40,x2:600,y1:base,y2:base,class:"axl","stroke-width":1.5},s);
+  for(let h=3;h<=15;h++){el("line",{x1:dpX(h),x2:dpX(h),y1:base,y2:base+5,class:"axl"},s);txt(s,dpX(h),base+20,h,"ax")}
+  txt(s,320,base+40,"hours of sleep","ax");
+  const m=mean(dp),md=median(dp),mo=modes(dp);
+  mo.forEach(v=>el("rect",{x:dpX(v)-13,y:base-2,width:26,height:6,rx:3,style:"fill:var(--gold)"},s));
+  [[md,"var(--teal)","median",36],[m,"var(--accent)","mean",16]].forEach(([v,c,l,y])=>{
+    el("line",{x1:dpX(v),x2:dpX(v),y1:y+6,y2:base,style:`stroke:${c}`,"stroke-width":2.5,"stroke-dasharray":l==="median"?"5 4":"none"},s);
+    txt(s,dpX(v),y,l,"lab","middle",c)});
+  const stack={};dp.forEach((v,i)=>{const k=stack[v]=(stack[v]||0)+1;
+    const c=el("circle",{cx:dpX(v),cy:base-12-(k-1)*20,r:9,style:"fill:var(--ink);cursor:grab",tabindex:0,"aria-label":`friend ${i+1}: ${v} hours`},s);c.dataset.i=i});
+  $("dpMean").textContent=m.toFixed(2)+" h";$("dpMed").textContent=md.toFixed(1)+" h";$("dpMode").textContent=mo.length?mo.map(v=>v.toFixed(1)).join(", ")+" h":"none"}
+function svgX(svg,e){const p=svg.createSVGPoint();p.x=e.clientX;p.y=e.clientY;return p.matrixTransform(svg.getScreenCTM().inverse()).x}
+{const s=$("dotplot");
+ s.addEventListener("pointerdown",e=>{const t=e.target;if(t.tagName!=="circle")return;drag=+t.dataset.i;s.setPointerCapture(e.pointerId)});
+ s.addEventListener("pointermove",e=>{if(drag<0)return;const v=Math.min(15,Math.max(3,dpV(svgX(s,e))));if(v!==dp[drag]){dp[drag]=v;drawDots()}});
+ const up=()=>{drag=-1};s.addEventListener("pointerup",up);s.addEventListener("pointercancel",up);
+ s.addEventListener("keydown",e=>{const t=e.target;if(t.tagName!=="circle")return;const i=+t.dataset.i;let d=0;
+   if(e.key==="ArrowRight"||e.key==="ArrowUp")d=.5;if(e.key==="ArrowLeft"||e.key==="ArrowDown")d=-.5;if(!d)return;e.preventDefault();
+   dp[i]=Math.min(15,Math.max(3,dp[i]+d));drawDots();const n=[...s.querySelectorAll("circle")].find(c=>+c.dataset.i===i);n&&n.focus()})}
+$("dpOut").addEventListener("click",()=>{if(dpOut)return;dpOut=true;dp.push(14.5);drawDots();$("dpOut").disabled=true;
+  $("dpNote").textContent="One extreme value pulled the mean up by almost a full hour. The median barely moved."});
+$("dpReset").addEventListener("click",()=>{dp=[...DP0];dpOut=false;$("dpOut").disabled=false;drawDots();
+  $("dpNote").textContent="Try it: add the outlier. Watch which marker moves a lot and which barely moves."});
+drawDots();
+
+/* ---------- page 3a: descriptives ---------- */
+const VARS={sleep:{lab:"sleep_hours",unit:"h",lo:5,hi:9,w:.5,d:2},screen:{lab:"screen_time",unit:"h/day",lo:1,hi:7,w:.5,d:2},quiz:{lab:"quiz_score",unit:"pts",lo:55,hi:95,w:5,d:1}};
+function drawHist(k){const V=VARS[k],a=D.map(r=>r[k]),s=$("hist");s.innerHTML="";
+  const L=50,R=610,T=30,B=200,x=v=>L+(v-V.lo)/(V.hi-V.lo)*(R-L);const nb=Math.round((V.hi-V.lo)/V.w),cnt=Array(nb).fill(0);
+  a.forEach(v=>{const i=Math.min(nb-1,Math.floor((v-V.lo)/V.w+1e-9));cnt[i]++});const mx=Math.max(...cnt),top=Math.ceil(mx/2)*2,y=c=>B-c/top*(B-T);
+  for(let c=0;c<=top;c+=2){el("line",{x1:L,x2:R,y1:y(c),y2:y(c),class:"axl","stroke-dasharray":c?"2 4":"none"},s);txt(s,L-8,y(c)+4,c,"ax","end")}
+  cnt.forEach((c,i)=>{if(c)el("rect",{x:x(V.lo+i*V.w)+1.5,y:y(c),width:(R-L)/nb-3,height:B-y(c),rx:2,style:"fill:var(--teal);opacity:.55"},s)});
+  const step=k==="quiz"?10:1;for(let v=V.lo;v<=V.hi+1e-9;v+=step)txt(s,x(v),B+18,+v.toFixed(1),"ax");
+  txt(s,(L+R)/2,B+36,V.lab+" ("+V.unit+")","ax");txt(s,L-8,T-12,"students","ax","start");
+  const m=mean(a),md=median(a);
+  [[m,"var(--accent)","mean","none",T-14],[md,"var(--teal)","median","5 4",T+2]].forEach(([v,c,l,da,ty])=>{
+    el("line",{x1:x(v),x2:x(v),y1:ty+6,y2:B,style:`stroke:${c}`,"stroke-width":2.5,"stroke-dasharray":da},s);
+    txt(s,x(v)+(l==="mean"?6:-6),ty+4,l,"lab",l==="mean"?"start":"end",c)});
+  const f=v=>v.toFixed(V.d);
+  $("descOut").innerHTML=[["N",a.length],["Mean",f(m)],["Median",f(md)],["SD",f(sd(a))],["Min",Math.min(...a)],["Max",Math.max(...a)]]
+    .map(([l,v])=>`<div class="stat"><span>${l}</span><b>${v}</b></div>`).join("")}
+document.querySelectorAll("#descSeg button").forEach(b=>b.addEventListener("click",()=>{
+  document.querySelectorAll("#descSeg button").forEach(x=>x.setAttribute("aria-pressed",x===b));drawHist(b.dataset.v)}));
+drawHist("sleep");
+
+/* ---------- page 3b: chance machine ---------- */
+const COMP={
+ sport:{k:"sleep",gA:r=>r.sport==="Yes",A:"Athletes",B:"Non-athletes",unit:"h",lo:4.5,hi:9.5,d:2,p:".006"},
+ grade:{k:"quiz",gA:r=>r.grade===12,A:"Seniors",B:"Juniors",unit:"pts",lo:55,hi:95,d:1,p:".717"}};
+let cmp="sport",nulls=[],shown=null;
+function vals(){const C=COMP[cmp];return D.map(r=>r[C.k])}
+function realLabels(){const C=COMP[cmp];return D.map(C.gA)}
+function gap(v,lab){const a=[],b=[];v.forEach((x,i)=>(lab[i]?a:b).push(x));return mean(a)-mean(b)}
+function shuffled(lab){const l=[...lab];for(let i=l.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[l[i],l[j]]=[l[j],l[i]]}return l}
+function drawStrips(lab){const C=COMP[cmp],v=vals(),s=$("strips");s.innerHTML="";const L=120,R=620,x=t=>L+(t-C.lo)/(C.hi-C.lo)*(R-L);
+  const rows=[[true,C.A,"var(--teal)",40],[false,C.B,"var(--gold)",95]];
+  rows.forEach(([g,name,col,y])=>{const pts=v.filter((_,i)=>lab[i]===g);txt(s,8,y+5,`${name} (${pts.length})`,"lab","start",col);
+    el("line",{x1:L,x2:R,y1:y,y2:y,class:"axl"},s);const seen={};
+    pts.forEach(t=>{const k=seen[t]=(seen[t]||0)+1;el("circle",{cx:x(t),cy:y+(k===1?0:(k%2===0?1:-1)*Math.floor(k/2)*8),r:5,style:`fill:${col};opacity:.75`},s)});
+    const m=mean(pts);el("line",{x1:x(m),x2:x(m),y1:y-16,y2:y+16,style:"stroke:var(--ink)","stroke-width":3},s);
+    txt(s,x(m),y-20,"avg "+m.toFixed(C.d),"ax")});
+  const step=cmp==="sport"?1:10;for(let t=Math.ceil(C.lo);t<=C.hi;t+=step)txt(s,x(t),140,t,"ax");
+  const g=gap(v,lab);$("stripLabel").textContent=(shown?"Shuffled labels":"Real labels")+` · gap = ${g>=0?"+":""}${g.toFixed(C.d)} ${C.unit}`}
+function drawNulls(){const C=COMP[cmp],s=$("nulls");s.innerHTML="";const obs=gap(vals(),realLabels()),ao=Math.abs(obs);
+  const mxAbs=nulls.length?Math.max(...nulls.map(Math.abs)):0;const Rng=Math.max(ao*1.6,mxAbs*1.05,cmp==="sport"?1:6);
+  const L=40,R=620,T=34,B=176,x=g=>L+(g+Rng)/(2*Rng)*(R-L);const nb=41,w=2*Rng/nb,cnt=Array(nb).fill(0);
+  nulls.forEach(g=>{cnt[Math.min(nb-1,Math.max(0,Math.floor((g+Rng)/w)))]++});const mx=Math.max(1,...cnt);
+  el("line",{x1:L,x2:R,y1:B,y2:B,class:"axl","stroke-width":1.5},s);
+  cnt.forEach((c,i)=>{if(!c)return;const lo=-Rng+i*w,mid=lo+w/2,far=Math.abs(mid)>=ao;
+    el("rect",{x:x(lo)+1,y:B-c/mx*(B-T),width:(R-L)/nb-2,height:c/mx*(B-T),rx:1.5,style:`fill:${far?"var(--accent)":"var(--muted)"};opacity:${far?.95:.45}`},s)});
+  [-ao,ao].forEach(g=>{el("line",{x1:x(g),x2:x(g),y1:T-12,y2:B,style:"stroke:var(--accent)","stroke-width":2,"stroke-dasharray":"5 4"},s)});
+  txt(s,x(ao),T-16,"real gap ±"+ao.toFixed(C.d),"lab","middle","var(--accent)");
+  const ticks=5;for(let i=0;i<=ticks;i++){const g=-Rng+i*2*Rng/ticks;txt(s,x(g),B+18,(g>0?"+":"")+g.toFixed(C.d),"ax")}
+  txt(s,330,B+38,`gap between group averages (${C.unit}) · 0 = no difference`,"ax");
+  if(!nulls.length)txt(s,330,105,"No shuffles yet","ax");
+  const far=nulls.filter(g=>Math.abs(g)>=ao-1e-9).length,n=nulls.length,pct=n?far/n*100:0,vd=$("verdict");
+  if(n<100){vd.className="verdict";vd.innerHTML=`<b>${n?n+" shuffle"+(n>1?"s":"")+" so far":"Shuffle at least 100 times"}</b><span>${n?`${far} of them made a gap as big as the real one. Keep going to 100+ before deciding.`:"Then we can see whether luck makes gaps as big as the real one."}</span>`;return}
+  const real=pct<5;vd.className="verdict "+(real?"real":"chance");
+  vd.innerHTML=`<b>${real?"Likely a real difference":"Could be chance"}</b><span>Only <span class="mono">${far} of ${n}</span> shuffles (${pct.toFixed(1)}%) made a gap at least as big as the real one. ${real?"Luck almost never does this.":"Luck does this all the time."}</span><span class="hint">That ${pct.toFixed(1)}% is your shuffle p-value. jamovi’s t-test will report p = ${C.p}.</span>`}
+function shuffleN(k){const v=vals(),lab=realLabels();let last;for(let i=0;i<k;i++){last=shuffled(lab);nulls.push(gap(v,last))}
+  if(k===1){shown=last;drawStrips(last)}else{shown=null;drawStrips(lab)}drawNulls()}
+$("sh1").addEventListener("click",()=>shuffleN(1));$("sh100").addEventListener("click",()=>shuffleN(100));$("sh1000").addEventListener("click",()=>shuffleN(1000));
+$("shReal").addEventListener("click",()=>{shown=null;drawStrips(realLabels())});
+$("shClear").addEventListener("click",()=>{nulls=[];shown=null;drawStrips(realLabels());drawNulls()});
+document.querySelectorAll("#ttSeg button").forEach(b=>b.addEventListener("click",()=>{
+  document.querySelectorAll("#ttSeg button").forEach(x=>x.setAttribute("aria-pressed",x===b));cmp=b.dataset.c;nulls=[];shown=null;drawStrips(realLabels());drawNulls()}));
+drawStrips(realLabels());drawNulls();
+
+/* ---------- page 3c: regression ---------- */
+const RX=D.map(r=>r.screen),RY=D.map(r=>r.quiz);
+const fit=(()=>{const mx=mean(RX),my=mean(RY);let sxy=0,sxx=0;RX.forEach((x,i)=>{sxy+=(x-mx)*(RY[i]-my);sxx+=(x-mx)**2});const b1=sxy/sxx;return{b0:my-b1*mx,b1}})();
+let revealed=false;
+const miss=(b0,b1)=>mean(RX.map((x,i)=>Math.abs(RY[i]-(b0+b1*x))));
+function drawScatter(){const s=$("scatter");s.innerHTML="";const L=50,R=620,T=16,B=290,x=v=>L+v/8*(R-L),y=v=>B-(v-50)/50*(B-T);
+  for(let v=50;v<=100;v+=10){el("line",{x1:L,x2:R,y1:y(v),y2:y(v),class:"axl","stroke-dasharray":v>50?"2 4":"none"},s);txt(s,L-8,y(v)+4,v,"ax","end")}
+  for(let v=0;v<=8;v++)txt(s,x(v),B+18,v,"ax");txt(s,(L+R)/2,B+38,"screen_time (hours per day)","ax");
+  const yl=txt(s,14,(T+B)/2,"quiz_score","ax");yl.setAttribute("transform",`rotate(-90 14 ${(T+B)/2})`);
+  const b0=+$("b0").value,b1=+$("b1").value,cl=v=>Math.min(105,Math.max(45,v));
+  const clipId="rc";const cp=el("clipPath",{id:clipId},el("defs",{},s));el("rect",{x:L,y:T,width:R-L,height:B-T},cp);
+  const g=el("g",{"clip-path":`url(#${clipId})`},s);
+  RX.forEach((xv,i)=>el("line",{x1:x(xv),x2:x(xv),y1:y(RY[i]),y2:y(b0+b1*xv),style:"stroke:var(--accent);opacity:.35"},g));
+  if(revealed)el("line",{x1:x(0),x2:x(8),y1:y(fit.b0),y2:y(fit.b0+fit.b1*8),style:"stroke:var(--teal)","stroke-width":3.5},g);
+  el("line",{x1:x(0),x2:x(8),y1:y(b0),y2:y(b0+b1*8),style:"stroke:var(--accent)","stroke-width":2.5,"stroke-dasharray":"7 5"},g);
+  RX.forEach((xv,i)=>el("circle",{cx:x(xv),cy:y(RY[i]),r:5.5,style:"fill:var(--ink);opacity:.85"},s));
+  $("b0v").textContent=b0.toFixed(1);$("b1v").textContent=(b1>0?"+":"")+b1.toFixed(1);
+  $("missG").textContent=miss(b0,b1).toFixed(1)+" pts";if(revealed)$("missB").textContent=miss(fit.b0,fit.b1).toFixed(1)+" pts"}
+["b0","b1"].forEach(id=>$(id).addEventListener("input",drawScatter));
+$("reveal").addEventListener("click",()=>{revealed=true;$("regTake").hidden=false;$("reveal").disabled=true;
+  $("regNote").textContent="The solid line is the best fit: no other straight line gets closer to the dots overall. Can you match it with the sliders?";drawScatter()});
+drawScatter();
+
+/* ---------- page 3d: matching ---------- */
+const MQ=[
+ ["How many hours does a typical junior sleep?","d","One group, one variable, summarize it."],
+ ["Do students in band score differently on the quiz than students not in band?","t","Two groups compared on one numerical variable."],
+ ["Do students who study more hours get higher SAT scores?","r","Two numerical variables: does one predict the other?"],
+ ["What's the range of screen time in our class?","d","Just describing the spread of one variable."],
+ ["Do seniors spend more time on screens than juniors?","t","Two groups (seniors, juniors), one numerical variable."],
+ ["As the temperature goes up, do ice-cream sales go up too?","r","Two numerical variables moving together."]];
+const TOOLN={d:"Descriptives",t:"t-test",r:"Regression"};let mRight=0,mDone=0;
+$("match").innerHTML=MQ.map((q,i)=>`<div class="mq" data-i="${i}"><p>${q[0]}</p><div class="seg">${["d","t","r"].map(k=>`<button data-k="${k}">${TOOLN[k]}</button>`).join("")}</div><div class="why" hidden></div></div>`).join("");
+document.querySelectorAll(".mq").forEach(m=>{const q=MQ[+m.dataset.i];m.querySelectorAll("button").forEach(b=>b.addEventListener("click",()=>{
+  if(m.dataset.done)return;m.dataset.done=1;const ok=b.dataset.k===q[1];b.classList.add(ok?"right":"wrong");
+  if(!ok)m.querySelector(`button[data-k="${q[1]}"]`).classList.add("right");mDone++;if(ok)mRight++;
+  const w=m.querySelector(".why");w.hidden=false;w.textContent=(ok?"Right. ":`It's ${TOOLN[q[1]]}. `)+q[2];
+  $("mScore").textContent=`· ${mRight} / ${mDone}`}))});
+
+/* ---------- page 4: download + notes ---------- */
+let dlCap=null;
+(async()=>{try{dlCap=window.claude&&window.claude.use?await window.claude.use("downloads"):null}catch(e){dlCap=null}})();
+$("dlBtn").addEventListener("click",async()=>{const msg=$("dlMsg");
+  let cap=dlCap;if(!cap){try{cap=window.claude&&window.claude.use?await window.claude.use("downloads"):null}catch(e){cap=null}}
+  if(!cap){try{const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([CSV],{type:"text/csv"}));a.download="class_survey.csv";document.body.appendChild(a);a.click();a.remove();msg.textContent="Saved. Look for class_survey.csv in your Downloads folder."}catch(e){msg.textContent="Saving isn't available here. Get class_survey.csv from your teacher instead."}return}
+  try{await cap.save({filename:"class_survey.csv",data:CSV});msg.textContent="Saved. Look for class_survey.csv in your Downloads folder."}
+  catch(e){const c=e&&e.code;msg.textContent=c==="declined"?"Save canceled. Click the button again when you're ready.":c==="rate_limited"?"A save box is already open. Finish that one first.":"That didn't work. Get class_survey.csv from your teacher instead."}});
+["n1","n2","n3","n4"].forEach(id=>{const t=$(id);try{const v=localStorage.getItem("ssn-"+id);if(v)t.value=v}catch(e){}
+  t.addEventListener("input",()=>{try{localStorage.setItem("ssn-"+id,t.value)}catch(e){}})});
+</script>
+
+</body>
+</html>
